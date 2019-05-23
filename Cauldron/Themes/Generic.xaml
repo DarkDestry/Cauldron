@@ -1,0 +1,153 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:customControls="clr-namespace:Cauldron.CustomControls">
+
+<!-- Styles -->
+    <Style TargetType="Border" x:Key="EditorWindows">
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Background" Value="#252526" />
+        <Setter Property="BorderBrush" Value="#3f3f46" />
+    </Style>
+    <Style TargetType="Label" x:Key="EditorWindowLabel">
+        <Setter Property="Background" Value="#2d2d30" />
+        <Setter Property="Foreground" Value="#d0d0d0" />
+        <Setter Property="FontFamily" Value="SegoeUI"/>
+    </Style>
+<!-- End Styles -->
+
+
+<!-- ControlTemplates -->
+    <Style TargetType="{x:Type customControls:Control_Property_Vector3}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type customControls:Control_Property_Vector3}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Label Name="LabelName" Grid.Row="0" Grid.Column="0" Content="{TemplateBinding NameLabel}"/>
+                        <Grid Grid.Row="0" Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox Name="Field_X" Grid.Column="0" Text="0" />
+                            <TextBox Name="Field_Y" Grid.Column="1" Text="0" />
+                            <TextBox Name="Field_Z" Grid.Column="2" Text="0" />
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type customControls:Control_Property_Transform}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type customControls:Control_Property_Transform}">
+                    <StackPanel>
+                        <customControls:Control_Property_Vector3 x:Name="Vector3_Position" NameLabel="Position"/>
+                        <customControls:Control_Property_Vector3 x:Name="Vector3_Rotation" NameLabel="Rotation"/>
+                        <customControls:Control_Property_Vector3 x:Name="Vector3_Scale" NameLabel="Scale"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type customControls:Control_PropertiesWindow}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type customControls:Control_PropertiesWindow}">
+                    <Border Name="PropertyWindow" Style="{StaticResource EditorWindows}" Grid.Row="0" Grid.Column="1">
+                        <Grid Height="Auto">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Properties</Label>
+                            <StackPanel Name="PropertyList"  Grid.Row="1" Grid.Column="0">
+
+                                <customControls:Control_Property_Object/>
+                                <customControls:Control_Property_Transform/>
+                                <!-- To be filled programatically -->
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type customControls:Control_HierarchyWindow}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type customControls:Control_HierarchyWindow}">
+                    <Border Name="HierarchyWindow" Style="{StaticResource EditorWindows}" Grid.Row="0" Grid.Column="0">
+                        <Grid Height="Auto">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Hierarchy</Label>
+                            <ListBox  Name="HierarchyList"  Grid.Row="1" Grid.Column="0" Style="{DynamicResource HierarchyListBox}">
+                                
+                                <!-- To be filled programatically -->
+                            </ListBox>
+                            <Grid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="New">
+                                        <MenuItem Header="Sphere" Name="ContextMenu_NewSphere"/>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </Grid.ContextMenu>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type customControls:Control_Property_String}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type customControls:Control_Property_String}">
+                    <Grid x:Name="Control_Property_String_Root">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Name="LabelName" Content="{TemplateBinding NameLabel}"/>
+                        <TextBox Grid.Column="1" Name="Field_Text" Focusable="{TemplateBinding Focusable}"></TextBox>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type customControls:Control_Property_Object}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type customControls:Control_Property_Object}">
+                    <StackPanel>
+                        <customControls:Control_Property_String x:Name="String_Name" NameLabel="Name"/>
+                        <customControls:Control_Property_String x:Name="String_Guid" NameLabel="GUID" Focusable="False"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+<!-- End ControlTemplates -->
+</ResourceDictionary>
