@@ -38,9 +38,9 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <TextBox Name="Field_X" Grid.Column="0" Text="0" />
-                            <TextBox Name="Field_Y" Grid.Column="1" Text="0" />
-                            <TextBox Name="Field_Z" Grid.Column="2" Text="0" />
+                            <TextBox Name="Field_X" Grid.Column="0" Text="" />
+                            <TextBox Name="Field_Y" Grid.Column="1" Text="" />
+                            <TextBox Name="Field_Z" Grid.Column="2" Text="" />
                         </Grid>
                     </Grid>
                 </ControlTemplate>
@@ -98,7 +98,6 @@
                             </Grid.RowDefinitions>
                             <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Hierarchy</Label>
                             <ListBox  Name="HierarchyList"  Grid.Row="1" Grid.Column="0" Style="{DynamicResource HierarchyListBox}">
-                                
                                 <!-- To be filled programatically -->
                             </ListBox>
                             <Grid.ContextMenu>

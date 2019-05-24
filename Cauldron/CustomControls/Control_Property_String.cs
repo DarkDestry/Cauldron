@@ -72,6 +72,8 @@ namespace Cauldron.CustomControls
 
 		private void TextField_TextChanged(object sender, TextChangedEventArgs e)
 		{
+			TextField = textField.Text;
+
 			OnFieldChanged(textField.Text);
 		}
 

@@ -90,13 +90,25 @@ namespace Cauldron.CustomControls
 			switch (e.Property.Name)
 			{
 				case "XValue":
+				{
+					int caretIndex = cpv3.x.CaretIndex;
 					cpv3.x.Text = e.NewValue.ToString();
+					cpv3.x.CaretIndex = caretIndex;
+				}
 					break;
 				case "YValue":
+				{
+					int caretIndex = cpv3.y.CaretIndex;
 					cpv3.y.Text = e.NewValue.ToString();
+					cpv3.y.CaretIndex = caretIndex;
+				}
 					break;
 				case "ZValue":
+				{
+					int caretIndex = cpv3.z.CaretIndex;
 					cpv3.z.Text = e.NewValue.ToString();
+					cpv3.z.CaretIndex = caretIndex;
+				}
 					break;
 			}
 		}
@@ -151,7 +163,26 @@ namespace Cauldron.CustomControls
 
 		private void Vector3_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			Vector3 v3 = new Vector3(float.Parse(x.Text),float.Parse(y.Text),float.Parse(z.Text));
+
+			float xV = x.Text == "" ? 0 : float.Parse(x.Text);
+			float yV = y.Text == "" ? 0 : float.Parse(y.Text);
+			float zV = z.Text == "" ? 0 : float.Parse(z.Text);
+
+			TextBox field = sender as TextBox;
+			switch (field.Name)
+			{
+				case "Field_X":
+					XValue = xV;
+					break;
+				case "Field_Y":
+					YValue = yV;
+					break;
+				case "Field_Z":
+					ZValue = zV;
+					break;
+			}
+
+			Vector3 v3 = new Vector3(xV,yV,zV);
 			OnFieldChanged(v3);
 		}
 
@@ -162,6 +193,10 @@ namespace Cauldron.CustomControls
 			XValue = v3.x;
 			YValue = v3.y;
 			ZValue = v3.z;
+
+			x.Text = v3.x.ToString();
+			y.Text = v3.y.ToString();
+			z.Text = v3.z.ToString();
 
 		}
 

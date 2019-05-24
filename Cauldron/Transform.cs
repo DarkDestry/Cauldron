@@ -11,5 +11,12 @@ namespace Cauldron
 		public Vector3 Position;
 		public Vector3 Rotation;
 		public Vector3 Scale;
+
+		public Transform()
+		{
+			Position = new Vector3(0,0,0);
+			Rotation = new Vector3(0,0,0);
+			Scale = new Vector3(0,0,0);
+		}
 	}
 }
