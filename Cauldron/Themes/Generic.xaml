@@ -52,11 +52,13 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type customControls:Control_Property_Transform}">
-                    <StackPanel>
-                        <customControls:Control_Property_Vector3 x:Name="Vector3_Position" NameLabel="Position"/>
-                        <customControls:Control_Property_Vector3 x:Name="Vector3_Rotation" NameLabel="Rotation"/>
-                        <customControls:Control_Property_Vector3 x:Name="Vector3_Scale" NameLabel="Scale"/>
-                    </StackPanel>
+                    <Expander Header="Transform">
+                        <StackPanel>
+                            <customControls:Control_Property_Vector3 x:Name="Vector3_Position" NameLabel="Position"/>
+                            <customControls:Control_Property_Vector3 x:Name="Vector3_Rotation" NameLabel="Rotation"/>
+                            <customControls:Control_Property_Vector3 x:Name="Vector3_Scale" NameLabel="Scale"/>
+                        </StackPanel>
+                    </Expander>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -138,10 +140,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type customControls:Control_Property_Object}">
-                    <StackPanel>
-                        <customControls:Control_Property_String x:Name="String_Name" NameLabel="Name"/>
-                        <customControls:Control_Property_String x:Name="String_Guid" NameLabel="GUID" Focusable="False"/>
-                    </StackPanel>
+                    <Expander Header="Object">
+                        <StackPanel>
+                            <customControls:Control_Property_String x:Name="String_Name" NameLabel="Name"/>
+                            <customControls:Control_Property_String x:Name="String_Guid" NameLabel="GUID" Focusable="False"/>
+                        </StackPanel>
+                    </Expander>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
