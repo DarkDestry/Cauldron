@@ -15,6 +15,11 @@
         <Setter Property="Foreground" Value="#d0d0d0" />
         <Setter Property="FontFamily" Value="SegoeUI"/>
     </Style>
+    <Style TargetType="ListBox" x:Key="HierarchyListBox">
+        <Setter Property="Background" Value="#FF252526" />
+        <Setter Property="TextElement.Foreground" Value="#f1f1f1" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
 <!-- End Styles -->
 
 
@@ -47,6 +52,104 @@
                             <customControls:Control_Property_String x:Name="String_Guid" NameLabel="GUID" Focusable="False"/>
                         </StackPanel>
                     </Expander>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+<!-- Control Windows -->
+
+    <Style TargetType="{x:Type customControls:Control_PropertiesWindow}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type customControls:Control_PropertiesWindow}">
+                    <Border Name="PropertyWindow" Style="{StaticResource EditorWindows}">
+                        <Grid Height="Auto">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Properties</Label>
+                            <StackPanel Name="PropertyList"  Grid.Row="1" Grid.Column="0">
+                                <!-- To be filled programatically -->
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type customControls:Control_HierarchyWindow}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type customControls:Control_HierarchyWindow}">
+                    <Border Name="HierarchyWindow" Style="{StaticResource EditorWindows}">
+                        <Grid Height="Auto">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Hierarchy</Label>
+                            <ListBox  Name="HierarchyList"  Grid.Row="1" Grid.Column="0" Style="{StaticResource HierarchyListBox}">
+                                <!-- To be filled programatically -->
+                            </ListBox>
+                            <Grid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="New">
+                                        <MenuItem Header="Sphere" Name="ContextMenu_NewSphere"/>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </Grid.ContextMenu>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type customControls:Control_SceneWindow}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type customControls:Control_SceneWindow}">
+                    <Border Name="PropertyWindow" Style="{StaticResource EditorWindows}" Grid.Column="1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Scene</Label>
+                            <Grid Grid.Row="1" ShowGridLines="True">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Label Panel.ZIndex="1" Grid.Row="0" Grid.Column="0" Content="Left Ortho" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                <Label Panel.ZIndex="1" Grid.Row="0" Grid.Column="1" Content="Right Ortho" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                <Label Panel.ZIndex="1" Grid.Row="1" Grid.Column="0" Content="Top Ortho" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                <Label Panel.ZIndex="1" Grid.Row="1" Grid.Column="1" Content="WIP 3D" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                <Canvas Panel.ZIndex="0" Grid.Row="0" Grid.Column="0" ClipToBounds="True" Tag="Left" x:Name="Canvas_Left">
+                                    <!-- To be filled programatically -->
+                                </Canvas>
+                                <Canvas Panel.ZIndex="0" Grid.Row="0" Grid.Column="1" ClipToBounds="True" Tag="Right" x:Name="Canvas_Right">
+                                    <!-- To be filled programatically -->
+                                </Canvas>
+                                <Canvas Panel.ZIndex="0" Grid.Row="1" Grid.Column="0" ClipToBounds="True" Tag="Top" x:Name="Canvas_Top">
+                                    <!-- To be filled programatically -->
+                                </Canvas>
+                                <Canvas Panel.ZIndex="0" Grid.Row="1" Grid.Column="1" ClipToBounds="True" Tag="3D" x:Name="Canvas_3D">
+                                    <!-- To be filled programatically -->
+                                </Canvas>
+                            </Grid>
+                        </Grid>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -98,57 +201,6 @@
                         <Label Name="LabelName" Content="{TemplateBinding NameLabel}"/>
                         <TextBox Grid.Column="1" Name="Field_Text" Focusable="{TemplateBinding Focusable}"></TextBox>
                     </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-<!-- Control Windows -->
-
-    <Style TargetType="{x:Type customControls:Control_PropertiesWindow}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type customControls:Control_PropertiesWindow}">
-                    <Border Name="PropertyWindow" Style="{StaticResource EditorWindows}">
-                        <Grid Height="Auto">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Properties</Label>
-                            <StackPanel Name="PropertyList"  Grid.Row="1" Grid.Column="0">
-                                <!-- To be filled programatically -->
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style TargetType="{x:Type customControls:Control_HierarchyWindow}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type customControls:Control_HierarchyWindow}">
-                    <Border Name="HierarchyWindow" Style="{StaticResource EditorWindows}">
-                        <Grid Height="Auto">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Hierarchy</Label>
-                            <ListBox  Name="HierarchyList"  Grid.Row="1" Grid.Column="0" Style="{DynamicResource HierarchyListBox}">
-                                <!-- To be filled programatically -->
-                            </ListBox>
-                            <Grid.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="New">
-                                        <MenuItem Header="Sphere" Name="ContextMenu_NewSphere"/>
-                                    </MenuItem>
-                                </ContextMenu>
-                            </Grid.ContextMenu>
-                        </Grid>
-                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

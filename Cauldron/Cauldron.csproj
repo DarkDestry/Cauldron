@@ -62,6 +62,7 @@
     <Compile Include="CustomControls\Control_Property_Object.cs" />
     <Compile Include="CustomControls\Control_Property_String.cs" />
     <Compile Include="CustomControls\Control_Property_Vector3.cs" />
+    <Compile Include="CustomControls\Control_SceneWindow.cs" />
     <Compile Include="IProperty.cs" />
     <Compile Include="IPropertyField.cs" />
     <Compile Include="Transform.cs" />
