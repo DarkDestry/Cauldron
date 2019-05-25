@@ -32,12 +32,15 @@ namespace Cauldron.CustomControls
 		}
 
 		private Control_Property_Vector3 position, rotation, scale;
+        private bool templateApplied;
 
 		public override void OnApplyTemplate()
 		{
 			base.OnApplyTemplate();
 
-			if (this.Template != null)
+            templateApplied = true;
+
+            if (this.Template != null)
 			{
 				position = this.Template.FindName("Vector3_Position", this) as Control_Property_Vector3;
 				position.FieldChangedEvent += Position_FieldChanged;
@@ -45,8 +48,9 @@ namespace Cauldron.CustomControls
 				rotation.FieldChangedEvent += Rotation_FieldChanged;
 				scale = this.Template.FindName("Vector3_Scale", this) as Control_Property_Vector3;
 				scale.FieldChangedEvent += Scale_FieldChanged;
-			}
-		}
+                if (currentObjectGuid != null) UpdateProperty(Hierarchy.GetObject(currentObjectGuid));
+            }
+        }
 
 		private void Scale_FieldChanged(Vector3 value)
 		{
@@ -68,6 +72,8 @@ namespace Cauldron.CustomControls
 			Hierarchy.SceneObject sceneObject = value as Hierarchy.SceneObject;
 
 			currentObjectGuid = sceneObject.Guid;
+
+            if (!templateApplied) return;
 
 			position.UpdateProperty(sceneObject.Transform.Position);
 			rotation.UpdateProperty(sceneObject.Transform.Rotation);			

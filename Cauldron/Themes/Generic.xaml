@@ -52,7 +52,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type customControls:Control_Property_Transform}">
-                    <Expander Header="Transform">
+                    <Expander Header="Transform" IsExpanded="True">
                         <StackPanel>
                             <customControls:Control_Property_Vector3 x:Name="Vector3_Position" NameLabel="Position"/>
                             <customControls:Control_Property_Vector3 x:Name="Vector3_Rotation" NameLabel="Rotation"/>
@@ -76,9 +76,6 @@
                             </Grid.RowDefinitions>
                             <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Properties</Label>
                             <StackPanel Name="PropertyList"  Grid.Row="1" Grid.Column="0">
-
-                                <customControls:Control_Property_Object/>
-                                <customControls:Control_Property_Transform/>
                                 <!-- To be filled programatically -->
                             </StackPanel>
                         </Grid>
@@ -140,7 +137,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type customControls:Control_Property_Object}">
-                    <Expander Header="Object">
+                    <Expander Header="Object" IsExpanded="True">
                         <StackPanel>
                             <customControls:Control_Property_String x:Name="String_Name" NameLabel="Name"/>
                             <customControls:Control_Property_String x:Name="String_Guid" NameLabel="GUID" Focusable="False"/>

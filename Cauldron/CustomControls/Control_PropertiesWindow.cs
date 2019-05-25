@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,15 +41,33 @@ namespace Cauldron.CustomControls
 			}
 		}
 
-		public static void UpdateProperties(string guid)
-		{
-			Hierarchy.SceneObject obj = Hierarchy.GetObject(guid);
+        private void _UpdateProperties(string guid)
+        {
+            Hierarchy.SceneObject obj = Hierarchy.GetObject(guid);
 
-			foreach (var propertyListChild in instance.propertyList.Children)
-			{
-				IProperty iProperty = propertyListChild as IProperty;
-				iProperty.UpdateProperty(obj);
-			}
-		}
+            propertyList.Children.Clear();
+
+            if (obj.properties.ContainsKey("name"))
+            {
+                propertyList.Children.Add(new Control_Property_Object());
+            }
+
+            if (obj.properties.ContainsKey("transform"))
+            {
+                propertyList.Children.Add(new Control_Property_Transform());
+            }
+
+            foreach (var propertyListChild in propertyList.Children)
+            {
+                IProperty iProperty = propertyListChild as IProperty;
+                iProperty.UpdateProperty(obj);
+            }
+        }
+
+
+        public static void UpdateProperties(string guid)
+        {
+            instance._UpdateProperties(guid);
+        }
 	}
 }

@@ -20,8 +20,8 @@ namespace Cauldron.CustomControls
 	[TemplatePart(Name = "Field_Text", Type = typeof(TextBox))]
 	public class Control_Property_String : Control, IProperty
 	{
-
-		public static readonly DependencyProperty NameLabelProperty = DependencyProperty.Register(
+        #region DependencyProperty
+        public static readonly DependencyProperty NameLabelProperty = DependencyProperty.Register(
 			"NameLabel",
 			typeof(string),
 			typeof(Control_Property_String));
@@ -31,13 +31,15 @@ namespace Cauldron.CustomControls
 			typeof(Control_Property_String),
 			new FrameworkPropertyMetadata(OnFieldPropertyChanged));
 
-		private static void OnFieldPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-		{
-			Control_Property_String cps = d as Control_Property_String;
-			cps.textField.Text = e.NewValue as string;
-		}
+        private static void OnFieldPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Control_Property_String cps = d as Control_Property_String;
+            if (cps.textField != null) cps.textField.Text = e.NewValue as string;
+        }
+        #endregion
 
-		public string TextField
+        #region CLR Wrapper
+        public string TextField
 		{
 			get => (string) GetValue(TextFieldProperty);
 			set => SetValue(TextFieldProperty, value);
@@ -46,9 +48,10 @@ namespace Cauldron.CustomControls
 		{
 			get => (string) GetValue(NameLabelProperty);
 			set => SetValue(NameLabelProperty, value);
-		}
+        }
+        #endregion 
 
-		static Control_Property_String()
+        static Control_Property_String()
 		{
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(Control_Property_String), new FrameworkPropertyMetadata(typeof(Control_Property_String)));
 		}
@@ -67,8 +70,9 @@ namespace Cauldron.CustomControls
 			{
 				textField = this.Template.FindName("Field_Text", this) as TextBox;
 				textField.TextChanged += TextField_TextChanged;
-			}
-		}
+                textField.Text = TextField;
+            }
+        }
 
 		private void TextField_TextChanged(object sender, TextChangedEventArgs e)
 		{

@@ -27,18 +27,22 @@ namespace Cauldron.CustomControls
 		}
 
 		private Control_Property_String name, guid;
+        private bool templateApplied;
 
 		public override void OnApplyTemplate()
 		{
 			base.OnApplyTemplate();
 
-			if (this.Template != null)
+            templateApplied = true;
+
+            if (this.Template != null)
 			{
 				name = this.Template.FindName("String_Name", this) as Control_Property_String;
 				name.FieldChangedEvent += Name_FieldChanged;
 				guid = this.Template.FindName("String_Guid", this) as Control_Property_String;
+                if (currentObjectGuid != null) UpdateProperty(Hierarchy.GetObject(currentObjectGuid));
 			}
-		}
+        }
 
 		private void Name_FieldChanged(string value)
 		{
@@ -47,12 +51,14 @@ namespace Cauldron.CustomControls
 		}
 
 		public void UpdateProperty(object value)
-		{
+        {
 			Hierarchy.SceneObject obj = value as Hierarchy.SceneObject;
 
 			currentObjectGuid = obj.Guid;
 
-			name.UpdateProperty(obj.Name);
+            if (!templateApplied) return;
+
+            name.UpdateProperty(obj.Name);
 			guid.UpdateProperty(obj.Guid);
 		}
 	}
