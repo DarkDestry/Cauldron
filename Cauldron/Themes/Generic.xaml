@@ -19,6 +19,41 @@
 
 
 <!-- ControlTemplates -->
+<!-- Control Property Containers-->
+
+    <Style TargetType="{x:Type customControls:Control_Property_Transform}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type customControls:Control_Property_Transform}">
+                    <Expander Header="Transform" IsExpanded="True">
+                        <StackPanel>
+                            <customControls:Control_Property_Vector3 x:Name="Vector3_Position" NameLabel="Position"/>
+                            <customControls:Control_Property_Vector3 x:Name="Vector3_Rotation" NameLabel="Rotation"/>
+                            <customControls:Control_Property_Vector3 x:Name="Vector3_Scale" NameLabel="Scale"/>
+                        </StackPanel>
+                    </Expander>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type customControls:Control_Property_Object}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type customControls:Control_Property_Object}">
+                    <Expander Header="Object" IsExpanded="True">
+                        <StackPanel>
+                            <customControls:Control_Property_String x:Name="String_Name" NameLabel="Name"/>
+                            <customControls:Control_Property_String x:Name="String_Guid" NameLabel="GUID" Focusable="False"/>
+                        </StackPanel>
+                    </Expander>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+<!-- Control Property Attributes -->
+
     <Style TargetType="{x:Type customControls:Control_Property_Vector3}">
         <Setter Property="Template">
             <Setter.Value>
@@ -48,71 +83,6 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type customControls:Control_Property_Transform}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type customControls:Control_Property_Transform}">
-                    <Expander Header="Transform" IsExpanded="True">
-                        <StackPanel>
-                            <customControls:Control_Property_Vector3 x:Name="Vector3_Position" NameLabel="Position"/>
-                            <customControls:Control_Property_Vector3 x:Name="Vector3_Rotation" NameLabel="Rotation"/>
-                            <customControls:Control_Property_Vector3 x:Name="Vector3_Scale" NameLabel="Scale"/>
-                        </StackPanel>
-                    </Expander>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style TargetType="{x:Type customControls:Control_PropertiesWindow}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type customControls:Control_PropertiesWindow}">
-                    <Border Name="PropertyWindow" Style="{StaticResource EditorWindows}" Grid.Row="0" Grid.Column="1">
-                        <Grid Height="Auto">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Properties</Label>
-                            <StackPanel Name="PropertyList"  Grid.Row="1" Grid.Column="0">
-                                <!-- To be filled programatically -->
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style TargetType="{x:Type customControls:Control_HierarchyWindow}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type customControls:Control_HierarchyWindow}">
-                    <Border Name="HierarchyWindow" Style="{StaticResource EditorWindows}" Grid.Row="0" Grid.Column="0">
-                        <Grid Height="Auto">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Hierarchy</Label>
-                            <ListBox  Name="HierarchyList"  Grid.Row="1" Grid.Column="0" Style="{DynamicResource HierarchyListBox}">
-                                <!-- To be filled programatically -->
-                            </ListBox>
-                            <Grid.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="New">
-                                        <MenuItem Header="Sphere" Name="ContextMenu_NewSphere"/>
-                                    </MenuItem>
-                                </ContextMenu>
-                            </Grid.ContextMenu>
-                        </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <Style TargetType="{x:Type customControls:Control_Property_String}">
         <Setter Property="Template">
             <Setter.Value>
@@ -133,16 +103,52 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type customControls:Control_Property_Object}">
+<!-- Control Windows -->
+
+    <Style TargetType="{x:Type customControls:Control_PropertiesWindow}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type customControls:Control_Property_Object}">
-                    <Expander Header="Object" IsExpanded="True">
-                        <StackPanel>
-                            <customControls:Control_Property_String x:Name="String_Name" NameLabel="Name"/>
-                            <customControls:Control_Property_String x:Name="String_Guid" NameLabel="GUID" Focusable="False"/>
-                        </StackPanel>
-                    </Expander>
+                <ControlTemplate TargetType="{x:Type customControls:Control_PropertiesWindow}">
+                    <Border Name="PropertyWindow" Style="{StaticResource EditorWindows}">
+                        <Grid Height="Auto">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Properties</Label>
+                            <StackPanel Name="PropertyList"  Grid.Row="1" Grid.Column="0">
+                                <!-- To be filled programatically -->
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type customControls:Control_HierarchyWindow}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type customControls:Control_HierarchyWindow}">
+                    <Border Name="HierarchyWindow" Style="{StaticResource EditorWindows}">
+                        <Grid Height="Auto">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Hierarchy</Label>
+                            <ListBox  Name="HierarchyList"  Grid.Row="1" Grid.Column="0" Style="{DynamicResource HierarchyListBox}">
+                                <!-- To be filled programatically -->
+                            </ListBox>
+                            <Grid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="New">
+                                        <MenuItem Header="Sphere" Name="ContextMenu_NewSphere"/>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </Grid.ContextMenu>
+                        </Grid>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

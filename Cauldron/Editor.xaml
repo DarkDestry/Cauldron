@@ -7,12 +7,23 @@
         mc:Ignorable="d"
         Icon="Cauldron.png"
         Style="{StaticResource DarkTheme}"
-        Title="Cauldron Editor" Height="450" Width="800">
+        Title="Cauldron Editor" Height="768" Width="1366">
     <Window.Resources>
         <Style TargetType="ListBox" x:Key="HierarchyListBox">
             <Setter Property="Background" Value="#FF252526" />
             <Setter Property="TextElement.Foreground" Value="#f1f1f1" />
             <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        <Style TargetType="Border" x:Key="EditorWindows">
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Background" Value="#252526" />
+            <Setter Property="BorderBrush" Value="#3f3f46" />
+        </Style>
+        <Style TargetType="Label" x:Key="EditorWindowLabel">
+            <Setter Property="Background" Value="#2d2d30" />
+            <Setter Property="Foreground" Value="#d0d0d0" />
+            <Setter Property="FontFamily" Value="SegoeUI"/>
         </Style>
 
     </Window.Resources>
@@ -22,10 +33,50 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <customControls:Control_HierarchyWindow/>
-        <customControls:Control_PropertiesWindow Grid.Column="1" />
+        <Border Name="PropertyWindow" Style="{StaticResource EditorWindows}" Grid.Column="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Scene</Label>
+                <Grid Grid.Row="1" ShowGridLines="True">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label Panel.ZIndex="999" Grid.Row="0" Grid.Column="0" Content="Left Ortho" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    <Label Panel.ZIndex="999" Grid.Row="0" Grid.Column="1" Content="Right Ortho" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    <Label Panel.ZIndex="999" Grid.Row="1" Grid.Column="0" Content="Top Ortho" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    <Label Panel.ZIndex="999" Grid.Row="1" Grid.Column="1" Content="WIP 3D" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    <Canvas Grid.Row="0" Grid.Column="0" ClipToBounds="True" Tag="Left">
+                        <!-- To be filled programatically -->
+                    </Canvas>
+                    <Canvas Grid.Row="0" Grid.Column="1" ClipToBounds="True" Tag="Right">
+                        <!-- To be filled programatically -->
+                    </Canvas>
+                    <Canvas Grid.Row="1" Grid.Column="0" ClipToBounds="True" Tag="Top">
+                        <!-- To be filled programatically -->
+                    </Canvas>
+                    <Canvas Grid.Row="1" Grid.Column="1" ClipToBounds="True" Tag="3D">
+                        <!-- To be filled programatically -->
+                    </Canvas>
+                </Grid>
+            </Grid>
+        </Border>
+        <customControls:Control_PropertiesWindow Grid.Column="2" />
+
 
     </Grid>
 </Window>
