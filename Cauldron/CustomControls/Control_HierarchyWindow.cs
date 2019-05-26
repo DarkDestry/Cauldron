@@ -33,13 +33,13 @@ namespace Cauldron.CustomControls
 		{
 			base.OnApplyTemplate();
 
-			if (this.Template != null)
+			if (Template != null)
 			{
-				MenuItem NewSphereMenuItem = this.Template.FindName("ContextMenu_NewSphere", this) as MenuItem;
+				MenuItem NewSphereMenuItem = Template.FindName("ContextMenu_NewSphere", this) as MenuItem;
 				NewSphereMenuItem.Click += CreateSubMenuItem_OnClick;
 				instance = this;
 
-				hierarchyListBox = this.Template.FindName("HierarchyList", this) as ListBox;
+				hierarchyListBox = Template.FindName("HierarchyList", this) as ListBox;
 			}
 		}
 
@@ -59,12 +59,9 @@ namespace Cauldron.CustomControls
 			}
 		}
 
-		public static void UpdateHierarchyList()
-		{
-			instance._UpdateHierarchyList();
-		}
+		public static void UpdateHierarchyList() => instance._UpdateHierarchyList();
 
-		private void _UpdateHierarchyList()
+        private void _UpdateHierarchyList()
 		{
 			hierarchyListBox.Items.Clear();
 			foreach (var sceneObject in Hierarchy.hierarchyObjectList)
@@ -89,8 +86,8 @@ namespace Cauldron.CustomControls
 		{
 			ListBoxItem item = sender as ListBoxItem;
 			Hierarchy.SceneObject obj = item.Tag as Hierarchy.SceneObject;
-			Control_PropertiesWindow.UpdateProperties(obj.Guid);
-		}
+            Hierarchy.ChangeObjectFocus(obj);
+        }
 
 		private void DeleteMenuItem_Click(object sender, RoutedEventArgs e)
 		{

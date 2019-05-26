@@ -66,9 +66,9 @@ namespace Cauldron.CustomControls
 		{
 			base.OnApplyTemplate();
 
-			if (this.Template != null)
+			if (Template != null)
 			{
-				textField = this.Template.FindName("Field_Text", this) as TextBox;
+				textField = Template.FindName("Field_Text", this) as TextBox;
 				textField.TextChanged += TextField_TextChanged;
                 textField.Text = TextField;
             }
@@ -87,9 +87,6 @@ namespace Cauldron.CustomControls
 			TextField = s;
 		}
 
-		protected virtual void OnFieldChanged(string value)
-		{
-			FieldChangedEvent?.Invoke(value);
-		}
-	}
+		protected virtual void OnFieldChanged(string value) => FieldChangedEvent?.Invoke(value);
+    }
 }

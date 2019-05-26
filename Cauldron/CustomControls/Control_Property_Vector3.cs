@@ -131,11 +131,11 @@ namespace Cauldron.CustomControls
 
             templateApplied = true;
 
-            if (this.Template != null)
+            if (Template != null)
             {
-                x = this.Template.FindName("Field_X",this) as TextBox;
-                y = this.Template.FindName("Field_Y",this) as TextBox;
-                z = this.Template.FindName("Field_Z",this) as TextBox;
+                x = Template.FindName("Field_X",this) as TextBox;
+                y = Template.FindName("Field_Y",this) as TextBox;
+                z = Template.FindName("Field_Z",this) as TextBox;
                 x.PreviewTextInput += PreviewTextInput;
                 y.PreviewTextInput += PreviewTextInput;
                 z.PreviewTextInput += PreviewTextInput;
@@ -203,9 +203,6 @@ namespace Cauldron.CustomControls
             ZValue = v3.z;
         }
 
-        protected virtual void OnFieldChanged(Vector3 value)
-        {
-            FieldChangedEvent?.Invoke(value);
-        }
+        protected virtual void OnFieldChanged(Vector3 value) => FieldChangedEvent?.Invoke(value);
     }
 }

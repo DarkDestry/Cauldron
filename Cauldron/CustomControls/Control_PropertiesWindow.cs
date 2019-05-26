@@ -20,7 +20,6 @@ namespace Cauldron.CustomControls
 	[TemplatePart(Name = "PropertyList", Type = typeof(StackPanel))]
 	public class Control_PropertiesWindow : Control
 	{
-		private static Control_PropertiesWindow instance;
 
 		static Control_PropertiesWindow()
 		{
@@ -33,18 +32,15 @@ namespace Cauldron.CustomControls
 		{
 			base.OnApplyTemplate();
 
-			instance = this;
-
-			if (this.Template != null)
+			if (Template != null)
 			{
-				propertyList = this.Template.FindName("PropertyList", this) as StackPanel;
+				propertyList = Template.FindName("PropertyList", this) as StackPanel;
+                Hierarchy.FocusChangedEvent += Hierarchy_FocusChangedEvent;
 			}
 		}
 
-        private void _UpdateProperties(string guid)
+        private void Hierarchy_FocusChangedEvent(Hierarchy.SceneObject obj)
         {
-            Hierarchy.SceneObject obj = Hierarchy.GetObject(guid);
-
             propertyList.Children.Clear();
 
             if (obj.properties.ContainsKey("name"))
@@ -62,12 +58,6 @@ namespace Cauldron.CustomControls
                 IProperty iProperty = propertyListChild as IProperty;
                 iProperty.UpdateProperty(obj);
             }
-        }
-
-
-        public static void UpdateProperties(string guid)
-        {
-            instance._UpdateProperties(guid);
         }
 	}
 }

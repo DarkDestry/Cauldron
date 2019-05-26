@@ -11,7 +11,9 @@ namespace Cauldron
 	{
 		public static List<SceneObject> hierarchyObjectList = new List<SceneObject>();
 
+        public delegate void FocusChangedEventHandler(SceneObject obj);
 
+        public static event FocusChangedEventHandler FocusChangedEvent; 
 
 		public class SceneObject
 		{
@@ -65,5 +67,9 @@ namespace Cauldron
 			MessageBox.Show($"Attempted to obtain object of GUID {guid} but object is not in hierarchy");
 			return null;
 		}
-	}
+
+        private static void OnFocusChanged(SceneObject obj) => FocusChangedEvent?.Invoke(obj);
+
+        public static void ChangeObjectFocus(SceneObject obj) => OnFocusChanged(obj);
+    }
 }

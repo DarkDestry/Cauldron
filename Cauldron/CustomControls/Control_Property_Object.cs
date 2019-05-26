@@ -35,11 +35,11 @@ namespace Cauldron.CustomControls
 
             templateApplied = true;
 
-            if (this.Template != null)
+            if (Template != null)
 			{
-				name = this.Template.FindName("String_Name", this) as Control_Property_String;
+				name = Template.FindName("String_Name", this) as Control_Property_String;
 				name.FieldChangedEvent += Name_FieldChanged;
-				guid = this.Template.FindName("String_Guid", this) as Control_Property_String;
+				guid = Template.FindName("String_Guid", this) as Control_Property_String;
                 if (currentObjectGuid != null) UpdateProperty(Hierarchy.GetObject(currentObjectGuid));
 			}
         }

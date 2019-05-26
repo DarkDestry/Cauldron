@@ -40,34 +40,25 @@ namespace Cauldron.CustomControls
 
             templateApplied = true;
 
-            if (this.Template != null)
+            if (Template != null)
 			{
-				position = this.Template.FindName("Vector3_Position", this) as Control_Property_Vector3;
+				position = Template.FindName("Vector3_Position", this) as Control_Property_Vector3;
 				position.FieldChangedEvent += Position_FieldChanged;
-				rotation = this.Template.FindName("Vector3_Rotation", this) as Control_Property_Vector3;
+				rotation = Template.FindName("Vector3_Rotation", this) as Control_Property_Vector3;
 				rotation.FieldChangedEvent += Rotation_FieldChanged;
-				scale = this.Template.FindName("Vector3_Scale", this) as Control_Property_Vector3;
+				scale = Template.FindName("Vector3_Scale", this) as Control_Property_Vector3;
 				scale.FieldChangedEvent += Scale_FieldChanged;
                 if (currentObjectGuid != null) UpdateProperty(Hierarchy.GetObject(currentObjectGuid));
             }
         }
 
-		private void Scale_FieldChanged(Vector3 value)
-		{
-			Hierarchy.GetObject(currentObjectGuid).Transform.Scale = value;
-		}
+		private void Scale_FieldChanged(Vector3 value) => Hierarchy.GetObject(currentObjectGuid).Transform.Scale = value;
 
-		private void Rotation_FieldChanged(Vector3 value)
-		{
-			Hierarchy.GetObject(currentObjectGuid).Transform.Rotation = value;
-		}
+        private void Rotation_FieldChanged(Vector3 value) => Hierarchy.GetObject(currentObjectGuid).Transform.Rotation = value;
 
-		private void Position_FieldChanged(Vector3 value)
-		{
-			Hierarchy.GetObject(currentObjectGuid).Transform.Position = value;
-		}
+        private void Position_FieldChanged(Vector3 value) => Hierarchy.GetObject(currentObjectGuid).Transform.Position = value;
 
-		public void UpdateProperty(object value)
+        public void UpdateProperty(object value)
 		{
 			Hierarchy.SceneObject sceneObject = value as Hierarchy.SceneObject;
 
