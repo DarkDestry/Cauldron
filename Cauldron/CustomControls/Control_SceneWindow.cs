@@ -44,9 +44,9 @@ namespace Cauldron.CustomControls
                 top = Template.FindName("Canvas_Top",this) as Canvas;
                 perspective = Template.FindName("Canvas_3D",this) as Canvas;
 
-                front.GotMouseCapture += Front_GotMouseCapture;
-                right.GotMouseCapture += Right_GotMouseCapture;
-                top.GotMouseCapture += Top_GotMouseCapture;
+                front.GotMouseCapture += HandleMouseMove;
+                right.GotMouseCapture += HandleMouseMove;
+                top.GotMouseCapture += HandleMouseMove;
                 //perspective.GotMouseCapture += Perspective_GotMouseCapture;
 
                 front.MouseDown += Canvas_MouseDown;
@@ -54,9 +54,9 @@ namespace Cauldron.CustomControls
                 top.MouseDown += Canvas_MouseDown;
                 //perspective.MouseDown += Canvas_MouseDown;
 
-                front.MouseMove += Front_GotMouseCapture;
-                right.MouseMove += Right_GotMouseCapture;
-                top.MouseMove += Top_GotMouseCapture;
+                front.MouseMove += HandleMouseMove;
+                right.MouseMove += HandleMouseMove;
+                top.MouseMove += HandleMouseMove;
                 //perspective.GotMouseCapture += Perspective_GotMouseCapture;
             }
 
@@ -79,46 +79,39 @@ namespace Cauldron.CustomControls
         private bool panning;
         private Point pos;
 
-        private void Perspective_GotMouseCapture(object sender, MouseEventArgs e)
+        private void HandleMouseMove(object sender, MouseEventArgs e)
         {
+            Canvas canvas = sender as Canvas;
             if (e.MiddleButton == MouseButtonState.Pressed && !panning)
             {
-                pos = Mouse.GetPosition(sender as Canvas);
-                panning = true;
-            }
-
-            if (panning) {
-                Vector delta = e.GetPosition(sender as Canvas) - pos;
-
-                pos = e.GetPosition(sender as Canvas);
-
-                focusPoint.x += (float)delta.X;
-                focusPoint.y += (float)delta.Y;
-                if (e.MiddleButton == MouseButtonState.Released)
-                {
-                    panning = false;
-                    Mouse.Capture(null);
-                }
-            }
-            UpdateCanvas();
-        }
-
-        private void Top_GotMouseCapture(object sender, MouseEventArgs e)
-        {
-            if (e.MiddleButton == MouseButtonState.Pressed && !panning)
-            {
-                pos = Mouse.GetPosition(sender as Canvas);
+                pos = Mouse.GetPosition(canvas);
                 panning = true;
             }
 
             if (panning)
             {
-                Vector delta = e.GetPosition(sender as Canvas) - pos;
+                Vector delta = e.GetPosition(canvas) - pos;
 
-                pos = e.GetPosition(sender as Canvas);
+                pos = e.GetPosition(canvas);
 
-                focusPoint.x += -(float)delta.X;
-                focusPoint.z += -(float)delta.Y;
+                switch (canvas.Name)
+                {
+                    case "Canvas_Front":
+                        focusPoint.x += -(float)delta.X;
+                        focusPoint.y += (float)delta.Y;
+                        break;
+                    case "Canvas_Right":
+                        focusPoint.z += (float)delta.X;
+                        focusPoint.y += (float)delta.Y;
+                        break;
+                    case "Canvas_Top":
+                        focusPoint.x += -(float)delta.X;
+                        focusPoint.z += -(float)delta.Y;
+                        break;
+                    case "Canvas_3D":
+                        //TODO: 3D canvas movement
+                        break;
+                }
                 if (e.MiddleButton == MouseButtonState.Released)
                 {
                     panning = false;
@@ -126,56 +119,7 @@ namespace Cauldron.CustomControls
                 }
             }
             UpdateCanvas();
-        }
 
-        private void Right_GotMouseCapture(object sender, MouseEventArgs e)
-        {
-            if (e.MiddleButton == MouseButtonState.Pressed && !panning)
-            {
-                pos = Mouse.GetPosition(sender as Canvas);
-                panning = true;
-            }
-
-            if (panning)
-            {
-                Vector delta = e.GetPosition(sender as Canvas) - pos;
-
-                pos = e.GetPosition(sender as Canvas);
-
-                focusPoint.z += (float)delta.X;
-                focusPoint.y += (float)delta.Y;
-                if (e.MiddleButton == MouseButtonState.Released)
-                {
-                    panning = false;
-                    Mouse.Capture(null);
-                }
-            }
-            UpdateCanvas();
-        }
-
-        private void Front_GotMouseCapture(object sender, MouseEventArgs e)
-        {
-            if (e.MiddleButton == MouseButtonState.Pressed && !panning)
-            {
-                pos = Mouse.GetPosition(sender as Canvas);
-                panning = true;
-            }
-
-            if (panning)
-            {
-                Vector delta = e.GetPosition(sender as Canvas) - pos;
-
-                pos = e.GetPosition(sender as Canvas);
-
-                focusPoint.x += -(float)delta.X;
-                focusPoint.y += (float)delta.Y;
-                if (e.MiddleButton == MouseButtonState.Released)
-                {
-                    panning = false;
-                    Mouse.Capture(null);
-                }
-            }
-            UpdateCanvas();
         }
     }
 }
