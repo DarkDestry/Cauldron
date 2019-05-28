@@ -52,11 +52,23 @@ namespace Cauldron.CustomControls
             }
         }
 
-		private void Scale_FieldChanged(Vector3 value) => Hierarchy.GetObject(currentObjectGuid).Transform.Scale = value;
+		private void Scale_FieldChanged(Vector3 value)
+        {
+            Hierarchy.GetObject(currentObjectGuid).Transform.Scale = value;
+            Hierarchy.TriggerHierarchyUpdate();
+        }
 
-        private void Rotation_FieldChanged(Vector3 value) => Hierarchy.GetObject(currentObjectGuid).Transform.Rotation = value;
+        private void Rotation_FieldChanged(Vector3 value)
+        {
+            Hierarchy.GetObject(currentObjectGuid).Transform.Rotation = value;
+            Hierarchy.TriggerHierarchyUpdate();
+        }
 
-        private void Position_FieldChanged(Vector3 value) => Hierarchy.GetObject(currentObjectGuid).Transform.Position = value;
+        private void Position_FieldChanged(Vector3 value)
+        {
+            Hierarchy.GetObject(currentObjectGuid).Transform.Position = value;
+            Hierarchy.TriggerHierarchyUpdate();
+        }
 
         public void UpdateProperty(object value)
 		{
@@ -69,6 +81,6 @@ namespace Cauldron.CustomControls
 			position.UpdateProperty(sceneObject.Transform.Position);
 			rotation.UpdateProperty(sceneObject.Transform.Rotation);			
 			scale.UpdateProperty(sceneObject.Transform.Scale);
-		}
+        }
 	}
 }

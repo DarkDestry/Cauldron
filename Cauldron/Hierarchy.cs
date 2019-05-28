@@ -13,7 +13,11 @@ namespace Cauldron
 
         public delegate void FocusChangedEventHandler(SceneObject obj);
 
-        public static event FocusChangedEventHandler FocusChangedEvent; 
+        public delegate void HierarchyUpdateEventHandler();
+
+        public static event FocusChangedEventHandler FocusChangedEvent;
+
+        public static event HierarchyUpdateEventHandler HierarchyUpdateEvent;
 
 		public class SceneObject
 		{
@@ -71,5 +75,9 @@ namespace Cauldron
         private static void OnFocusChanged(SceneObject obj) => FocusChangedEvent?.Invoke(obj);
 
         public static void ChangeObjectFocus(SceneObject obj) => OnFocusChanged(obj);
+
+        private static void OnHierarchyUpdate() => HierarchyUpdateEvent?.Invoke();
+
+        public static void TriggerHierarchyUpdate() => OnHierarchyUpdate();
     }
 }

@@ -47,8 +47,8 @@ namespace Cauldron.CustomControls
 		private void Name_FieldChanged(string value)
 		{
 			Hierarchy.GetObject(currentObjectGuid).Name = value;
-			Control_HierarchyWindow.UpdateHierarchyList();
-		}
+            Hierarchy.TriggerHierarchyUpdate();
+        }
 
 		public void UpdateProperty(object value)
         {

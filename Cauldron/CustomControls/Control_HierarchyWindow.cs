@@ -20,7 +20,6 @@ namespace Cauldron.CustomControls
 	[TemplatePart(Name = "HierarchyList", Type = typeof(ListBox))]
 	public class Control_HierarchyWindow : Control
 	{
-		private static Control_HierarchyWindow instance;
 
 		static Control_HierarchyWindow()
 		{
@@ -37,7 +36,7 @@ namespace Cauldron.CustomControls
 			{
 				MenuItem NewSphereMenuItem = Template.FindName("ContextMenu_NewSphere", this) as MenuItem;
 				NewSphereMenuItem.Click += CreateSubMenuItem_OnClick;
-				instance = this;
+                Hierarchy.HierarchyUpdateEvent += _UpdateHierarchyList;
 
 				hierarchyListBox = Template.FindName("HierarchyList", this) as ListBox;
 			}
@@ -53,13 +52,11 @@ namespace Cauldron.CustomControls
 				{
 					case "Sphere":
 						Hierarchy.hierarchyObjectList.Add(new Hierarchy.SceneObject("Sphere"));
-						_UpdateHierarchyList();
+						Hierarchy.TriggerHierarchyUpdate();
 						break;
 				}
 			}
 		}
-
-		public static void UpdateHierarchyList() => instance._UpdateHierarchyList();
 
         private void _UpdateHierarchyList()
 		{
@@ -93,7 +90,7 @@ namespace Cauldron.CustomControls
 		{
 			MenuItem item = sender as MenuItem;
 			Hierarchy.RemoveObject(item.Tag as string);
-			UpdateHierarchyList();
-		}
+            Hierarchy.TriggerHierarchyUpdate();
+        }
 	}
 }

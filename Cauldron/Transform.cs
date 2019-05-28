@@ -16,7 +16,7 @@ namespace Cauldron
 		{
 			Position = new Vector3(0,0,0);
 			Rotation = new Vector3(0,0,0);
-			Scale = new Vector3(0,0,0);
+			Scale = new Vector3(1,1,1);
 		}
 	}
 }

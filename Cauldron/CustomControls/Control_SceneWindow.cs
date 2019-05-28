@@ -58,6 +58,8 @@ namespace Cauldron.CustomControls
                 right.MouseMove += HandleMouseMove;
                 top.MouseMove += HandleMouseMove;
                 //perspective.GotMouseCapture += Perspective_GotMouseCapture;
+
+                Hierarchy.HierarchyUpdateEvent += UpdateCanvas;
             }
 
             UpdateCanvas();
@@ -71,9 +73,55 @@ namespace Cauldron.CustomControls
         private void UpdateCanvas()
         {
             front.Children.Clear();
+            right.Children.Clear();
+            top.Children.Clear();
             Label test = new Label();
             test.Content = $"{focusPoint.x}, {focusPoint.y}, {focusPoint.z}";
             front.Children.Add(test);
+
+            //canvas top left points
+            float frontX = focusPoint.x - (float)top.ActualWidth/2;
+            float frontY = focusPoint.y + (float)top.ActualHeight / 2;
+            float rightX = focusPoint.z + (float)right.ActualWidth / 2;
+            float rightY = focusPoint.y + (float)right.ActualHeight / 2; 
+            float topX = focusPoint.x - (float)front.ActualWidth / 2;
+            float topY = focusPoint.z - (float) front.ActualHeight / 2;
+
+
+            foreach (var sceneObject in Hierarchy.hierarchyObjectList)
+            {
+                //Top Canvas
+                Ellipse topSphere = new Ellipse();
+                topSphere.Width = sceneObject.Transform.Scale.x;
+                topSphere.Height = sceneObject.Transform.Scale.z;
+                topSphere.Stroke = Brushes.White;
+                topSphere.StrokeThickness = 2;
+                Canvas.SetLeft(topSphere, sceneObject.Transform.Position.x - topX - sceneObject.Transform.Scale.x / 2);
+                Canvas.SetTop(topSphere, sceneObject.Transform.Position.z - topY - sceneObject.Transform.Scale.z / 2);
+                top.Children.Add(topSphere);
+
+                //Right Canvas
+                Ellipse rightSphere = new Ellipse();
+                rightSphere.Width = sceneObject.Transform.Scale.z;
+                rightSphere.Height = sceneObject.Transform.Scale.y;
+                rightSphere.Stroke = Brushes.White;
+                rightSphere.StrokeThickness = 2;
+                Canvas.SetLeft(rightSphere, rightX - sceneObject.Transform.Position.z - sceneObject.Transform.Scale.z / 2);
+                Canvas.SetTop(rightSphere, rightY - sceneObject.Transform.Position.y - sceneObject.Transform.Scale.y / 2);
+                right.Children.Add(rightSphere);
+
+                //Front Canvas
+                Ellipse frontSphere = new Ellipse();
+                frontSphere.Width = sceneObject.Transform.Scale.x;
+                frontSphere.Height = sceneObject.Transform.Scale.y;
+                frontSphere.Stroke = Brushes.White;
+                frontSphere.StrokeThickness = 2;
+                Canvas.SetLeft(frontSphere, sceneObject.Transform.Position.x - frontX - sceneObject.Transform.Scale.x / 2);
+                Canvas.SetTop(frontSphere, frontY - sceneObject.Transform.Position.y - sceneObject.Transform.Scale.y / 2);
+                front.Children.Add(frontSphere);
+            }
+
+            
         }
 
         private bool panning;
