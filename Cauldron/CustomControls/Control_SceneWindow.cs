@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -29,6 +30,9 @@ namespace Cauldron.CustomControls
 
 
         private Canvas front, right, top, perspective;
+        private int frontZoom = 1;
+        private int rightZoom = 1;
+        private int topZoom = 1;
 
         //Centralized Focus Point
         private Vector3 focusPoint = new Vector3(0,0,0);
@@ -59,6 +63,25 @@ namespace Cauldron.CustomControls
                 top.MouseMove += HandleMouseMove;
                 //perspective.GotMouseCapture += Perspective_GotMouseCapture;
 
+                front.MouseWheel += (sender, args) =>
+                {
+                    if (Math.Sign(args.Delta) > 0) frontZoom *= 2;
+                    else frontZoom /= 2;
+                    UpdateCanvas();
+                };
+                right.MouseWheel += (sender, args) =>
+                {
+                    if (Math.Sign(args.Delta) > 0) rightZoom *= 2;
+                    else rightZoom /= 2;
+                    UpdateCanvas();
+                };
+                top.MouseWheel += (sender, args) =>
+                {
+                    if (Math.Sign(args.Delta) > 0) topZoom *= 2;
+                    else topZoom /= 2;
+                    UpdateCanvas();
+                };
+
                 Hierarchy.HierarchyUpdateEvent += UpdateCanvas;
             }
 
@@ -80,44 +103,48 @@ namespace Cauldron.CustomControls
             front.Children.Add(test);
 
             //canvas top left points
-            float frontX = focusPoint.x - (float)top.ActualWidth/2;
-            float frontY = focusPoint.y + (float)top.ActualHeight / 2;
-            float rightX = focusPoint.z + (float)right.ActualWidth / 2;
-            float rightY = focusPoint.y + (float)right.ActualHeight / 2; 
-            float topX = focusPoint.x - (float)front.ActualWidth / 2;
-            float topY = focusPoint.z - (float) front.ActualHeight / 2;
+            float frontX = focusPoint.x - (float) front.ActualWidth / 2 / frontZoom;
+            float frontY = focusPoint.y + (float) front.ActualHeight / 2 / frontZoom;
+            float rightX = focusPoint.z + (float) right.ActualWidth / 2 / rightZoom;
+            float rightY = focusPoint.y + (float) right.ActualHeight / 2 / rightZoom; 
+            float topX = focusPoint.x - (float) top.ActualWidth / 2 / topZoom;
+            float topY = focusPoint.z - (float)top.ActualHeight / 2 / topZoom;
 
 
             foreach (var sceneObject in Hierarchy.hierarchyObjectList)
             {
                 //Top Canvas
                 Ellipse topSphere = new Ellipse();
-                topSphere.Width = sceneObject.Transform.Scale.x;
-                topSphere.Height = sceneObject.Transform.Scale.z;
+                topSphere.Width = sceneObject.Transform.Scale.x * topZoom;
+                topSphere.Height = sceneObject.Transform.Scale.z * topZoom;
                 topSphere.Stroke = Brushes.White;
-                topSphere.StrokeThickness = 2;
-                Canvas.SetLeft(topSphere, sceneObject.Transform.Position.x - topX - sceneObject.Transform.Scale.x / 2);
-                Canvas.SetTop(topSphere, sceneObject.Transform.Position.z - topY - sceneObject.Transform.Scale.z / 2);
+                topSphere.StrokeThickness = 1;
+                Canvas.SetLeft(topSphere, (sceneObject.Transform.Position.x - topX - sceneObject.Transform.Scale.x / 2) * topZoom);
+                Canvas.SetTop(topSphere, (sceneObject.Transform.Position.z - topY - sceneObject.Transform.Scale.z / 2) * topZoom);
                 top.Children.Add(topSphere);
 
                 //Right Canvas
                 Ellipse rightSphere = new Ellipse();
-                rightSphere.Width = sceneObject.Transform.Scale.z;
-                rightSphere.Height = sceneObject.Transform.Scale.y;
+                rightSphere.Width = sceneObject.Transform.Scale.z * rightZoom;
+                rightSphere.Height = sceneObject.Transform.Scale.y * rightZoom;
                 rightSphere.Stroke = Brushes.White;
-                rightSphere.StrokeThickness = 2;
-                Canvas.SetLeft(rightSphere, rightX - sceneObject.Transform.Position.z - sceneObject.Transform.Scale.z / 2);
-                Canvas.SetTop(rightSphere, rightY - sceneObject.Transform.Position.y - sceneObject.Transform.Scale.y / 2);
+                rightSphere.StrokeThickness = 1;
+                Canvas.SetLeft(rightSphere,
+                    (rightX - sceneObject.Transform.Position.z - sceneObject.Transform.Scale.z / 2) * rightZoom);
+                Canvas.SetTop(rightSphere,
+                    (rightY - sceneObject.Transform.Position.y - sceneObject.Transform.Scale.y / 2) * rightZoom);
                 right.Children.Add(rightSphere);
 
                 //Front Canvas
                 Ellipse frontSphere = new Ellipse();
-                frontSphere.Width = sceneObject.Transform.Scale.x;
-                frontSphere.Height = sceneObject.Transform.Scale.y;
+                frontSphere.Width = sceneObject.Transform.Scale.x * frontZoom;
+                frontSphere.Height = sceneObject.Transform.Scale.y * frontZoom;
                 frontSphere.Stroke = Brushes.White;
-                frontSphere.StrokeThickness = 2;
-                Canvas.SetLeft(frontSphere, sceneObject.Transform.Position.x - frontX - sceneObject.Transform.Scale.x / 2);
-                Canvas.SetTop(frontSphere, frontY - sceneObject.Transform.Position.y - sceneObject.Transform.Scale.y / 2);
+                frontSphere.StrokeThickness = 1;
+                Canvas.SetLeft(frontSphere,
+                    (sceneObject.Transform.Position.x - frontX - sceneObject.Transform.Scale.x / 2) * frontZoom);
+                Canvas.SetTop(frontSphere,
+                    (frontY - sceneObject.Transform.Position.y - sceneObject.Transform.Scale.y / 2) * frontZoom);
                 front.Children.Add(frontSphere);
             }
 
@@ -145,16 +172,16 @@ namespace Cauldron.CustomControls
                 switch (canvas.Name)
                 {
                     case "Canvas_Front":
-                        focusPoint.x += -(float)delta.X;
-                        focusPoint.y += (float)delta.Y;
+                        focusPoint.x += -(float)delta.X * 1 / frontZoom;
+                        focusPoint.y += (float)delta.Y * 1 / frontZoom;
                         break;
                     case "Canvas_Right":
-                        focusPoint.z += (float)delta.X;
-                        focusPoint.y += (float)delta.Y;
+                        focusPoint.z += (float)delta.X * 1 / rightZoom;
+                        focusPoint.y += (float)delta.Y * 1 / rightZoom;
                         break;
                     case "Canvas_Top":
-                        focusPoint.x += -(float)delta.X;
-                        focusPoint.z += -(float)delta.Y;
+                        focusPoint.x += -(float)delta.X * 1 / topZoom;
+                        focusPoint.z += -(float)delta.Y * 1 / topZoom;
                         break;
                     case "Canvas_3D":
                         //TODO: 3D canvas movement
