@@ -60,6 +60,7 @@
     <Compile Include="CustomControls\Control_HierarchyWindow.cs" />
     <Compile Include="CustomControls\Control_PropertiesWindow.cs" />
     <Compile Include="CustomControls\Control_Property_Object.cs" />
+    <Compile Include="CustomControls\Control_Property_ReadOnly.cs" />
     <Compile Include="CustomControls\Control_Property_String.cs" />
     <Compile Include="CustomControls\Control_Property_Vector3.cs" />
     <Compile Include="CustomControls\Control_SceneWindow.cs" />

@@ -129,8 +129,8 @@ namespace Cauldron.CustomControls
             {
                 //Top Canvas
                 Ellipse topSphere = new Ellipse();
-                topSphere.Width = sceneObject.Transform.Scale.x * topZoom;
-                topSphere.Height = sceneObject.Transform.Scale.z * topZoom;
+                topSphere.Width = Math.Abs(sceneObject.Transform.Scale.x * topZoom);
+                topSphere.Height = Math.Abs(sceneObject.Transform.Scale.z * topZoom);
                 topSphere.Stroke = Brushes.White;
                 topSphere.StrokeThickness = 1;
                 Canvas.SetLeft(topSphere, (sceneObject.Transform.Position.x - topX - sceneObject.Transform.Scale.x / 2) * topZoom);
@@ -139,8 +139,8 @@ namespace Cauldron.CustomControls
 
                 //Right Canvas
                 Ellipse rightSphere = new Ellipse();
-                rightSphere.Width = sceneObject.Transform.Scale.z * rightZoom;
-                rightSphere.Height = sceneObject.Transform.Scale.y * rightZoom;
+                rightSphere.Width = Math.Abs(sceneObject.Transform.Scale.z * rightZoom);
+                rightSphere.Height = Math.Abs(sceneObject.Transform.Scale.y * rightZoom);
                 rightSphere.Stroke = Brushes.White;
                 rightSphere.StrokeThickness = 1;
                 Canvas.SetLeft(rightSphere,
@@ -151,8 +151,8 @@ namespace Cauldron.CustomControls
 
                 //Front Canvas
                 Ellipse frontSphere = new Ellipse();
-                frontSphere.Width = sceneObject.Transform.Scale.x * frontZoom;
-                frontSphere.Height = sceneObject.Transform.Scale.y * frontZoom;
+                frontSphere.Width = Math.Abs(sceneObject.Transform.Scale.x * frontZoom);
+                frontSphere.Height = Math.Abs(sceneObject.Transform.Scale.y * frontZoom);
                 frontSphere.Stroke = Brushes.White;
                 frontSphere.StrokeThickness = 1;
                 Canvas.SetLeft(frontSphere,

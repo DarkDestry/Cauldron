@@ -41,12 +41,19 @@ namespace Cauldron
 				get => properties["name"] as string;
 				set => properties["name"] = value;
 			}
+
 			public string Guid
 			{
 				get => properties["guid"] as string;
 				set => properties["guid"] = value;
 			}
-		}
+
+            public Geometry Geometry
+            {
+                get => (Geometry) properties["geometry"];
+                set => properties["geometry"] = value;
+            }
+        }
 
 		public static void RemoveObject(string guid)
 		{
@@ -79,5 +86,11 @@ namespace Cauldron
         private static void OnHierarchyUpdate() => HierarchyUpdateEvent?.Invoke();
 
         public static void TriggerHierarchyUpdate() => OnHierarchyUpdate();
+    }
+
+    public enum Geometry
+    {
+        Sphere,
+        Cube,
     }
 }

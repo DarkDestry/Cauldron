@@ -146,6 +146,69 @@ namespace Cauldron.CustomControls
                 x.Text = XValue.ToString();
                 y.Text = YValue.ToString();
                 z.Text = ZValue.ToString();
+
+                x.PreviewMouseDown += MouseMiddleButtonDown;
+                y.PreviewMouseDown += MouseMiddleButtonDown;
+                z.PreviewMouseDown += MouseMiddleButtonDown;
+
+                x.MouseMove += Field_MouseMove;
+                y.MouseMove += Field_MouseMove;
+                z.MouseMove += Field_MouseMove;
+                x.GotMouseCapture += Field_MouseMove;
+                y.GotMouseCapture += Field_MouseMove;
+                z.GotMouseCapture += Field_MouseMove;
+            }
+        }
+
+        private bool dragging;
+        private Point cursorPos;
+
+        private void Field_MouseMove(object sender, MouseEventArgs e)
+        {
+            TextBox field = sender as TextBox;
+
+            if (!dragging && e.MiddleButton == MouseButtonState.Pressed)
+            {
+                dragging = true;
+                cursorPos = Mouse.GetPosition(field);
+            }
+
+            if (dragging)
+            {
+                Vector delta = e.GetPosition(field) - cursorPos;
+
+                cursorPos = e.GetPosition(field);
+
+                switch (field.Name)
+                {
+                    case "Field_X":
+                        XValue = (float)(float.Parse(field.Text) + delta.X);
+                        break;
+                    case "Field_Y":
+                        YValue = (float)(float.Parse(field.Text) + delta.X);
+                        break;
+                    case "Field_Z":
+                        ZValue = (float)(float.Parse(field.Text) + delta.X);
+                        break;
+                }
+                
+
+                if (e.MiddleButton == MouseButtonState.Released)
+                {
+                    dragging = false;
+                    Mouse.OverrideCursor = Cursors.Arrow;
+                    Mouse.Capture(null);
+                }
+            }
+        }
+
+        private void MouseMiddleButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.MiddleButton == MouseButtonState.Pressed)
+            {
+                e.Handled = true;
+                Mouse.Capture(sender as IInputElement);
+                Mouse.OverrideCursor = Cursors.SizeWE;
             }
         }
 
@@ -172,9 +235,9 @@ namespace Cauldron.CustomControls
         private void Vector3_TextChanged(object sender, TextChangedEventArgs e)
         {
 
-            float xV = x.Text == "" ? 0 : float.Parse(x.Text);
-            float yV = y.Text == "" ? 0 : float.Parse(y.Text);
-            float zV = z.Text == "" ? 0 : float.Parse(z.Text);
+            float xV = x.Text == "" || x.Text == "-" ? 0 : float.Parse(x.Text);
+            float yV = y.Text == "" || x.Text == "-" ? 0 : float.Parse(y.Text);
+            float zV = z.Text == "" || x.Text == "-" ? 0 : float.Parse(z.Text);
 
             TextBox field = sender as TextBox;
             switch (field.Name)

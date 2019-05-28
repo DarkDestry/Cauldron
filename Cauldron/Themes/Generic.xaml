@@ -49,7 +49,8 @@
                     <Expander Header="Object" IsExpanded="True">
                         <StackPanel>
                             <customControls:Control_Property_String x:Name="String_Name" NameLabel="Name"/>
-                            <customControls:Control_Property_String x:Name="String_Guid" NameLabel="GUID" Focusable="False"/>
+
+                            <customControls:Control_Property_ReadOnly x:Name="String_Guid" NameLabel="GUID"/>
                         </StackPanel>
                     </Expander>
                 </ControlTemplate>
@@ -199,13 +200,34 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Label Name="LabelName" Content="{TemplateBinding NameLabel}"/>
-                        <TextBox Grid.Column="1" Name="Field_Text" Focusable="{TemplateBinding Focusable}"></TextBox>
+                        <TextBox Grid.Column="1" Name="Field_Text" Focusable="{TemplateBinding Focusable}" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-
+    <Style TargetType="{x:Type customControls:Control_Property_ReadOnly}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type customControls:Control_Property_ReadOnly}">
+                    <Grid x:Name="Control_Property_ReadOnly_Root">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Name="LabelName" Content="{TemplateBinding NameLabel}"/>
+                        <Label Grid.Column="1" Name="Label_Value" Focusable="{TemplateBinding Focusable}"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 <!-- End ControlTemplates -->
+
+
+
 </ResourceDictionary>
