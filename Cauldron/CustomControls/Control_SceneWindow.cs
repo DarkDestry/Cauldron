@@ -23,6 +23,13 @@ namespace Cauldron.CustomControls
     [TemplatePart(Name = "Canvas_3D", Type = typeof(Canvas))]
     public class Control_SceneWindow : Control
     {
+        private delegate void SceneObjectFocusEventHandler(Hierarchy.SceneObject obj);
+
+        private static event SceneObjectFocusEventHandler SceneObjectFocusEvent;
+
+        public static void OnSceneObjectFocus(Hierarchy.SceneObject obj) => SceneObjectFocusEvent?.Invoke(obj);
+
+
         static Control_SceneWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Control_SceneWindow), new FrameworkPropertyMetadata(typeof(Control_SceneWindow)));
@@ -83,8 +90,15 @@ namespace Cauldron.CustomControls
                 };
 
                 Hierarchy.HierarchyUpdateEvent += UpdateCanvas;
+                SceneObjectFocusEvent += FocusObject;
             }
 
+            UpdateCanvas();
+        }
+
+        private void FocusObject(Hierarchy.SceneObject obj)
+        {
+            focusPoint = obj.Transform.Position;
             UpdateCanvas();
         }
 

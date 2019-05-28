@@ -72,14 +72,25 @@ namespace Cauldron.CustomControls
 				deleteMenuItem.Header = "Delete Object";
 				deleteMenuItem.Click += DeleteMenuItem_Click;
 				deleteMenuItem.Tag = sceneObject.Guid;
+                MenuItem focusMenuItem = new MenuItem();
+                focusMenuItem.Header = "Focus Object in Scene";
+                focusMenuItem.Click += FocusMenuItem_Click;
+                focusMenuItem.Tag = sceneObject.Guid;
 				item.ContextMenu.Items.Add(deleteMenuItem);
+                item.ContextMenu.Items.Add(focusMenuItem);
 
 				hierarchyListBox.Items.Add(item);
 
 			}
 		}
 
-		private void Item_Selected(object sender, RoutedEventArgs e)
+        private void FocusMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = sender as MenuItem;
+            Control_SceneWindow.OnSceneObjectFocus(Hierarchy.GetObject(item.Tag as string));
+        }
+
+        private void Item_Selected(object sender, RoutedEventArgs e)
 		{
 			ListBoxItem item = sender as ListBoxItem;
 			Hierarchy.SceneObject obj = item.Tag as Hierarchy.SceneObject;
