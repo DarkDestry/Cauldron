@@ -19,6 +19,11 @@
             <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+        <Grid.ContextMenu>
+            <ContextMenu>
+                <MenuItem Name="Render" Header="Render" Click="Render_OnClick"></MenuItem>
+            </ContextMenu>
+        </Grid.ContextMenu>
         <customControls:Control_HierarchyWindow/>
         <customControls:Control_SceneWindow Grid.Column="1"/>
         <customControls:Control_PropertiesWindow Grid.Column="2" />

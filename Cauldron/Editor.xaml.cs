@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,8 +21,14 @@ namespace Cauldron
 	/// Interaction logic for Editor.xaml
 	/// </summary>
 	public partial class Editor : Window
-	{
-		public Editor()
+    {
+        [DllImport("elixir_d.dll", CallingConvention = CallingConvention.Cdecl)]
+        static extern bool createBox(float px, float py, float pz, float sx, float sy, float sz, float rx, float ry,
+            float rz);
+        [DllImport("elixir_d.dll", CallingConvention = CallingConvention.Cdecl)]
+        static extern bool render();
+
+        public Editor()
 		{
 			InitializeComponent();
             this.Loaded += Editor_Loaded;
@@ -30,36 +37,36 @@ namespace Cauldron
         private void Editor_Loaded(object sender, RoutedEventArgs e)
         {
 #if DEBUG
-            var obj1 = new Hierarchy.SceneObject("Debug Sphere 1");
-            obj1.Transform.Position = new Vector3(50,0,0);
-            obj1.Transform.Scale = new Vector3(100,5,5);
-            var obj2 = new Hierarchy.SceneObject("Debug Sphere 2");
-            obj2.Transform.Position = new Vector3(0,0,50);
-            obj2.Transform.Scale = new Vector3(5,5,100);
-            var obj3 = new Hierarchy.SceneObject("Debug Sphere 3");
-            obj3.Transform.Position = new Vector3(0, 50, 0);
-            obj3.Transform.Scale = new Vector3(5,100,5);
+            //var obj1 = new Hierarchy.SceneObject("Debug Sphere 1 Axis X");
+            //obj1.Transform.Position = new Vector3(5,0,0);
+            //obj1.Transform.Scale = new Vector3(10,0.5f,0.5f);
+            //var obj2 = new Hierarchy.SceneObject("Debug Sphere 2 Axis Z");
+            //obj2.Transform.Position = new Vector3(0,0,5);
+            //obj2.Transform.Scale = new Vector3(0.5f, 0.5f, 10);
+            //var obj3 = new Hierarchy.SceneObject("Debug Sphere 3 Axis Y");
+            //obj3.Transform.Position = new Vector3(0, 5, 0);
+            //obj3.Transform.Scale = new Vector3(0.5f, 10, 0.5f);
             var obj4 = new Hierarchy.SceneObject("Debug Sphere 4");
-            obj4.Transform.Position = new Vector3(100, 40, 100);
-            obj4.Transform.Scale = new Vector3(80, 80, 80);
+            obj4.Transform.Position = new Vector3(-10, 4, -10);
+            obj4.Transform.Scale = new Vector3(8, 8, 8);
             var obj5 = new Hierarchy.SceneObject("Debug Sphere 5");
-            obj5.Transform.Position = new Vector3(100, 110, 100);
-            obj5.Transform.Scale = new Vector3(60, 60, 60);
+            obj5.Transform.Position = new Vector3(-10, 11, -10);
+            obj5.Transform.Scale = new Vector3(6, 6, 6);
             var obj6 = new Hierarchy.SceneObject("Debug Sphere 6");
-            obj6.Transform.Position = new Vector3(110, 120, 125);
-            obj6.Transform.Scale = new Vector3(15, 15, 15);
+            obj6.Transform.Position = new Vector3(-11, 12, -7.5f);
+            obj6.Transform.Scale = new Vector3(1.5f, 1.5f, 1.5f);
             var obj7 = new Hierarchy.SceneObject("Debug Sphere 7");
-            obj7.Transform.Position = new Vector3(90, 120, 125);
-            obj7.Transform.Scale = new Vector3(15, 15, 15);
+            obj7.Transform.Position = new Vector3(-9,12, -7.5f);
+            obj7.Transform.Scale = new Vector3(1.5f, 1.5f, 1.5f);
             var obj8 = new Hierarchy.SceneObject("Debug Sphere 8");
-            obj8.Transform.Position = new Vector3(100, 100, 125);
-            obj8.Transform.Scale = new Vector3(30, 7, 7);
+            obj8.Transform.Position = new Vector3(-10, 10, -7.5f);
+            obj8.Transform.Scale = new Vector3(3, 0.7f, 0.7f);
 
 
 
-            Hierarchy.hierarchyObjectList.Add(obj1);
-            Hierarchy.hierarchyObjectList.Add(obj2);
-            Hierarchy.hierarchyObjectList.Add(obj3);
+            //Hierarchy.hierarchyObjectList.Add(obj1);
+            //Hierarchy.hierarchyObjectList.Add(obj2);
+            //Hierarchy.hierarchyObjectList.Add(obj3);
             Hierarchy.hierarchyObjectList.Add(obj4);
             Hierarchy.hierarchyObjectList.Add(obj5);
             Hierarchy.hierarchyObjectList.Add(obj6);
@@ -67,6 +74,25 @@ namespace Cauldron
             Hierarchy.hierarchyObjectList.Add(obj8);
             Hierarchy.TriggerHierarchyUpdate();
 #endif
+        }
+
+        private void Render_OnClick(object sender, RoutedEventArgs e)
+        {
+            foreach (var o in Hierarchy.hierarchyObjectList)
+            {
+
+                createBox(o.Transform.Position.x,
+                    o.Transform.Position.y,
+                    o.Transform.Position.z,
+                    o.Transform.Scale.x,
+                    o.Transform.Scale.y,
+                    o.Transform.Scale.z,
+                    o.Transform.Rotation.x,
+                    o.Transform.Rotation.y,
+                    o.Transform.Rotation.z);
+            }
+
+            render();
         }
     }
 }
