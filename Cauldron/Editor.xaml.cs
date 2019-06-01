@@ -37,36 +37,36 @@ namespace Cauldron
         private void Editor_Loaded(object sender, RoutedEventArgs e)
         {
 #if DEBUG
-            //var obj1 = new Hierarchy.SceneObject("Debug Sphere 1 Axis X");
-            //obj1.Transform.Position = new Vector3(5,0,0);
-            //obj1.Transform.Scale = new Vector3(10,0.5f,0.5f);
-            //var obj2 = new Hierarchy.SceneObject("Debug Sphere 2 Axis Z");
-            //obj2.Transform.Position = new Vector3(0,0,5);
-            //obj2.Transform.Scale = new Vector3(0.5f, 0.5f, 10);
-            //var obj3 = new Hierarchy.SceneObject("Debug Sphere 3 Axis Y");
-            //obj3.Transform.Position = new Vector3(0, 5, 0);
-            //obj3.Transform.Scale = new Vector3(0.5f, 10, 0.5f);
+            var obj1 = new Hierarchy.SceneObject("Debug Sphere 1 Axis X");
+            obj1.Transform.Position = new CldVector3(5, 0, 0);
+            obj1.Transform.Scale = new CldVector3(10, 0.5f, 0.5f);
+            var obj2 = new Hierarchy.SceneObject("Debug Sphere 2 Axis Z");
+            obj2.Transform.Position = new CldVector3(0, 0, 5);
+            obj2.Transform.Scale = new CldVector3(0.5f, 0.5f, 10);
+            var obj3 = new Hierarchy.SceneObject("Debug Sphere 3 Axis Y");
+            obj3.Transform.Position = new CldVector3(0, 5, 0);
+            obj3.Transform.Scale = new CldVector3(0.5f, 10, 0.5f);
             var obj4 = new Hierarchy.SceneObject("Debug Sphere 4");
-            obj4.Transform.Position = new Vector3(-10, 4, -10);
-            obj4.Transform.Scale = new Vector3(8, 8, 8);
+            obj4.Transform.Position = new CldVector3(0, 4, 0);
+            obj4.Transform.Scale = new CldVector3(8, 8, 8);
             var obj5 = new Hierarchy.SceneObject("Debug Sphere 5");
-            obj5.Transform.Position = new Vector3(-10, 11, -10);
-            obj5.Transform.Scale = new Vector3(6, 6, 6);
+            obj5.Transform.Position = new CldVector3(0, 11, 0);
+            obj5.Transform.Scale = new CldVector3(6, 6, 6);
             var obj6 = new Hierarchy.SceneObject("Debug Sphere 6");
-            obj6.Transform.Position = new Vector3(-11, 12, -7.5f);
-            obj6.Transform.Scale = new Vector3(1.5f, 1.5f, 1.5f);
+            obj6.Transform.Position = new CldVector3(-1, 12, 2.5f);
+            obj6.Transform.Scale = new CldVector3(1.5f, 1.5f, 0.7f);
             var obj7 = new Hierarchy.SceneObject("Debug Sphere 7");
-            obj7.Transform.Position = new Vector3(-9,12, -7.5f);
-            obj7.Transform.Scale = new Vector3(1.5f, 1.5f, 1.5f);
+            obj7.Transform.Position = new CldVector3(1,12, 2.5f);
+            obj7.Transform.Scale = new CldVector3(1.5f, 1.5f, 0.7f);
             var obj8 = new Hierarchy.SceneObject("Debug Sphere 8");
-            obj8.Transform.Position = new Vector3(-10, 10, -7.5f);
-            obj8.Transform.Scale = new Vector3(3, 0.7f, 0.7f);
+            obj8.Transform.Position = new CldVector3(0, 10, 2.5f);
+            obj8.Transform.Scale = new CldVector3(3, 0.7f, 0.7f);
 
 
 
-            //Hierarchy.hierarchyObjectList.Add(obj1);
-            //Hierarchy.hierarchyObjectList.Add(obj2);
-            //Hierarchy.hierarchyObjectList.Add(obj3);
+            Hierarchy.hierarchyObjectList.Add(obj1);
+            Hierarchy.hierarchyObjectList.Add(obj2);
+            Hierarchy.hierarchyObjectList.Add(obj3);
             Hierarchy.hierarchyObjectList.Add(obj4);
             Hierarchy.hierarchyObjectList.Add(obj5);
             Hierarchy.hierarchyObjectList.Add(obj6);

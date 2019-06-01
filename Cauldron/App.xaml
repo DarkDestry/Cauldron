@@ -265,9 +265,6 @@
             <Setter Property="TextElement.Foreground" Value="#f1f1f1" />
             <Setter Property="Margin" Value="2 0" />
         </Style>
-        <Style TargetType="Canvas">
-            <Setter Property="Background" Value="Transparent"/>
-        </Style>
         <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
             <Grid>
                 <Grid.ColumnDefinitions>

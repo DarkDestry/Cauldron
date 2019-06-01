@@ -81,7 +81,7 @@ namespace Cauldron.CustomControls
         #endregion
 
 
-        public delegate void FieldChangedEventHandler(Vector3 value);
+        public delegate void FieldChangedEventHandler(CldVector3 value);
 
         public event FieldChangedEventHandler FieldChangedEvent;
 
@@ -253,19 +253,19 @@ namespace Cauldron.CustomControls
                     break;
             }
 
-            Vector3 v3 = new Vector3(xV,yV,zV);
+            CldVector3 v3 = new CldVector3(xV,yV,zV);
             OnFieldChanged(v3);
         }
 
         public void UpdateProperty(object value)
         {
-            Vector3 v3 = value is Vector3 ? (Vector3) value : default;
+            CldVector3 v3 = value is CldVector3 ? (CldVector3) value : default;
 
             XValue = v3.x;
             YValue = v3.y;
             ZValue = v3.z;
         }
 
-        protected virtual void OnFieldChanged(Vector3 value) => FieldChangedEvent?.Invoke(value);
+        protected virtual void OnFieldChanged(CldVector3 value) => FieldChangedEvent?.Invoke(value);
     }
 }

@@ -12,22 +12,25 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Cauldron.Primitives;
 
 namespace Cauldron.CustomControls
 {
     [TemplatePart(Name = "Canvas_Front", Type = typeof(Canvas))]
     [TemplatePart(Name = "Canvas_Right", Type = typeof(Canvas))]
     [TemplatePart(Name = "Canvas_Top", Type = typeof(Canvas))]
-    [TemplatePart(Name = "Canvas_3D", Type = typeof(Canvas))]
+    [TemplatePart(Name = "Viewport_3D", Type = typeof(MonoGameViewport))]
     public class Control_SceneWindow : Control
     {
         private delegate void SceneObjectFocusEventHandler(Hierarchy.SceneObject obj);
 
         private static event SceneObjectFocusEventHandler SceneObjectFocusEvent;
 
-        public static void OnSceneObjectFocus(Hierarchy.SceneObject obj) => SceneObjectFocusEvent?.Invoke(obj);
+        public static void OnSceneObjectFocus(Hierarchy.SceneObject
+            obj) => SceneObjectFocusEvent?.Invoke(obj);
 
 
         static Control_SceneWindow()
@@ -36,13 +39,14 @@ namespace Cauldron.CustomControls
         }
 
 
-        private Canvas front, right, top, perspective;
-        private int frontZoom = 1;
-        private int rightZoom = 1;
-        private int topZoom = 1;
+        private Canvas front, right, top;
+        private MonoGameViewport perspective;
+        private int frontZoom = 8;
+        private int rightZoom = 8;
+        private int topZoom = 8;
 
         //Centralized Focus Point
-        private Vector3 focusPoint = new Vector3(0,0,0);
+        private CldVector3 focusPoint = new CldVector3(0,0,0);
 
         public override void OnApplyTemplate()
         {
@@ -53,22 +57,19 @@ namespace Cauldron.CustomControls
                 front = Template.FindName("Canvas_Front", this) as Canvas;
                 right = Template.FindName("Canvas_Right",this) as Canvas;
                 top = Template.FindName("Canvas_Top",this) as Canvas;
-                perspective = Template.FindName("Canvas_3D",this) as Canvas;
+                perspective = Template.FindName("Viewport_3D",this) as MonoGameViewport;
 
                 front.GotMouseCapture += HandleMouseMove;
                 right.GotMouseCapture += HandleMouseMove;
                 top.GotMouseCapture += HandleMouseMove;
-                //perspective.GotMouseCapture += Perspective_GotMouseCapture;
 
                 front.MouseDown += Canvas_MouseDown;
                 right.MouseDown += Canvas_MouseDown;
                 top.MouseDown += Canvas_MouseDown;
-                //perspective.MouseDown += Canvas_MouseDown;
 
                 front.MouseMove += HandleMouseMove;
                 right.MouseMove += HandleMouseMove;
                 top.MouseMove += HandleMouseMove;
-                //perspective.GotMouseCapture += Perspective_GotMouseCapture;
 
                 front.MouseWheel += (sender, args) =>
                 {
@@ -112,6 +113,7 @@ namespace Cauldron.CustomControls
             front.Children.Clear();
             right.Children.Clear();
             top.Children.Clear();
+            //perspective.Children.Clear();
             Label test = new Label();
             test.Content = $"{focusPoint.x}, {focusPoint.y}, {focusPoint.z}";
             front.Children.Add(test);
@@ -123,7 +125,6 @@ namespace Cauldron.CustomControls
             float rightY = focusPoint.y + (float) right.ActualHeight / 2 / rightZoom; 
             float topX = focusPoint.x - (float) top.ActualWidth / 2 / topZoom;
             float topY = focusPoint.z - (float)top.ActualHeight / 2 / topZoom;
-
 
             foreach (var sceneObject in Hierarchy.hierarchyObjectList)
             {
@@ -162,7 +163,6 @@ namespace Cauldron.CustomControls
                 front.Children.Add(frontSphere);
             }
 
-            
         }
 
         private bool panning;

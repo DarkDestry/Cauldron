@@ -8,15 +8,15 @@ namespace Cauldron
 {
 	public class Transform
 	{
-		public Vector3 Position;
-		public Vector3 Rotation;
-		public Vector3 Scale;
+		public CldVector3 Position;
+		public CldVector3 Rotation;
+		public CldVector3 Scale;
 
 		public Transform()
 		{
-			Position = new Vector3(0,0,0);
-			Rotation = new Vector3(0,0,0);
-			Scale = new Vector3(1,1,1);
+			Position = new CldVector3(0,0,0);
+			Rotation = new CldVector3(0,0,0);
+			Scale = new CldVector3(1,1,1);
 		}
 	}
 }

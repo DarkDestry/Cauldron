@@ -1,7 +1,8 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:customControls="clr-namespace:Cauldron.CustomControls">
+    xmlns:customControls="clr-namespace:Cauldron.CustomControls"
+    xmlns:cauldron="clr-namespace:Cauldron">
 
 <!-- Styles -->
     <Style TargetType="Border" x:Key="EditorWindows">
@@ -145,9 +146,9 @@
                                 <Canvas Panel.ZIndex="0" Grid.Row="1" Grid.Column="0" ClipToBounds="True" Tag="Top" x:Name="Canvas_Top">
                                     <!-- To be filled programatically -->
                                 </Canvas>
-                                <Canvas Panel.ZIndex="0" Grid.Row="1" Grid.Column="1" ClipToBounds="True" Tag="3D" x:Name="Canvas_3D">
-                                    <!-- To be filled programatically -->
-                                </Canvas>
+                                <cauldron:MonoGameViewport Panel.ZIndex="0" Grid.Row="1" Grid.Column="1" Tag="3D" x:Name="Viewport_3D">
+                                    <!--To be filled programatically--> 
+                                </cauldron:MonoGameViewport>
                             </Grid>
                         </Grid>
                     </Border>
