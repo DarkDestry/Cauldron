@@ -124,32 +124,7 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Scene</Label>
-                            <Grid Grid.Row="1" ShowGridLines="True">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Label Panel.ZIndex="1" Grid.Row="0" Grid.Column="0" Content="Front Ortho" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                                <Label Panel.ZIndex="1" Grid.Row="0" Grid.Column="1" Content="Right Ortho" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                                <Label Panel.ZIndex="1" Grid.Row="1" Grid.Column="0" Content="Top Ortho" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                                <Label Panel.ZIndex="1" Grid.Row="1" Grid.Column="1" Content="WIP 3D" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                                <Canvas Panel.ZIndex="0" Grid.Row="0" Grid.Column="0" ClipToBounds="True" Tag="Front" x:Name="Canvas_Front">
-                                    <!-- To be filled programatically -->
-                                </Canvas>
-                                <Canvas Panel.ZIndex="0" Grid.Row="0" Grid.Column="1" ClipToBounds="True" Tag="Right" x:Name="Canvas_Right">
-                                    <!-- To be filled programatically -->
-                                </Canvas>
-                                <Canvas Panel.ZIndex="0" Grid.Row="1" Grid.Column="0" ClipToBounds="True" Tag="Top" x:Name="Canvas_Top">
-                                    <!-- To be filled programatically -->
-                                </Canvas>
-                                <cauldron:MonoGameViewport Panel.ZIndex="0" Grid.Row="1" Grid.Column="1" Tag="3D" x:Name="Viewport_3D">
-                                    <!--To be filled programatically--> 
-                                </cauldron:MonoGameViewport>
-                            </Grid>
+                            <cauldron:MonoGameViewport Panel.ZIndex="0" Grid.Row="1" Tag="3D" x:Name="Viewport_3D" />
                         </Grid>
                     </Border>
                 </ControlTemplate>

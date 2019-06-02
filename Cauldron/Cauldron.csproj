@@ -124,6 +124,7 @@
     <Compile Include="IPropertyField.cs" />
     <Compile Include="MonoGameViewport.cs" />
     <Compile Include="Primitives\Box.cs" />
+    <Compile Include="SolidColorTexture.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="CldVector3.cs" />
     <Page Include="Editor.xaml">
