@@ -1,15 +1,11 @@
-﻿using System;
-using System.Diagnostics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Framework.WpfInterop;
 using MonoGame.Framework.WpfInterop.Input;
-using SharpDX.Direct2D1;
 using Box = Cauldron.Primitives.Box;
 using Point = Microsoft.Xna.Framework.Point;
 using PrimitiveType = Microsoft.Xna.Framework.Graphics.PrimitiveType;
-using Quaternion = Microsoft.Xna.Framework.Quaternion;
 
 namespace Cauldron
 {
@@ -36,10 +32,17 @@ namespace Cauldron
             effect.EnableDefaultLighting();
             effect.SpecularColor = Vector3.Zero;
 
+            Hierarchy.FocusChangedEvent += Hierarchy_FocusChangedEvent;
+
             // must be called after the WpfGraphicsDeviceService instance was created
             base.Initialize();
 
             // content loading now possible
+        }
+
+        private void Hierarchy_FocusChangedEvent(Hierarchy.SceneObject obj)
+        {
+            cameraFocusPoint = obj.Transform.Position;
         }
 
         protected override void Update(GameTime time)
@@ -181,6 +184,7 @@ namespace Cauldron
         private Point pos;
         private int lastScrollWheelValue;
         private bool orbiting;
+        private bool panning;
 
         private void HandleInput(float deltaTime)
         {
@@ -189,11 +193,13 @@ namespace Cauldron
                 if (!_mouse.CaptureMouseWithin) pos = _mouse.GetState().Position;
 
                 _mouse.CaptureMouseWithin = true;
-                orbiting = true;
+                if (_keyboard.GetState().IsKeyDown(Keys.LeftShift)) panning = true;
+                else orbiting = true;
             }
             else
             {
                 _mouse.CaptureMouseWithin = false;
+                panning = false;
                 orbiting = false;
             }
 
@@ -205,6 +211,16 @@ namespace Cauldron
 
                 cameraPitch += (float) -delta.Y / 2;
                 cameraYaw += (float)-delta.X / 2;
+            }
+
+            if (panning)
+            {
+                Point delta = _mouse.GetState().Position - pos;
+
+                pos = _mouse.GetState().Position;
+
+                cameraFocusPoint += cameraRight * (float) -delta.X / 30;
+                cameraFocusPoint += cameraUp * (float) delta.Y / 30;
             }
 
             if (lastScrollWheelValue != _mouse.GetState().ScrollWheelValue)
