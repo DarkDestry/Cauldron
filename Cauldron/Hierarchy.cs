@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Xna.Framework;
 
 namespace Cauldron
 {
@@ -26,6 +27,8 @@ namespace Cauldron
 				properties.Add("name", name);
 				properties.Add("transform", new Transform());
 				properties.Add("guid", System.Guid.NewGuid().ToString());
+                properties.Add("geometry", Geometry.Cube);
+                properties.Add("color", Color.White);
 			}
 
 			public Dictionary<string,object> properties = new Dictionary<string, object>();
@@ -52,6 +55,12 @@ namespace Cauldron
             {
                 get => (Geometry) properties["geometry"];
                 set => properties["geometry"] = value;
+            }
+
+            public Color Color
+            {
+                get => (Color) properties["color"];
+                set => properties["color"] = value;
             }
         }
 

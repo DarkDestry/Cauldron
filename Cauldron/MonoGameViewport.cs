@@ -130,7 +130,7 @@ namespace Cauldron
                 pass.Apply();
                 foreach (var sceneObject in Hierarchy.hierarchyObjectList)
                 {
-                    effect.DiffuseColor = new Vector3(1,1,1);;
+                    effect.DiffuseColor = sceneObject.Color.ToVector3();
                     pass.Apply();
                     Box box = new Box(sceneObject.Transform);
 

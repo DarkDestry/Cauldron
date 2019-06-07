@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Cauldron.CustomControls;
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace Cauldron
 {
@@ -49,18 +50,23 @@ namespace Cauldron
             var obj4 = new Hierarchy.SceneObject("Debug Sphere 4");
             obj4.Transform.Position = new CldVector3(0, 0.5f, 0);
             obj4.Transform.Scale = new CldVector3(1, 1, 1);
+            obj4.Color = Color.SkyBlue;
             var obj5 = new Hierarchy.SceneObject("Debug Sphere 5");
             obj5.Transform.Position = new CldVector3(0, 1.4f, 0);
             obj5.Transform.Scale = new CldVector3(0.8f, 0.8f, 0.8f);
+            obj5.Color = Color.Aquamarine;
             var obj6 = new Hierarchy.SceneObject("Debug Sphere 6");
             obj6.Transform.Position = new CldVector3(-0.2f, 1.6f, -0.4f);
             obj6.Transform.Scale = new CldVector3(0.15f, 0.15f, 0.07f);
+            obj6.Color = Color.Black;
             var obj7 = new Hierarchy.SceneObject("Debug Sphere 7");
             obj7.Transform.Position = new CldVector3(0.2f, 1.6f, -0.4f);
             obj7.Transform.Scale = new CldVector3(0.15f, 0.15f, 0.07f);
+            obj7.Color = Color.Black;
             var obj8 = new Hierarchy.SceneObject("Debug Sphere 8");
             obj8.Transform.Position = new CldVector3(0, 1.2f, -0.4f);
             obj8.Transform.Scale = new CldVector3(0.3f, 0.07f, 0.07f);
+            obj8.Color = Color.Pink;
 
 
 
