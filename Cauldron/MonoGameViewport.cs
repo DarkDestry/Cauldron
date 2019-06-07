@@ -182,6 +182,7 @@ namespace Cauldron
         }
 
         private Point pos;
+        private float scrollValue = 10;
         private int lastScrollWheelValue;
         private bool orbiting;
         private bool panning;
@@ -228,8 +229,10 @@ namespace Cauldron
                 int delta = _mouse.GetState().ScrollWheelValue - lastScrollWheelValue;
                 lastScrollWheelValue = _mouse.GetState().ScrollWheelValue;
 
-                distance -= delta / 10;
-                distance = MathHelper.Clamp(distance, 1, float.MaxValue);
+                scrollValue -= (float)delta / 500;
+                scrollValue = MathHelper.Clamp(scrollValue, 1, float.MaxValue);
+
+                distance = scrollValue * scrollValue * scrollValue * scrollValue / 81;
                 System.Diagnostics.Trace.WriteLine(distance.ToString());
             }
         }
