@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Framework.WpfInterop;
 using MonoGame.Framework.WpfInterop.Input;
+using SharpDX.DirectWrite;
 using Box = Cauldron.Primitives.Box;
 using Point = Microsoft.Xna.Framework.Point;
 using PrimitiveType = Microsoft.Xna.Framework.Graphics.PrimitiveType;
@@ -15,6 +17,7 @@ namespace Cauldron
         private WpfKeyboard _keyboard;
         private WpfMouse _mouse;
         private BasicEffect effect;
+        private Effect outlineEffect;
 
         protected override void Initialize()
         {
@@ -40,6 +43,12 @@ namespace Cauldron
             // content loading now possible
         }
 
+        protected override void LoadContent()
+        {
+            Content.RootDirectory = @".\Content\bin\";
+            outlineEffect = Content.Load<Effect>(@"Shaders\Outline");
+        }
+
         private void Hierarchy_FocusChangedEvent(Hierarchy.SceneObject obj)
         {
             cameraFocusPoint = obj.Transform.Position;
@@ -50,6 +59,9 @@ namespace Cauldron
             // every update we can now query the keyboard & mouse for our WpfGame
             var mouseState = _mouse.GetState();
             var keyboardState = _keyboard.GetState();
+            float deltaTime = (float)time.ElapsedGameTime.Milliseconds / 1000;
+
+            HandleInput(deltaTime);
         }
 
         private float cameraPitch;
@@ -69,9 +81,6 @@ namespace Cauldron
 
         protected override void Draw(GameTime time)
         {
-            float deltaTime = (float)time.ElapsedGameTime.Milliseconds/1000;
-
-            HandleInput(deltaTime);
 
             GraphicsDevice.Clear(new Color(new Vector3(0.14f)));
 
@@ -88,7 +97,7 @@ namespace Cauldron
 
             //effect.VertexColorEnabled = true;
 
-            int gridLineCount = 8;
+            const int gridLineCount = 16;
 
             VertexPositionNormalTexture[] worldGrid = new VertexPositionNormalTexture[(gridLineCount*2 +1)* 4];
 
@@ -109,18 +118,27 @@ namespace Cauldron
 
             var forwardLine = new[]
             {
-                new VertexPositionNormalTexture(Vector3.Forward * 10, Vector3.Up, Vector2.Zero),
-                new VertexPositionNormalTexture(Vector3.Forward * -10, Vector3.Up, Vector2.Zero)
+                new VertexPositionNormalTexture(Vector3.Forward * (gridLineCount+1), Vector3.Up, Vector2.Zero),
+                new VertexPositionNormalTexture(Vector3.Forward * -(gridLineCount+1), Vector3.Up, Vector2.Zero)
             };
             var rightLine = new[]
             {
-                new VertexPositionNormalTexture(Vector3.Right * -10, Vector3.Up, Vector2.Zero),
-                new VertexPositionNormalTexture(Vector3.Right * 10, Vector3.Up, Vector2.Zero)
+                new VertexPositionNormalTexture(Vector3.Right * -(gridLineCount+1), Vector3.Up, Vector2.Zero),
+                new VertexPositionNormalTexture(Vector3.Right * (gridLineCount+1), Vector3.Up, Vector2.Zero)
             };
             var upLine = new[]
             {
-                new VertexPositionNormalTexture(Vector3.Up * -10, Vector3.Up, Vector2.Zero),
-                new VertexPositionNormalTexture(Vector3.Up * 10, Vector3.Up, Vector2.Zero)
+                new VertexPositionNormalTexture(Vector3.Up * -(gridLineCount+1), Vector3.Up, Vector2.Zero),
+                new VertexPositionNormalTexture(Vector3.Up * (gridLineCount+1), Vector3.Up, Vector2.Zero)
+            };
+            var screenspaceQuad = new[]
+            {
+                new VertexPositionNormalTexture(Vector3.Zero,Vector3.Forward,Vector2.Zero),
+                new VertexPositionNormalTexture(Vector3.Right,Vector3.Forward,Vector2.UnitX),
+                new VertexPositionNormalTexture(Vector3.Right + Vector3.Up,Vector3.Forward,Vector2.One),
+                new VertexPositionNormalTexture(Vector3.Zero,Vector3.Forward,Vector2.Zero),
+                new VertexPositionNormalTexture(Vector3.Right + Vector3.Up,Vector3.Forward,Vector2.One),
+                new VertexPositionNormalTexture(Vector3.Up,Vector3.Forward,Vector2.UnitY)
             };
 
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
@@ -142,15 +160,17 @@ namespace Cauldron
 
                 }
 
+                //grid plane lines
                 effect.DiffuseColor = new Vector3(0.3f); ;
                 pass.Apply();
                 GraphicsDevice.DrawUserPrimitives(
                     PrimitiveType.LineList,
                     worldGrid,
                     0,
-                    worldGrid.Length/2
+                    worldGrid.Length / 2
                 );
 
+                //Blue Z axis line
                 effect.DiffuseColor = new Vector3(0.1f, 0.1f, 0.6f); ;
                 pass.Apply();
                 GraphicsDevice.DrawUserPrimitives(
@@ -160,6 +180,7 @@ namespace Cauldron
                     1
                 );
 
+                //Red X axis line
                 effect.DiffuseColor = new Vector3(0.6f, 0.1f, 0.1f); ;
                 pass.Apply();
                 GraphicsDevice.DrawUserPrimitives(
@@ -169,15 +190,61 @@ namespace Cauldron
                     1
                 );
 
-                //effect.DiffuseColor = new Vector3(0.1f, 0.6f, 0.1f); ;
-                //pass.Apply();
-                //GraphicsDevice.DrawUserPrimitives(
-                //    PrimitiveType.LineList,
-                //    upLine,
-                //    0,
-                //    1
-                //);
             }
+
+            RenderTarget2D wpfRenderTarget = (RenderTarget2D) GraphicsDevice.GetRenderTargets()[0].RenderTarget;
+            RenderTarget2D outlineRenderTarget = new RenderTarget2D(GraphicsDevice, wpfRenderTarget.Width, wpfRenderTarget.Height);
+            Rectangle Rect = new Rectangle(0, 0, outlineRenderTarget.Width, outlineRenderTarget.Height);
+
+            GraphicsDevice.SetRenderTarget(outlineRenderTarget);
+
+            outlineEffect.Parameters["World"].SetValue(Matrix.Identity);
+            outlineEffect.Parameters["View"].SetValue(effect.View);
+            outlineEffect.Parameters["Projection"].SetValue(effect.Projection);
+            outlineEffect.Techniques[0].Passes[0].Apply();
+            foreach (var sceneObject in Hierarchy.hierarchyObjectList)
+            {
+                Box box = new Box(sceneObject.Transform);
+
+                GraphicsDevice.DrawUserPrimitives(
+                    PrimitiveType.TriangleList,
+                    box.GetVertexPositionNormalTexture(),
+                    0,
+                    12);
+
+            }
+
+            Texture2D pass1 = outlineRenderTarget;
+
+            GraphicsDevice.SetRenderTarget(wpfRenderTarget);
+
+            outlineEffect.Parameters["colorMapTexture"].SetValue(pass1);
+            Vector2[] offsets = new[]
+            {
+                new Vector2(1 / pass1.Width, 1 / pass1.Height),
+                new Vector2(0 / pass1.Width, 1 / pass1.Height),
+                new Vector2(-1 / pass1.Width, 1 / pass1.Height),
+                new Vector2(-1 / pass1.Width, 0 / pass1.Height),
+                new Vector2(-1 / pass1.Width, -1 / pass1.Height),
+                new Vector2(0 / pass1.Width, -1 / pass1.Height),
+                new Vector2(1 / pass1.Width, -1 / pass1.Height),
+                new Vector2(1 / pass1.Width, 0 / pass1.Height)
+            };
+            outlineEffect.Parameters["offsets"].SetValue(offsets);
+            outlineEffect.Techniques[0].Passes[1].Apply();
+
+            SpriteBatch sb = new SpriteBatch(GraphicsDevice);
+
+            GraphicsDevice.DrawUserPrimitives(
+                PrimitiveType.TriangleList,
+                screenspaceQuad,
+                0,
+                2);
+
+            sb.Begin(0, BlendState.AlphaBlend, null, null, null, outlineEffect);
+            sb.Draw(pass1, Vector2.Zero, Rect, Color.White);
+            sb.End();
+
 
         }
 
