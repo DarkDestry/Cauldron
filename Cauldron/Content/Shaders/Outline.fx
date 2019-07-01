@@ -66,18 +66,16 @@ VertexShaderOutput OutlineVS(in VertexShaderInput input)
 float4 OutlinePS(VertexShaderOutput input) : SV_TARGET
 {
     float4 color = tex2D(colorMap, input.UV);
-    //color.a = 1-tex2D(colorMap, input.UV).a;
 
     for (int i = 0; i < 8; i++)
     {
         float4 samp = tex2D(colorMap, input.UV + offsets[i]);
         color.rgb = max(samp.rgb, color.rgb);
-		//if (length(tex2D(colorMap, input.UV + offsets[i]).rgb) > 0.01f) color = float4(1, 0, 1, 1);
 
 
     }
-	//if (length(color.rgb) > 0.01f) color.a = 1.0f;
-	if (length(tex2D(colorMap, input.UV).rgb) > 0.01f) color.rgb = 0;
+
+	color.rgb -= tex2D(colorMap, input.UV).rgb;
 	return color;
 }
 
