@@ -105,10 +105,12 @@
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\PresentationFramework.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <ApplicationDefinition Include="WPF\App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
@@ -120,23 +122,23 @@
     <Compile Include="CustomControls\Control_Property_String.cs" />
     <Compile Include="CustomControls\Control_Property_Vector3.cs" />
     <Compile Include="CustomControls\Control_SceneWindow.cs" />
-    <Compile Include="IProperty.cs" />
-    <Compile Include="IPropertyField.cs" />
-    <Compile Include="MonoGameViewport.cs" />
+    <Compile Include="Core\IProperty.cs" />
+    <Compile Include="Core\IPropertyField.cs" />
+    <Compile Include="Core\MonoGameViewport.cs" />
     <Compile Include="Primitives\Box.cs" />
-    <Compile Include="SolidColorTexture.cs" />
-    <Compile Include="Transform.cs" />
-    <Compile Include="CldVector3.cs" />
-    <Page Include="Editor.xaml">
+    <Compile Include="Core\SolidColorTexture.cs" />
+    <Compile Include="Core\Transform.cs" />
+    <Compile Include="Core\CldVector3.cs" />
+    <Page Include="WPF\Editor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
+    <Compile Include="WPF\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CustomControls\Control_Property_Transform.cs" />
-    <Compile Include="Editor.xaml.cs">
+    <Compile Include="WPF\Editor.xaml.cs">
       <DependentUpon>Editor.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -146,7 +148,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Hierarchy.cs" />
+    <Compile Include="Core\Hierarchy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -172,12 +174,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="WPF\App.config" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Cauldron.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Shaders\Add.fx" />
     <Content Include="elixir_d.dll" />
   </ItemGroup>
   <ItemGroup />
