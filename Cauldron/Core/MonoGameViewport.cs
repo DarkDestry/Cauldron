@@ -217,6 +217,7 @@ namespace Cauldron
                 );
 
             }
+
             //============START OUTLINE RENDER============
             RenderTarget2D outlineRenderTarget = GetRenderTarget("outlineRenderTarget");
             Rectangle Rect = new Rectangle(0, 0, outlineRenderTarget.Width, outlineRenderTarget.Height);
@@ -250,16 +251,19 @@ namespace Cauldron
             float p1w = pass1.Width;
             Vector2[] offsets = new[]
             {
-                new Vector2(1 / p1w, 1 / p1h),
-                new Vector2(0 / p1w, 1 / p1h),
-                new Vector2(-1 / p1w, 1 / p1h),
-                new Vector2(-1 / p1w, 0 / p1h),
-                new Vector2(-1 / p1w, -1 / p1h),
-                new Vector2(0 / p1w, -1 / p1h),
-                new Vector2(1 / p1w, -1 / p1h),
-                new Vector2(1 / p1w, 0 / p1h)
+                new Vector2(1, 1),
+                new Vector2(0, 1),
+                new Vector2(-1, 1),
+                new Vector2(-1, 0),
+                new Vector2(-1, -1),
+                new Vector2(0, -1),
+                new Vector2(1, -1),
+                new Vector2(1, 0)
             };
             outlineEffect.Parameters["offsets"].SetValue(offsets);
+            outlineEffect.Parameters["width"].SetValue((float)p1w);
+            outlineEffect.Parameters["height"].SetValue((float)p1h);
+            outlineEffect.Parameters["lineWidth"].SetValue(2.0f);
             outlineEffect.Techniques[0].Passes[1].Apply();
 
             GraphicsDevice.DrawUserPrimitives(

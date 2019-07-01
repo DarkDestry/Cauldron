@@ -4,6 +4,10 @@ float4x4 Projection;
 
 Texture2D colorMapTexture;
 
+float width;
+float height;
+float lineWidth;
+
 float2 offsets[8];
 
 SamplerState colorMap
@@ -53,7 +57,7 @@ float4 PixelShaderFunction(VertexShaderOutput input) : SV_TARGET
 
 VertexShaderOutput OutlineVS(in VertexShaderInput input)
 {
-	VertexShaderOutput output;// = (VertexShaderOutput)0;
+	VertexShaderOutput output;
 
 	output.Position = input.Position;
 	output.UV = input.UV;
@@ -69,10 +73,9 @@ float4 OutlinePS(VertexShaderOutput input) : SV_TARGET
 
     for (int i = 0; i < 8; i++)
     {
-        float4 samp = tex2D(colorMap, input.UV + offsets[i]);
+		float2 localOffset = float2(lineWidth / width, lineWidth / height);
+        float4 samp = tex2D(colorMap, clamp(input.UV + offsets[i] * localOffset,0,1));
         color.rgb = max(samp.rgb, color.rgb);
-
-
     }
 
 	color.rgb -= tex2D(colorMap, input.UV).rgb;
