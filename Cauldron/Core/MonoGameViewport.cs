@@ -238,7 +238,7 @@ namespace Cauldron
                     box.GetVertexPositionNormalTexture(),
                     0,
                     12);
-
+                break;
             }
 
             Texture2D pass1 = outlineRenderTarget;
@@ -358,7 +358,6 @@ namespace Cauldron
                 scrollValue = MathHelper.Clamp(scrollValue, 1, float.MaxValue);
 
                 distance = scrollValue * scrollValue * scrollValue * scrollValue / 81;
-                System.Diagnostics.Trace.WriteLine(distance.ToString());
             }
         }
     }

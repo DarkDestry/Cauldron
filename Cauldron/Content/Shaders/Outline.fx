@@ -74,7 +74,11 @@ float4 OutlinePS(VertexShaderOutput input) : SV_TARGET
     for (int i = 0; i < 8; i++)
     {
 		float2 localOffset = float2(lineWidth / width, lineWidth / height);
-        float4 samp = tex2D(colorMap, clamp(input.UV + offsets[i] * localOffset,0,1));
+		localOffset = input.UV + offsets[i] * localOffset;
+		localOffset.x = clamp(localOffset.x, 0.0001f, 0.9999f);
+		localOffset.y = clamp(localOffset.y, 0.0001f, 0.9999f);
+		//if (localOffset.x > 1 || localOffset.x < 0 || localOffset.y < 0 || localOffset.y > 1) continue;
+        float4 samp = tex2D(colorMap, localOffset);
         color.rgb = max(samp.rgb, color.rgb);
     }
 

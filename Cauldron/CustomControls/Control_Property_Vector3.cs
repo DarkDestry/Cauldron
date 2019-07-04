@@ -217,7 +217,7 @@ namespace Cauldron.CustomControls
         {
             TextBox field = sender as TextBox;
 
-            e.Handled = !IsTextAllowed(field.Text + e.Text);
+            //e.Handled = !IsTextAllowed(field.Text + e.Text);
         }
 
 
@@ -234,27 +234,30 @@ namespace Cauldron.CustomControls
 
         private void Vector3_TextChanged(object sender, TextChangedEventArgs e)
         {
-
-            float xV = x.Text == "" || x.Text == "-" ? 0 : float.Parse(x.Text);
-            float yV = y.Text == "" || x.Text == "-" ? 0 : float.Parse(y.Text);
-            float zV = z.Text == "" || x.Text == "-" ? 0 : float.Parse(z.Text);
-
             TextBox field = sender as TextBox;
-            switch (field.Name)
+            UpdateField(field.Name, field.Text);
+
+            CldVector3 v3 = new CldVector3(XValue,YValue,ZValue);
+            OnFieldChanged(v3);
+        }
+
+        private void UpdateField(string fieldName, string value)
+        {
+            float V;
+            if (!float.TryParse(value, out V)) return;
+
+            switch (fieldName)
             {
                 case "Field_X":
-                    XValue = xV;
+                    XValue = V;
                     break;
                 case "Field_Y":
-                    YValue = yV;
+                    YValue = V;
                     break;
                 case "Field_Z":
-                    ZValue = zV;
+                    ZValue = V;
                     break;
             }
-
-            CldVector3 v3 = new CldVector3(xV,yV,zV);
-            OnFieldChanged(v3);
         }
 
         public void UpdateProperty(object value)
