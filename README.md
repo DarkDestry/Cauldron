@@ -16,3 +16,9 @@ The Cauldron project started with the need of a scene editor for a headless rend
 
 * [Windows Presentation Foundation](https://docs.microsoft.com/en-us/dotnet/framework/wpf/) - The Framework used for the UI
 * [Monogame](http://www.monogame.net/documentation/) - Raster Renderer for scene rendering
+
+## Screenshots
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/DarkDestry/Cauldron/master/Cauldron/Screenshot.png" width=700>
+</p>
