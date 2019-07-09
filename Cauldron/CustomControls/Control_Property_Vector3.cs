@@ -50,6 +50,11 @@ namespace Cauldron.CustomControls
             typeof(Control_Property_Vector3),
             new FrameworkPropertyMetadata(OnFloatPropertyChanged));
 
+        public static readonly DependencyProperty SensitivityProperty = DependencyProperty.Register(
+            "Sensitivity", 
+            typeof(float), 
+            typeof(Control_Property_Vector3),
+            new FrameworkPropertyMetadata(OnFloatPropertyChanged));
 
         #endregion
 
@@ -76,6 +81,12 @@ namespace Cauldron.CustomControls
         {
             get => (float)GetValue(ZValueProperty);
             set => SetValue(ZValueProperty, value);
+        }
+
+        public float Sensitivity
+        {
+            get => (float)GetValue(SensitivityProperty);
+            set => SetValue(SensitivityProperty, value);
         }
 
         #endregion
@@ -112,6 +123,11 @@ namespace Cauldron.CustomControls
                     cpv3.z.CaretIndex = caretIndex;
                 }
                     break;
+                case "Sensitivity":
+                {
+                    cpv3.sensitivity = float.Parse(e.NewValue.ToString());
+                }
+                    break;
             }
         }
 
@@ -124,6 +140,7 @@ namespace Cauldron.CustomControls
 
         private TextBox x, y, z;
         private bool templateApplied;
+        private float sensitivity = 0.25f;
 
         public override void OnApplyTemplate()
         {
@@ -136,9 +153,6 @@ namespace Cauldron.CustomControls
                 x = Template.FindName("Field_X",this) as TextBox;
                 y = Template.FindName("Field_Y",this) as TextBox;
                 z = Template.FindName("Field_Z",this) as TextBox;
-                x.PreviewTextInput += PreviewTextInput;
-                y.PreviewTextInput += PreviewTextInput;
-                z.PreviewTextInput += PreviewTextInput;
 
                 x.TextChanged += Vector3_TextChanged;
                 y.TextChanged += Vector3_TextChanged;
@@ -157,6 +171,8 @@ namespace Cauldron.CustomControls
                 x.GotMouseCapture += Field_MouseMove;
                 y.GotMouseCapture += Field_MouseMove;
                 z.GotMouseCapture += Field_MouseMove;
+
+                sensitivity = Sensitivity;
             }
         }
 
@@ -182,13 +198,13 @@ namespace Cauldron.CustomControls
                 switch (field.Name)
                 {
                     case "Field_X":
-                        XValue = (float)(float.Parse(field.Text) + delta.X);
+                        XValue = (float)(float.Parse(field.Text) + delta.X * sensitivity);
                         break;
                     case "Field_Y":
-                        YValue = (float)(float.Parse(field.Text) + delta.X);
+                        YValue = (float)(float.Parse(field.Text) + delta.X * sensitivity);
                         break;
                     case "Field_Z":
-                        ZValue = (float)(float.Parse(field.Text) + delta.X);
+                        ZValue = (float)(float.Parse(field.Text) + delta.X * sensitivity);
                         break;
                 }
                 
@@ -211,26 +227,6 @@ namespace Cauldron.CustomControls
                 Mouse.OverrideCursor = Cursors.SizeWE;
             }
         }
-
-        #region Input Validation
-        private void PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            TextBox field = sender as TextBox;
-
-            //e.Handled = !IsTextAllowed(field.Text + e.Text);
-        }
-
-
-        private static readonly Regex _regex = new Regex("[^0-9.-]+"); //regex that matches disallowed text
-        private static bool IsTextAllowed(string text)
-        {
-            
-            float f;
-            return float.TryParse(text, out f);
-            //return !_regex.IsMatch(text);
-        }
-
-        #endregion
 
         private void Vector3_TextChanged(object sender, TextChangedEventArgs e)
         {

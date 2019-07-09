@@ -53,6 +53,11 @@ namespace Cauldron.CustomControls
                 propertyList.Children.Add(new Control_Property_Transform());
             }
 
+            if (obj.properties.ContainsKey("color"))
+            {
+                propertyList.Children.Add(new Control_Property_MeshRenderer());
+            }
+
             foreach (var propertyListChild in propertyList.Children)
             {
                 IProperty iProperty = propertyListChild as IProperty;
