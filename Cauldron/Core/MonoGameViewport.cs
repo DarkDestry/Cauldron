@@ -1,15 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Controls;
+using Cauldron.Core;
+using Cauldron.Primitives;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Framework.WpfInterop;
 using MonoGame.Framework.WpfInterop.Input;
+using SharpDX;
 using SharpDX.DirectWrite;
 using Box = Cauldron.Primitives.Box;
+using Color = Microsoft.Xna.Framework.Color;
+using Matrix = Microsoft.Xna.Framework.Matrix;
 using Point = Microsoft.Xna.Framework.Point;
 using PrimitiveType = Microsoft.Xna.Framework.Graphics.PrimitiveType;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
+using Vector3 = Microsoft.Xna.Framework.Vector3;
 
 namespace Cauldron
 {
@@ -83,9 +92,9 @@ namespace Cauldron
             HandleInput(deltaTime);
         }
 
-        private float cameraPitch;
-        private float cameraYaw;
-        private float distance = 30;
+        private float cameraPitch = -30;
+        private float cameraYaw = 150;
+        private float distance = 20;
         private Vector3 cameraFocusPoint = new CldVector3(0,0,0);
 
         private Matrix cameraTransform => Matrix.CreateFromYawPitchRoll(MathHelper.ToRadians(cameraYaw), MathHelper.ToRadians(cameraPitch), 0);
@@ -176,13 +185,14 @@ namespace Cauldron
                 {
                     effect.DiffuseColor = sceneObject.Color.ToVector3();
                     pass.Apply();
-                    Box box = new Box(sceneObject.Transform);
+                    //Box box = new Box(sceneObject.Transform);
+                    IMesh mesh = sceneObject.Mesh;
 
                     GraphicsDevice.DrawUserPrimitives(
                         PrimitiveType.TriangleList,
-                        box.GetVertexPositionNormalTexture(),
+                        mesh.GetModelVertexPositionNormalTexture(sceneObject.Transform),
                         0,
-                        12);
+                        mesh.GetModelVertexPositionNormalTexture(sceneObject.Transform).Length/3);
 
                 }
 
@@ -229,16 +239,16 @@ namespace Cauldron
             outlineEffect.Parameters["View"].SetValue(effect.View);
             outlineEffect.Parameters["Projection"].SetValue(effect.Projection);
             outlineEffect.Techniques[0].Passes[0].Apply();
-            foreach (var sceneObject in Hierarchy.hierarchyObjectList)
+
+            if (Hierarchy.selectedObject != null)
             {
-                Box box = new Box(sceneObject.Transform);
+                IMesh mesh = Hierarchy.selectedObject.Mesh;
 
                 GraphicsDevice.DrawUserPrimitives(
                     PrimitiveType.TriangleList,
-                    box.GetVertexPositionNormalTexture(),
+                    mesh.GetModelVertexPositionNormalTexture(Hierarchy.selectedObject.Transform),
                     0,
-                    12);
-                break;
+                    mesh.GetModelVertexPositionNormalTexture(Hierarchy.selectedObject.Transform).Length/3);
             }
 
             Texture2D pass1 = outlineRenderTarget;
@@ -307,7 +317,6 @@ namespace Cauldron
         }
 
         private Point pos;
-        private float scrollValue = 10;
         private int lastScrollWheelValue;
         private bool orbiting;
         private bool panning;
@@ -351,13 +360,18 @@ namespace Cauldron
 
             if (lastScrollWheelValue != _mouse.GetState().ScrollWheelValue)
             {
-                int delta = _mouse.GetState().ScrollWheelValue - lastScrollWheelValue;
+                float delta = _mouse.GetState().ScrollWheelValue - lastScrollWheelValue;
                 lastScrollWheelValue = _mouse.GetState().ScrollWheelValue;
+                delta = -delta;
 
-                scrollValue -= (float)delta / 500;
-                scrollValue = MathHelper.Clamp(scrollValue, 1, float.MaxValue);
+                //scrollValue -= (float)delta / 500;
+                //scrollValue = MathHelper.Clamp(scrollValue, 1, float.MaxValue);
 
-                distance = scrollValue * scrollValue * scrollValue * scrollValue / 81;
+                //distance = scrollValue * scrollValue * scrollValue * scrollValue / 81;
+
+                distance += MathHelper.Clamp(delta/200, -1,1) * MathHelper.Clamp((float)Math.Pow(distance/10,2),0,30);
+                //distance += MathHelper.Clamp(delta/200, -1,1) * MathHelper.Clamp((float)Math.Exp(distance/10 - 2),0,100);
+                
             }
         }
     }

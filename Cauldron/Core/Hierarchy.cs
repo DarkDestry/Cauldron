@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Cauldron.Core;
 using Microsoft.Xna.Framework;
+using SharpDX.Direct2D1;
 
 namespace Cauldron
 {
@@ -57,6 +59,12 @@ namespace Cauldron
                 set => properties["geometry"] = value;
             }
 
+            public IMesh Mesh
+            {
+                get => properties["mesh"] as IMesh;
+                set => properties["mesh"] = value;
+            }
+
             public Color Color
             {
                 get => (Color) properties["color"];
@@ -88,13 +96,19 @@ namespace Cauldron
 			return null;
 		}
 
-        private static void OnFocusChanged(SceneObject obj) => FocusChangedEvent?.Invoke(obj);
+        private static void OnFocusChanged(SceneObject obj)
+        {
+            selectedObject = obj;
+            FocusChangedEvent?.Invoke(obj);
+        }
 
         public static void ChangeObjectFocus(SceneObject obj) => OnFocusChanged(obj);
 
         private static void OnHierarchyUpdate() => HierarchyUpdateEvent?.Invoke();
 
         public static void TriggerHierarchyUpdate() => OnHierarchyUpdate();
+
+        public static SceneObject selectedObject;
     }
 
     public enum Geometry
