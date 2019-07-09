@@ -5,25 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Media3D;
+using Cauldron.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Cauldron.Primitives
 {
-    public class Box
+    public class Box : IMesh
     {
         CldVector3[] vertices = new CldVector3[8];
         int[] vertexTriangles;
         CldVector3[] vertexNormals = new CldVector3[36];
         Vector2[] uvCoordinates = new Vector2[36];
-
-        Transform transform = new Transform();
-
-        public Box(Transform transform)
-        {
-            this.transform = transform;
-            SetupGeometry();
-        }
 
         public Box()
         {
@@ -147,20 +140,21 @@ namespace Cauldron.Primitives
             };
         }
 
-        public void SetRotation(float x, float y, float z)
+        public VertexPositionNormalTexture[] GetVertexPositionNormalTexture()
         {
-            transform.Rotation = new CldVector3(x,y,z);
-        }
-        public void SetPosition(float x, float y, float z)
-        {
-            transform.Position = new CldVector3(x,y,z);
-        }
-        public void SetScale(float x, float y, float z)
-        {
-            transform.Scale = new CldVector3(x,y,z);
+            VertexPositionNormalTexture[] vpnt = new VertexPositionNormalTexture[36];
+
+            for (int i = 0; i < 36; i++)
+            {
+                vpnt[i].Position = vertices[vertexTriangles[i]];
+                vpnt[i].Normal = vertexNormals[i];
+                vpnt[i].TextureCoordinate = uvCoordinates[i];
+            }
+
+            return vpnt;
         }
 
-        public VertexPositionNormalTexture[] GetVertexPositionNormalTexture()
+        public VertexPositionNormalTexture[] GetModelVertexPositionNormalTexture(Transform transform)
         {
             VertexPositionNormalTexture[] vpnt = new VertexPositionNormalTexture[36];
 
