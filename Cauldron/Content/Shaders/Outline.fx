@@ -1,4 +1,7 @@
-﻿float4x4 World;
+﻿
+#pragma enable_d3d11_debug_symbols
+
+float4x4 World;
 float4x4 View;
 float4x4 Projection;
 

@@ -6,6 +6,7 @@
 	#define VS_SHADERMODEL vs_4_0_level_9_1
 	#define PS_SHADERMODEL ps_4_0_level_9_1
 #endif
+#pragma enable_d3d11_debug_symbols
 
 matrix WorldViewProjection;
 

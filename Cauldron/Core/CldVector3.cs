@@ -1,6 +1,7 @@
 ﻿using System;
 using SharpDX;
 using Quaternion = Microsoft.Xna.Framework.Quaternion;
+using Vector3 = Microsoft.Xna.Framework.Vector3;
 
 namespace Cauldron
 {
@@ -30,6 +31,11 @@ namespace Cauldron
         public static implicit operator Microsoft.Xna.Framework.Vector3(CldVector3 val)
         {
             return new Microsoft.Xna.Framework.Vector3(val.x, val.y, val.z);
+        }
+
+        public static implicit operator CldVector3(Vector3 val)
+        {
+            return new CldVector3(val.X, val.Y, val.Z);
         }
 
         public static implicit operator Quaternion(CldVector3 val)

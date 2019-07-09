@@ -33,9 +33,9 @@
                 <ControlTemplate TargetType="{x:Type customControls:Control_Property_Transform}">
                     <Expander Header="Transform" IsExpanded="True">
                         <StackPanel>
-                            <customControls:Control_Property_Vector3 x:Name="Vector3_Position" NameLabel="Position"/>
-                            <customControls:Control_Property_Vector3 x:Name="Vector3_Rotation" NameLabel="Rotation"/>
-                            <customControls:Control_Property_Vector3 x:Name="Vector3_Scale" NameLabel="Scale"/>
+                            <customControls:Control_Property_Vector3 x:Name="Vector3_Position" NameLabel="Position" Sensitivity="0.05"/>
+                            <customControls:Control_Property_Vector3 x:Name="Vector3_Rotation" NameLabel="Rotation" Sensitivity="2"/>
+                            <customControls:Control_Property_Vector3 x:Name="Vector3_Scale" NameLabel="Scale" Sensitivity="0.1"/>
                         </StackPanel>
                     </Expander>
                 </ControlTemplate>
@@ -52,6 +52,20 @@
                             <customControls:Control_Property_String x:Name="String_Name" NameLabel="Name"/>
                             <customControls:Control_Property_ReadOnly x:Name="String_Guid" NameLabel="GUID"/>
                             <customControls:Control_Property_ReadOnly x:Name="String_ObjectType" NameLabel="Object Type"/>
+                        </StackPanel>
+                    </Expander>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type customControls:Control_Property_MeshRenderer}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type customControls:Control_Property_MeshRenderer}">
+                    <Expander Header="Mesh Renderer" IsExpanded="True">
+                        <StackPanel>
+                            <customControls:Control_Property_Vector3 x:Name="Vector3_Color" NameLabel="Color" Sensitivity="0.01"/>
                         </StackPanel>
                     </Expander>
                 </ControlTemplate>
@@ -224,6 +238,7 @@
     </Style>
 
 <!-- End ControlTemplates -->
+
 
 
 </ResourceDictionary>
