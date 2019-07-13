@@ -183,10 +183,10 @@ namespace Cauldron
                 pass.Apply();
                 foreach (var sceneObject in Hierarchy.hierarchyObjectList)
                 {
-                    effect.DiffuseColor = sceneObject.Color.ToVector3();
+                    effect.DiffuseColor = sceneObject.MeshRenderer.Color.ToVector3();
                     pass.Apply();
                     //Box box = new Box(sceneObject.Transform);
-                    IMesh mesh = sceneObject.Mesh;
+                    IMesh mesh = sceneObject.MeshRenderer.Mesh;
 
                     GraphicsDevice.DrawUserPrimitives(
                         PrimitiveType.TriangleList,
@@ -242,7 +242,7 @@ namespace Cauldron
 
             if (Hierarchy.selectedObject != null)
             {
-                IMesh mesh = Hierarchy.selectedObject.Mesh;
+                IMesh mesh = Hierarchy.selectedObject.MeshRenderer.Mesh;
 
                 GraphicsDevice.DrawUserPrimitives(
                     PrimitiveType.TriangleList,

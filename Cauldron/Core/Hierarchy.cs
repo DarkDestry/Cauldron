@@ -7,6 +7,7 @@ using System.Windows;
 using Cauldron.Core;
 using Microsoft.Xna.Framework;
 using SharpDX.Direct2D1;
+using Transform = Cauldron.Core.Transform;
 
 namespace Cauldron
 {
@@ -29,9 +30,7 @@ namespace Cauldron
 				properties.Add("name", name);
 				properties.Add("transform", new Transform());
 				properties.Add("guid", System.Guid.NewGuid().ToString());
-                properties.Add("geometry", Geometry.Cube);
-                properties.Add("color", Color.White);
-			}
+            }
 
 			public Dictionary<string,object> properties = new Dictionary<string, object>();
 
@@ -53,22 +52,10 @@ namespace Cauldron
 				set => properties["guid"] = value;
 			}
 
-            public Geometry Geometry
+            public MeshRenderer MeshRenderer
             {
-                get => (Geometry) properties["geometry"];
-                set => properties["geometry"] = value;
-            }
-
-            public IMesh Mesh
-            {
-                get => properties["mesh"] as IMesh;
-                set => properties["mesh"] = value;
-            }
-
-            public Color Color
-            {
-                get => (Color) properties["color"];
-                set => properties["color"] = value;
+                get => properties["meshRenderer"] as MeshRenderer;
+                set => properties["meshRenderer"] = value;
             }
         }
 

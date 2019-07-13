@@ -48,7 +48,7 @@ namespace Cauldron.CustomControls
 
         private void Color_FieldChanged(CldVector3 value)
         {
-            Hierarchy.GetObject(currentObjectGuid).Color = new Color(value);
+            Hierarchy.GetObject(currentObjectGuid).MeshRenderer.Color = new Color(value);
         }
 
         public void UpdateProperty(object value)
@@ -59,7 +59,7 @@ namespace Cauldron.CustomControls
 
             if (!templateApplied) return;
 
-            color.UpdateProperty((CldVector3)obj.Color.ToVector3());
+            color.UpdateProperty((CldVector3)obj.MeshRenderer.Color.ToVector3());
         }
     }
 }
