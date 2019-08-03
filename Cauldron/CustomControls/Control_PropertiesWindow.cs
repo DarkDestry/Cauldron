@@ -53,7 +53,7 @@ namespace Cauldron.CustomControls
                 propertyList.Children.Add(new Control_Property_Transform());
             }
 
-            if (obj.properties.ContainsKey("color"))
+            if (obj.properties.ContainsKey("meshRenderer"))
             {
                 propertyList.Children.Add(new Control_Property_MeshRenderer());
             }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -13,7 +14,7 @@ namespace Cauldron
 	/// </summary>
 	public partial class App : Application
 	{
-		private void Application_Startup(object sender, StartupEventArgs e)
+        private void Application_Startup(object sender, StartupEventArgs e)
 		{
 			//Hook to Daemon here?
 			Editor editor = new	Editor();

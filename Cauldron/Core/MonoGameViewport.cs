@@ -30,6 +30,7 @@ namespace Cauldron
         private BasicEffect effect;
         private Effect outlineEffect;
         private Effect addEffect;
+        private Effect unlitColorEffect;
         private Dictionary<string, RenderTarget2D> renderTargets;
 
         private int screenHeight = 0, screenWidth = 0;
@@ -75,6 +76,7 @@ namespace Cauldron
             Content.RootDirectory = @".\Content\bin\";
             outlineEffect = Content.Load<Effect>(@"Shaders\Outline");
             addEffect = Content.Load<Effect>(@"Shaders\Add");
+            unlitColorEffect = Content.Load<Effect>(@"Shaders\UnlitColor");
         }
 
         private void Hierarchy_FocusChangedEvent(Hierarchy.SceneObject obj)
@@ -296,9 +298,34 @@ namespace Cauldron
                 0,
                 2);
 
+            //==============START SELECTION RENDER PASS ===========
+
+            RenderTarget2D selectionRenderTarget = GetRenderTarget("selectionRenderTarget");
+            GraphicsDevice.SetRenderTarget(selectionRenderTarget);
+            GraphicsDevice.Clear(new Color(Color.Black,0));
+
+            unlitColorEffect.Parameters["World"].SetValue(Matrix.Identity);
+            unlitColorEffect.Parameters["View"].SetValue(effect.View);
+            unlitColorEffect.Parameters["Projection"].SetValue(effect.Projection);
+
+            foreach (var sceneObject in Hierarchy.hierarchyObjectList)
+            {
+                unlitColorEffect.Parameters["Color"].SetValue(Hierarchy.GetColorFromGuid(sceneObject.Guid).ToVector4());
+                unlitColorEffect.CurrentTechnique.Passes[0].Apply();
+            
+                IMesh mesh = sceneObject.MeshRenderer.Mesh;
+
+                GraphicsDevice.DrawUserPrimitives(
+                    PrimitiveType.TriangleList,
+                    mesh.GetModelVertexPositionNormalTexture(sceneObject.Transform),
+                    0,
+                    mesh.GetModelVertexPositionNormalTexture(sceneObject.Transform).Length/3);
+            }
+
+
             //int[] rtData = new int[wpfRenderTarget.Width * wpfRenderTarget.Height];
 
-            //sceneRenderTarget.GetData(rtData);
+            //selectionRenderTarget.GetData(rtData);
             //wpfRenderTarget.SetData(rtData);
         }
 

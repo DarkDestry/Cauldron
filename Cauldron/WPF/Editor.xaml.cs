@@ -25,12 +25,6 @@ namespace Cauldron
 	/// </summary>
 	public partial class Editor : Window
     {
-        [DllImport("elixir_d.dll", CallingConvention = CallingConvention.Cdecl)]
-        static extern bool createBox(float px, float py, float pz, float sx, float sy, float sz, float rx, float ry,
-            float rz);
-        [DllImport("elixir_d.dll", CallingConvention = CallingConvention.Cdecl)]
-        static extern bool render();
-
         public Editor()
 		{
 			InitializeComponent();
@@ -40,67 +34,35 @@ namespace Cauldron
         private void Editor_Loaded(object sender, RoutedEventArgs e)
         {
 #if DEBUG
-            //var obj1 = new Hierarchy.SceneObject("Debug Sphere 1 Axis X");
-            //obj1.Transform.Position = new CldVector3(5, 0, 0);
-            //obj1.Transform.Scale = new CldVector3(10, 0.5f, 0.5f);
-            //var obj2 = new Hierarchy.SceneObject("Debug Sphere 2 Axis Z");
-            //obj2.Transform.Position = new CldVector3(0, 0, 5);
-            //obj2.Transform.Scale = new CldVector3(0.5f, 0.5f, 10);
-            //var obj3 = new Hierarchy.SceneObject("Debug Sphere 3 Axis Y");
-            //obj3.Transform.Position = new CldVector3(0, 5, 0);
-            //obj3.Transform.Scale = new CldVector3(0.5f, 10, 0.5f);
-            var obj4 = new Hierarchy.SceneObject("Debug Cube 4");
-            obj4.Transform.Position = new CldVector3(0, 0.5f, 0);
-            obj4.Transform.Scale = new CldVector3(1, 1, 1);
-            obj4.MeshRenderer = new MeshRenderer {Color = Color.SkyBlue, Mesh = new Box()};
-            var obj5 = new Hierarchy.SceneObject("Debug Cube 5");
-            obj5.Transform.Position = new CldVector3(0, 1.4f, 0);
-            obj5.Transform.Scale = new CldVector3(0.8f, 0.8f, 0.8f);
-            obj5.MeshRenderer = new MeshRenderer {Color = Color.Aquamarine, Mesh = new Box()};
-            var obj6 = new Hierarchy.SceneObject("Debug Sphere 6");
-            obj6.Transform.Position = new CldVector3(-0.2f, 1.6f, -0.4f);
-            obj6.Transform.Scale = new CldVector3(0.15f, 0.15f, 0.07f);
-            obj6.MeshRenderer = new MeshRenderer {Color = Color.Black, Mesh = new Icosphere(1)};
-            var obj7 = new Hierarchy.SceneObject("Debug Sphere 7");
-            obj7.Transform.Position = new CldVector3(0.2f, 1.6f, -0.4f);
-            obj7.Transform.Scale = new CldVector3(0.15f, 0.15f, 0.07f);
-            obj7.MeshRenderer = new MeshRenderer {Color = Color.Black, Mesh = new Icosphere(1)};
-            var obj8 = new Hierarchy.SceneObject("Debug Sphere 8");
-            obj8.Transform.Position = new CldVector3(0, 1.2f, -0.4f);
-            obj8.Transform.Scale = new CldVector3(0.3f, 0.07f, 0.07f);
-            obj8.MeshRenderer = new MeshRenderer {Color = Color.Pink, Mesh = new Icosphere(1)};
+            var body = new Hierarchy.SceneObject("Debug Cube 4");
+            body.Transform.Position = new CldVector3(0, 0.5f, 0);
+            body.Transform.Scale = new CldVector3(1, 1, 1);
+            body.MeshRenderer = new MeshRenderer {Color = Color.SkyBlue, Mesh = new Box()};
+            var head = new Hierarchy.SceneObject("Debug Cube 5");
+            head.Transform.Position = new CldVector3(0, 1.4f, 0);
+            head.Transform.Scale = new CldVector3(0.8f, 0.8f, 0.8f);
+            head.MeshRenderer = new MeshRenderer {Color = Color.Aquamarine, Mesh = new Box()};
+            var eye1 = new Hierarchy.SceneObject("Debug Sphere 6");
+            eye1.Transform.Position = new CldVector3(-0.2f, 1.6f, -0.4f);
+            eye1.Transform.Scale = new CldVector3(0.15f, 0.15f, 0.07f);
+            eye1.MeshRenderer = new MeshRenderer {Color = Color.Black, Mesh = new Icosphere(1)};
+            var eye2 = new Hierarchy.SceneObject("Debug Sphere 7");
+            eye2.Transform.Position = new CldVector3(0.2f, 1.6f, -0.4f);
+            eye2.Transform.Scale = new CldVector3(0.15f, 0.15f, 0.07f);
+            eye2.MeshRenderer = new MeshRenderer {Color = Color.Black, Mesh = new Icosphere(1)};
+            var mouth = new Hierarchy.SceneObject("Debug Sphere 8");
+            mouth.Transform.Position = new CldVector3(0, 1.2f, -0.4f);
+            mouth.Transform.Scale = new CldVector3(0.3f, 0.07f, 0.07f);
+            mouth.MeshRenderer = new MeshRenderer {Color = Color.Pink, Mesh = new Icosphere(1)};
 
 
-
-            //Hierarchy.hierarchyObjectList.Add(obj1);
-            //Hierarchy.hierarchyObjectList.Add(obj2);
-            //Hierarchy.hierarchyObjectList.Add(obj3);
-            Hierarchy.hierarchyObjectList.Add(obj4);
-            Hierarchy.hierarchyObjectList.Add(obj5);
-            Hierarchy.hierarchyObjectList.Add(obj6);
-            Hierarchy.hierarchyObjectList.Add(obj7);
-            Hierarchy.hierarchyObjectList.Add(obj8);
+            Hierarchy.hierarchyObjectList.Add(body);
+            Hierarchy.hierarchyObjectList.Add(head);
+            Hierarchy.hierarchyObjectList.Add(eye1);
+            Hierarchy.hierarchyObjectList.Add(eye2);
+            Hierarchy.hierarchyObjectList.Add(mouth);
             Hierarchy.TriggerHierarchyUpdate();
 #endif
-        }
-
-        private void Render_OnClick(object sender, RoutedEventArgs e)
-        {
-            foreach (var o in Hierarchy.hierarchyObjectList)
-            {
-
-                createBox(o.Transform.Position.x,
-                    o.Transform.Position.y,
-                    o.Transform.Position.z,
-                    o.Transform.Scale.x,
-                    o.Transform.Scale.y,
-                    o.Transform.Scale.z,
-                    o.Transform.Rotation.x,
-                    o.Transform.Rotation.y,
-                    o.Transform.Rotation.z);
-            }
-
-            render();
         }
     }
 }
