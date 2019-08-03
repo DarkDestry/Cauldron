@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Controls;
 using Cauldron.Core;
 using Cauldron.Primitives;
@@ -9,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Framework.WpfInterop;
 using MonoGame.Framework.WpfInterop.Input;
+using MonoGame.Utilities.Png;
 using SharpDX;
 using SharpDX.DirectWrite;
 using Box = Cauldron.Primitives.Box;
@@ -32,6 +34,7 @@ namespace Cauldron
         private Effect addEffect;
         private Effect unlitColorEffect;
         private Dictionary<string, RenderTarget2D> renderTargets;
+        private Texture2D selectionTexture;
 
         private int screenHeight = 0, screenWidth = 0;
         private void CheckForScreenResize()
@@ -81,7 +84,7 @@ namespace Cauldron
 
         private void Hierarchy_FocusChangedEvent(Hierarchy.SceneObject obj)
         {
-            cameraFocusPoint = obj.Transform.Position;
+            //cameraFocusPoint = obj.Transform.Position;
         }
 
         protected override void Update(GameTime time)
@@ -319,9 +322,10 @@ namespace Cauldron
                     PrimitiveType.TriangleList,
                     mesh.GetModelVertexPositionNormalTexture(sceneObject.Transform),
                     0,
-                    mesh.GetModelVertexPositionNormalTexture(sceneObject.Transform).Length/3);
+                    mesh.GetModelVertexPositionNormalTexture(sceneObject.Transform).Length / 3);
             }
 
+            selectionTexture = selectionRenderTarget;
 
             //int[] rtData = new int[wpfRenderTarget.Width * wpfRenderTarget.Height];
 
@@ -350,6 +354,34 @@ namespace Cauldron
 
         private void HandleInput(float deltaTime)
         {
+            if (_mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                //Get mouse position on texture
+                Point mousePos = _mouse.GetState().Position;
+                //sample texture for color
+                Color[] colors1D = new Color[selectionTexture.Width * selectionTexture.Height];
+                selectionTexture.GetData(colors1D);
+                Color[,] colors2D = new Color[selectionTexture.Width, selectionTexture.Height];
+                for (int x = 0; x < selectionTexture.Width; x++)
+                {
+                    for (int y = 0; y < selectionTexture.Height; y++)
+                    {
+                        colors2D[x, y] = colors1D[x + y * selectionTexture.Width];
+                    }
+                }
+                //Get guid
+                Color selectedColor = colors2D[mousePos.X, mousePos.Y];
+                Color adjustedColor = new Color(selectedColor.B, selectedColor.G, selectedColor.R, (byte)0xFF);
+                uint packedValue = adjustedColor.PackedValue;
+                string guid = Hierarchy.GetGuidFromColor(adjustedColor);
+                if (guid != "")
+                {
+                    Hierarchy.SceneObject obj = Hierarchy.GetObject(guid);
+                    //change selection
+                    Hierarchy.ChangeObjectFocus(obj);
+                }
+            }
+
             if (_mouse.GetState().MiddleButton == ButtonState.Pressed)
             {
                 if (!_mouse.CaptureMouseWithin) pos = _mouse.GetState().Position;
