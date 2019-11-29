@@ -13,6 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Cauldron.Core;
+using Cauldron.Primitives;
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace Cauldron.CustomControls
 {
@@ -51,7 +54,12 @@ namespace Cauldron.CustomControls
 				switch (item.Header)
 				{
 					case "Sphere":
-						Hierarchy.hierarchyObjectList.Add(new Hierarchy.SceneObject("Sphere"));
+                        Hierarchy.SceneObject obj = new Hierarchy.SceneObject("Sphere");
+                        obj.MeshRenderer = new MeshRenderer();
+                        obj.MeshRenderer.Color = Color.White;
+                        obj.MeshRenderer.Mesh = new Icosphere(1);
+                        Hierarchy.hierarchyObjectList.Add(obj);
+
 						Hierarchy.TriggerHierarchyUpdate();
 						break;
 				}
