@@ -117,6 +117,7 @@
     </ApplicationDefinition>
     <Compile Include="Core\IMesh.cs" />
     <Compile Include="Core\MeshRenderer.cs" />
+    <Compile Include="Core\ObjImporter.cs" />
     <Compile Include="CustomControls\Control_HierarchyWindow.cs" />
     <Compile Include="CustomControls\Control_PropertiesWindow.cs" />
     <Compile Include="CustomControls\Control_Property_DropDown.cs" />
@@ -139,6 +140,9 @@
     </Page>
     <Compile Include="Primitives\Empty.cs" />
     <Compile Include="Primitives\Icosphere.cs" />
+    <Compile Include="Primitives\Mesh.cs" />
+    <Compile Include="Primitives\Model.cs" />
+    <Compile Include="Primitives\Vertex.cs" />
     <Compile Include="WPF\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>

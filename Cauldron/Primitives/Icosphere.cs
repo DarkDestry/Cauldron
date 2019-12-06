@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Cauldron.Primitives
 {
-    class Icosphere : IMesh
+    public class Icosphere : Mesh
     {
         private Dictionary<Int64, int> indexDictionary = new Dictionary<Int64, int>();
         List<CldVector3> Vertices = new List<CldVector3>(12);
@@ -119,7 +119,7 @@ namespace Cauldron.Primitives
             return index;
         }
 
-        public VertexPositionNormalTexture[] GetModelVertexPositionNormalTexture(Transform transform)
+        public override VertexPositionNormalTexture[] GetModelVertexPositionNormalTexture(Transform transform)
         {
             VertexPositionNormalTexture[] vpnt = new VertexPositionNormalTexture[Faces.Count * 3];
 
@@ -146,7 +146,7 @@ namespace Cauldron.Primitives
             return vpnt;
         }
 
-        public VertexPositionNormalTexture[] GetVertexPositionNormalTexture()
+        public override VertexPositionNormalTexture[] GetVertexPositionNormalTexture()
         {
             VertexPositionNormalTexture[] vpnt = new VertexPositionNormalTexture[Faces.Count * 3];
             

@@ -8,14 +8,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Cauldron.Primitives
 {
-    class Empty : IMesh
+    public class Empty : Mesh
     {
-        public VertexPositionNormalTexture[] GetModelVertexPositionNormalTexture(Transform transform)
+        public override VertexPositionNormalTexture[] GetModelVertexPositionNormalTexture(Transform transform)
         {
             return null;
         }
 
-        public VertexPositionNormalTexture[] GetVertexPositionNormalTexture()
+        public override VertexPositionNormalTexture[] GetVertexPositionNormalTexture()
         {
             return null;
         }

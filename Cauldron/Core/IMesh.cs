@@ -9,7 +9,5 @@ namespace Cauldron.Core
 {
     public interface IMesh
     {
-        VertexPositionNormalTexture[] GetModelVertexPositionNormalTexture(Transform transform);
-        VertexPositionNormalTexture[] GetVertexPositionNormalTexture();
     }
 }

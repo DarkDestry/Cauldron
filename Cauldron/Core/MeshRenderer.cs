@@ -5,14 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Cauldron.Primitives;
 using Microsoft.Xna.Framework;
-using SharpDX.Direct3D9;
 
 namespace Cauldron.Core
 {
     public class MeshRenderer
     {
         private Color color;
-        private IMesh mesh;
+        private Mesh mesh;
 
         public MeshRenderer()
         {
@@ -26,7 +25,7 @@ namespace Cauldron.Core
             set => color = value;
         }
 
-        public IMesh Mesh
+        public Mesh Mesh
         {
             get => mesh;
             set => mesh = value;

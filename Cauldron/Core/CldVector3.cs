@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using SharpDX;
 using Quaternion = Microsoft.Xna.Framework.Quaternion;
 using Vector3 = Microsoft.Xna.Framework.Vector3;
@@ -41,6 +42,11 @@ namespace Cauldron
         public static implicit operator Quaternion(CldVector3 val)
         {
             return toQuaternion(val.x,val.y, val.z);
+        }
+
+        public static implicit operator Microsoft.Xna.Framework.Vector2(CldVector3 val)
+        {
+            return new Microsoft.Xna.Framework.Vector2(val.x, val.y);
         }
 
         private static Quaternion toQuaternion(double yaw, double pitch, double roll) // yaw (Z), pitch (Y), roll (X)

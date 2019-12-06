@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Cauldron.Primitives
 {
-    public class Box : IMesh
+    public class Box : Mesh
     {
         CldVector3[] vertices = new CldVector3[8];
         int[] vertexTriangles;
@@ -140,7 +140,7 @@ namespace Cauldron.Primitives
             };
         }
 
-        public VertexPositionNormalTexture[] GetVertexPositionNormalTexture()
+        public override VertexPositionNormalTexture[] GetVertexPositionNormalTexture()
         {
             VertexPositionNormalTexture[] vpnt = new VertexPositionNormalTexture[36];
 
@@ -154,7 +154,7 @@ namespace Cauldron.Primitives
             return vpnt;
         }
 
-        public VertexPositionNormalTexture[] GetModelVertexPositionNormalTexture(Transform transform)
+        public override VertexPositionNormalTexture[] GetModelVertexPositionNormalTexture(Transform transform)
         {
             VertexPositionNormalTexture[] vpnt = new VertexPositionNormalTexture[36];
 

@@ -191,7 +191,7 @@ namespace Cauldron
                     effect.DiffuseColor = sceneObject.MeshRenderer.Color.ToVector3();
                     pass.Apply();
                     //Box box = new Box(sceneObject.Transform);
-                    IMesh mesh = sceneObject.MeshRenderer.Mesh;
+                    Mesh mesh = sceneObject.MeshRenderer.Mesh;
 
                     GraphicsDevice.DrawUserPrimitives(
                         PrimitiveType.TriangleList,
@@ -247,7 +247,7 @@ namespace Cauldron
 
             if (Hierarchy.selectedObject != null)
             {
-                IMesh mesh = Hierarchy.selectedObject.MeshRenderer.Mesh;
+                Mesh mesh = Hierarchy.selectedObject.MeshRenderer.Mesh;
 
                 GraphicsDevice.DrawUserPrimitives(
                     PrimitiveType.TriangleList,
@@ -316,7 +316,7 @@ namespace Cauldron
                 unlitColorEffect.Parameters["Color"].SetValue(Hierarchy.GetColorFromGuid(sceneObject.Guid).ToVector4());
                 unlitColorEffect.CurrentTechnique.Passes[0].Apply();
             
-                IMesh mesh = sceneObject.MeshRenderer.Mesh;
+                Mesh mesh = sceneObject.MeshRenderer.Mesh;
 
                 GraphicsDevice.DrawUserPrimitives(
                     PrimitiveType.TriangleList,
