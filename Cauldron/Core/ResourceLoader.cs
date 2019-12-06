@@ -28,25 +28,32 @@ namespace Cauldron.Core
 
         public static string LoadTextFile(string relativePath)
         {
-            string projectDirectory = Environment.CurrentDirectory;
-//            string projectDirectory = Directory.GetParent(workingDirectory).Parent.FullName;
-            return File.ReadAllText(projectDirectory + @"\" + relativePath);
+            while(true)
+            try
+            {
+                string workingDirectory = Environment.CurrentDirectory;
+                string projectDirectory = Directory.GetParent(workingDirectory).Parent.FullName;
+                return File.ReadAllText(projectDirectory + @"\" + relativePath);
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
-        private static Dictionary<string, long> filesize = new Dictionary<string, long>();
+        private static Dictionary<string, long> filehash = new Dictionary<string, long>();
         public static bool LoadTextFileIfChanged(string relativePath, out string content)
         {
-            string projectDirectory = Environment.CurrentDirectory;
-//            string projectDirectory = Directory.GetParent(workingDirectory).Parent.FullName;
-            long size = new FileInfo(projectDirectory + @"\" + relativePath).Length;
-
-            if (!filesize.ContainsKey(relativePath)) filesize[relativePath] = 0;
-
+            string workingDirectory = Environment.CurrentDirectory;
+            string projectDirectory = Directory.GetParent(workingDirectory).Parent.FullName;
             content = LoadTextFile(relativePath);
+            int hash = content.GetHashCode();
 
-            if (size != filesize[relativePath])
+            if (!filehash.ContainsKey(relativePath)) filehash[relativePath] = 0;
+
+            if (hash != filehash[relativePath])
             {
-                filesize[relativePath] = size;
+                filehash[relativePath] = hash;
                 return true;
             }
             return false;
