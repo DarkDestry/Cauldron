@@ -97,7 +97,6 @@
     <Compile Include="Core\CldMath.cs" />
     <Compile Include="Core\CldMatrix.cs" />
     <Compile Include="Core\CldVector2.cs" />
-    <Compile Include="Core\IMesh.cs" />
     <Compile Include="Core\MeshRenderer.cs" />
     <Compile Include="Core\ObjImporter.cs" />
     <Compile Include="Core\ResourceLoader.cs" />
