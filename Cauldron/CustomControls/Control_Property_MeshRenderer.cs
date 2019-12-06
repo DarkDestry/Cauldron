@@ -12,8 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.Xna.Framework;
-using Color = Microsoft.Xna.Framework.Color;
+using SharpGL.SceneGraph;
 
 namespace Cauldron.CustomControls
 {
@@ -48,7 +47,7 @@ namespace Cauldron.CustomControls
 
         private void Color_FieldChanged(CldVector3 value)
         {
-            Hierarchy.GetObject(currentObjectGuid).MeshRenderer.Color = new Color(value);
+            Hierarchy.GetObject(currentObjectGuid).MeshRenderer.Color = (GLColor) value;
         }
 
         public void UpdateProperty(object value)
@@ -59,7 +58,7 @@ namespace Cauldron.CustomControls
 
             if (!templateApplied) return;
 
-            color.UpdateProperty((CldVector3)obj.MeshRenderer.Color.ToVector3());
+            color.UpdateProperty(obj.MeshRenderer.Color);
         }
     }
 }

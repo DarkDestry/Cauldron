@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
 using Cauldron.Core;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using GlmSharp;
+using SharpGL;
+using SharpGL.VertexBuffers;
 
 namespace Cauldron.Primitives
 {
@@ -119,55 +120,30 @@ namespace Cauldron.Primitives
             return index;
         }
 
-        public override VertexPositionNormalTexture[] GetModelVertexPositionNormalTexture(Transform transform)
+        private VertexBufferArray vertexBufferArray;
+
+        public override void GenerateGeometry(OpenGL gl)
         {
-            VertexPositionNormalTexture[] vpnt = new VertexPositionNormalTexture[Faces.Count * 3];
+            vertexBufferArray = new VertexBufferArray();
+            vertexBufferArray.Create(gl);
+            vertexBufferArray.Bind(gl);
 
-            Matrix matrix = Matrix.CreateFromQuaternion(transform.Rotation);
-            matrix *= Matrix.CreateScale(transform.Scale);
-            matrix *= Matrix.CreateTranslation(transform.Position);
+            VertexBuffer vb = new VertexBuffer();
+            vb.Create(gl);
+            vb.Bind(gl);
+            vb.SetData(gl, 0, Vertices.SelectMany(v => ((vec3)v).ToArray()).ToArray(), false, 3);
 
-            for (int i = 0; i < Faces.Count; i++)
-            {
-                Vector3 vertexNormal = Vector3.Cross(
-                    (Vector3)Vertices[Faces[i][0]] - Vertices[Faces[i][2]],
-                    (Vector3)Vertices[Faces[i][0]] - Vertices[Faces[i][1]]
-                    );
-
-                for (var j = 0; j < Faces[i].Length; j++)
-                {
-                    var vertexIndex = Faces[i][j];
-                    vpnt[i * 3 + j].Position = Vector3.Transform(Vertices[vertexIndex], matrix);
-                    vpnt[i * 3 + j].Normal = vertexNormal;
-                    vpnt[i * 3 + j].TextureCoordinate = Vector2.Zero;
-                }
-            }
-
-            return vpnt;
+            IndexBuffer ib = new IndexBuffer();
+            ib.Create(gl);
+            ib.Bind(gl);
+            ib.SetData(gl, Faces.SelectMany(v => v).Select(v => (ushort)v).ToArray());
         }
 
-        public override VertexPositionNormalTexture[] GetVertexPositionNormalTexture()
+        public override void Draw(OpenGL gl)
         {
-            VertexPositionNormalTexture[] vpnt = new VertexPositionNormalTexture[Faces.Count * 3];
-            
-            for (int i = 0; i < Faces.Count; i++)
-            {
-                Vector3 vertexNormal = Vector3.Cross(
-                    (Vector3)Vertices[Faces[i][0]] - Vertices[Faces[i][2]],
-                    (Vector3)Vertices[Faces[i][0]] - Vertices[Faces[i][1]]
-                    );
+            vertexBufferArray.Bind(gl);
 
-                for (var j = 0; j < Faces[i].Length; j++)
-                {
-                    var vertexIndex = Faces[i][j];
-                    vpnt[i * 3 + j].Position = Vertices[vertexIndex];
-                    vpnt[i * 3 + j].Normal = vertexNormal;
-                    vpnt[i * 3 + j].TextureCoordinate = Vector2.Zero;
-                }
-            }
-
-            return vpnt;
-
+            gl.DrawElements(OpenGL.GL_TRIANGLES, Faces.Count*3, OpenGL.GL_UNSIGNED_SHORT, IntPtr.Zero);
         }
     }
 }

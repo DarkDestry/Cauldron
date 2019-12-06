@@ -6,17 +6,19 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Media3D;
 using Cauldron.Core;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using GlmSharp;
+using SharpGL;
+using SharpGL.VertexBuffers;
 
 namespace Cauldron.Primitives
 {
     public class Box : Mesh
     {
         CldVector3[] vertices = new CldVector3[8];
-        int[] vertexTriangles;
+        ushort[] vertexTriangles;
         CldVector3[] vertexNormals = new CldVector3[36];
-        Vector2[] uvCoordinates = new Vector2[36];
+        CldVector2[] uvCoordinates = new CldVector2[36];
+        public int indicesLength = 36;
 
         public Box()
         {
@@ -37,7 +39,7 @@ namespace Cauldron.Primitives
             vertices[7] = new CldVector3(-0.5f, -0.5f, 0.5f);
 
 
-            vertexTriangles = new[]
+            vertexTriangles = new ushort[]
             {
                 0, 1, 2, 0, 2, 3, //Right Face
                 0, 4, 5, 0, 5, 1, //Top Face
@@ -101,77 +103,69 @@ namespace Cauldron.Primitives
 
             uvCoordinates = new[]
             {
-                new Vector2(1, 0),
-                new Vector2(1, 1),
-                new Vector2(0, 1),
-                new Vector2(0, 1),
-                new Vector2(0, 0),
-                new Vector2(1, 0),
-                new Vector2(1, 0),
-                new Vector2(1, 1),
-                new Vector2(0, 1),
-                new Vector2(0, 1),
-                new Vector2(0, 0),
-                new Vector2(1, 0),
-                new Vector2(1, 0),
-                new Vector2(1, 1),
-                new Vector2(0, 1),
-                new Vector2(0, 1),
-                new Vector2(0, 0),
-                new Vector2(1, 0),
-                new Vector2(1, 0),
-                new Vector2(1, 1),
-                new Vector2(0, 1),
-                new Vector2(0, 1),
-                new Vector2(0, 0),
-                new Vector2(1, 0),
-                new Vector2(1, 0),
-                new Vector2(1, 1),
-                new Vector2(0, 1),
-                new Vector2(0, 1),
-                new Vector2(0, 0),
-                new Vector2(1, 0),
-                new Vector2(1, 0),
-                new Vector2(1, 1),
-                new Vector2(0, 1),
-                new Vector2(0, 1),
-                new Vector2(0, 0),
-                new Vector2(1, 0)
+                new CldVector2(1, 0),
+                new CldVector2(1, 1),
+                new CldVector2(0, 1),
+                new CldVector2(0, 1),
+                new CldVector2(0, 0),
+                new CldVector2(1, 0),
+                new CldVector2(1, 0),
+                new CldVector2(1, 1),
+                new CldVector2(0, 1),
+                new CldVector2(0, 1),
+                new CldVector2(0, 0),
+                new CldVector2(1, 0),
+                new CldVector2(1, 0),
+                new CldVector2(1, 1),
+                new CldVector2(0, 1),
+                new CldVector2(0, 1),
+                new CldVector2(0, 0),
+                new CldVector2(1, 0),
+                new CldVector2(1, 0),
+                new CldVector2(1, 1),
+                new CldVector2(0, 1),
+                new CldVector2(0, 1),
+                new CldVector2(0, 0),
+                new CldVector2(1, 0),
+                new CldVector2(1, 0),
+                new CldVector2(1, 1),
+                new CldVector2(0, 1),
+                new CldVector2(0, 1),
+                new CldVector2(0, 0),
+                new CldVector2(1, 0),
+                new CldVector2(1, 0),
+                new CldVector2(1, 1),
+                new CldVector2(0, 1),
+                new CldVector2(0, 1),
+                new CldVector2(0, 0),
+                new CldVector2(1, 0)
             };
         }
 
-        public override VertexPositionNormalTexture[] GetVertexPositionNormalTexture()
+        public VertexBufferArray vertexBufferArray;
+
+        public override void GenerateGeometry(OpenGL gl)
         {
-            VertexPositionNormalTexture[] vpnt = new VertexPositionNormalTexture[36];
+            vertexBufferArray = new VertexBufferArray();
+            vertexBufferArray.Create(gl);
+            vertexBufferArray.Bind(gl);
 
-            for (int i = 0; i < 36; i++)
-            {
-                vpnt[i].Position = vertices[vertexTriangles[i]];
-                vpnt[i].Normal = vertexNormals[i];
-                vpnt[i].TextureCoordinate = uvCoordinates[i];
-            }
+            VertexBuffer vb = new VertexBuffer();
+            vb.Create(gl);
+            vb.Bind(gl);
+            vb.SetData(gl, 0, vertices.SelectMany(v => ((vec3) v).ToArray()).ToArray(), false, 3);
 
-            return vpnt;
+            IndexBuffer ib = new IndexBuffer();
+            ib.Create(gl);
+            ib.Bind(gl);
+            ib.SetData(gl, vertexTriangles);
         }
 
-        public override VertexPositionNormalTexture[] GetModelVertexPositionNormalTexture(Transform transform)
+        public override void Draw(OpenGL gl)
         {
-            VertexPositionNormalTexture[] vpnt = new VertexPositionNormalTexture[36];
+            vertexBufferArray.Bind(gl);
 
-            Matrix matrix = Matrix.CreateFromQuaternion(transform.Rotation);
-            matrix *= Matrix.CreateScale(transform.Scale);
-            matrix *= Matrix.CreateTranslation(transform.Position);
-
-            for (int i = 0; i < 36; i++)
-            {
-                vpnt[i].Position = Vector3.Transform(vertices[vertexTriangles[i]], matrix);
-                vpnt[i].Normal = vertexNormals[i];
-                vpnt[i].TextureCoordinate = uvCoordinates[i];
-            }
-
-            return vpnt;
-
+            gl.DrawElements(OpenGL.GL_TRIANGLES, 36, OpenGL.GL_UNSIGNED_SHORT, IntPtr.Zero);
         }
-
     }
 }

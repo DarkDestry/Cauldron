@@ -2,7 +2,9 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:customControls="clr-namespace:Cauldron.CustomControls"
-    xmlns:cauldron="clr-namespace:Cauldron">
+    xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
+    xmlns:cauldron="clr-namespace:Cauldron" 
+    >
 
 <!-- Styles -->
     <Style TargetType="Border" x:Key="EditorWindows">
@@ -138,7 +140,8 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Scene</Label>
-                            <cauldron:MonoGameViewport Panel.ZIndex="0" Grid.Row="1" Tag="3D" x:Name="Viewport_3D" />
+                            <sharpGL:OpenGLControl Panel.ZIndex="0" Grid.Row="1" Tag="3D" x:Name="Viewport_3D"/>
+                            <!-- <cauldron:MonoGameViewport Panel.ZIndex="0" Grid.Row="1" Tag="3D" x:Name="Viewport_3D" /> -->
                         </Grid>
                     </Border>
                 </ControlTemplate>

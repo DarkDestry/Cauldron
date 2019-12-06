@@ -7,10 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Effects;
 using Cauldron.Core;
-using Microsoft.Xna.Framework;
-using SharpDX;
-using SharpDX.Direct2D1;
-using Color = Microsoft.Xna.Framework.Color;
 using Transform = Cauldron.Core.Transform;
 
 namespace Cauldron
@@ -101,30 +97,30 @@ namespace Cauldron
 
         public static void TriggerHierarchyUpdate() => OnHierarchyUpdate();
 
-        public static string GetGuidFromColor(Color color)
-        {
-            string colorString = color.PackedValue.ToString();
-            if (guidColorDictionary.ContainsKey(colorString)) return guidColorDictionary[colorString];
-            else return "";
-        }
+        //public static string GetGuidFromColor(Color color)
+        //{
+        //    string colorString = color.PackedValue.ToString();
+        //    if (guidColorDictionary.ContainsKey(colorString)) return guidColorDictionary[colorString];
+        //    else return "";
+        //}
 
-        public static Color GetColorFromGuid(string guid)
-        {
-            if (!guidColorDictionary.ContainsKey(guid))
-            {
-                string colorString = "";
-                while (colorString == "" || guidColorDictionary.ContainsKey(colorString))
-                {
-                    SharpDX.Color color = new Random().NextColor();
-                    color.A = 255;
-                    colorString = new Color(color.R, color.G, color.B, color.A).PackedValue.ToString();
-                }
+        //public static Color GetColorFromGuid(string guid)
+        //{
+        //    if (!guidColorDictionary.ContainsKey(guid))
+        //    {
+        //        string colorString = "";
+        //        while (colorString == "" || guidColorDictionary.ContainsKey(colorString))
+        //        {
+        //            SharpDX.Color color = new Random().NextColor();
+        //            color.A = 255;
+        //            colorString = new Color(color.R, color.G, color.B, color.A).PackedValue.ToString();
+        //        }
                 
-                guidColorDictionary.Add(guid, colorString);
-                guidColorDictionary.Add(colorString, guid);
-            }
-            return new Color(uint.Parse(guidColorDictionary[guid]));
-        }
+        //        guidColorDictionary.Add(guid, colorString);
+        //        guidColorDictionary.Add(colorString, guid);
+        //    }
+        //    return new Color(uint.Parse(guidColorDictionary[guid]));
+        //}
 
         public static SceneObject selectedObject;
     }

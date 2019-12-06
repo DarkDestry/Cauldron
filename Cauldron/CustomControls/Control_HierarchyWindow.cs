@@ -15,7 +15,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Cauldron.Core;
 using Cauldron.Primitives;
-using Color = Microsoft.Xna.Framework.Color;
+using SharpGL.SceneGraph;
+
+//using Color = Microsoft.Xna.Framework.Color;
 
 namespace Cauldron.CustomControls
 {
@@ -56,7 +58,7 @@ namespace Cauldron.CustomControls
 					case "Sphere":
                         Hierarchy.SceneObject obj = new Hierarchy.SceneObject("Sphere");
                         obj.MeshRenderer = new MeshRenderer();
-                        obj.MeshRenderer.Color = Color.White;
+                        obj.MeshRenderer.Color = new GLColor(1,1,1,1);
                         obj.MeshRenderer.Mesh = new Icosphere(1);
                         Hierarchy.hierarchyObjectList.Add(obj);
 

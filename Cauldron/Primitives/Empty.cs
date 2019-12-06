@@ -4,20 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cauldron.Core;
-using Microsoft.Xna.Framework.Graphics;
+using SharpGL;
 
 namespace Cauldron.Primitives
 {
     public class Empty : Mesh
     {
-        public override VertexPositionNormalTexture[] GetModelVertexPositionNormalTexture(Transform transform)
+        public override void GenerateGeometry(OpenGL gl)
         {
-            return null;
+            throw new NotImplementedException();
         }
 
-        public override VertexPositionNormalTexture[] GetVertexPositionNormalTexture()
-        {
-            return null;
-        }
+        public override void Draw(OpenGL gl) { }
     }
 }

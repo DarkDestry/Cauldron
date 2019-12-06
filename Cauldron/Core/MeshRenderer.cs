@@ -4,22 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cauldron.Primitives;
-using Microsoft.Xna.Framework;
+using SharpGL.SceneGraph;
 
 namespace Cauldron.Core
 {
     public class MeshRenderer
     {
-        private Color color;
+        private GLColor color;
         private Mesh mesh;
 
         public MeshRenderer()
         {
-            Color = Color.Black;
+            Color = new GLColor(0,0,0,1);
             Mesh = new Empty();
         }
 
-        public Color Color
+        public GLColor Color
         {
             get => color;
             set => color = value;

@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cauldron.Core;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using SharpGL;
 
 namespace Cauldron.Primitives
 {
@@ -24,36 +23,14 @@ namespace Cauldron.Primitives
         private CldVector3[] normals;
         private Vertex[] faces;
 
-        public override VertexPositionNormalTexture[] GetModelVertexPositionNormalTexture(Transform transform)
+        public override void GenerateGeometry(OpenGL gl)
         {
-            Matrix matrix = Matrix.CreateFromQuaternion(transform.Rotation);
-            matrix *= Matrix.CreateScale(transform.Scale);
-            matrix *= Matrix.CreateTranslation(transform.Position);
-
-            VertexPositionNormalTexture[] vpnt = new VertexPositionNormalTexture[faces.Length];
-
-            for (int i = 0; i < vpnt.Length; i++)
-            {
-                vpnt[i].Normal = normals[faces[i].Normal];
-                vpnt[i].TextureCoordinate = textureCoords[faces[i].TextureCoord];
-                vpnt[i].Position = Vector3.Transform(vertices[faces[i].Position], matrix);
-            }
-
-            return vpnt;
+            throw new NotImplementedException();
         }
 
-        public override VertexPositionNormalTexture[] GetVertexPositionNormalTexture()
+        public override void Draw(OpenGL gl)
         {
-            VertexPositionNormalTexture[] vpnt = new VertexPositionNormalTexture[faces.Length];
-
-            for (int i = 0; i < vpnt.Length; i++)
-            {
-                vpnt[i].Normal = normals[faces[i].Normal];
-                vpnt[i].TextureCoordinate = textureCoords[faces[i].TextureCoord];
-                vpnt[i].Position = vertices[faces[i].Position];
-            }
-
-            return vpnt;
+            throw new NotImplementedException();
         }
     }
 }

@@ -23,8 +23,9 @@ namespace Cauldron
 			editor.Show();
 		}
 
-		private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
-		{
+        private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+#if RELEASE
 			string messageBoxText = "An unhandled exception just occurred: " + e.Exception.Message;
 
 			messageBoxText += "\n\nStack Trace:\n";
@@ -32,6 +33,8 @@ namespace Cauldron
 
 			MessageBox.Show(messageBoxText, "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
 			e.Handled = true;
-		}
-	}
-}
+#endif
+        }
+
+    }
+    }

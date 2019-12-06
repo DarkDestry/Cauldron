@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cauldron.Primitives;
-using SharpDX.Direct3D9;
 
 namespace Cauldron.Core
 {
