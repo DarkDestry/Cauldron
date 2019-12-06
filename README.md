@@ -15,7 +15,7 @@ The Cauldron project started with the need of a scene editor for a headless rend
 ## Built With
 
 * [Windows Presentation Foundation](https://docs.microsoft.com/en-us/dotnet/framework/wpf/) - The Framework used for the UI
-* [Monogame](http://www.monogame.net/documentation/) - Raster Renderer for scene rendering
+* [OpenGL](https://github.com/dwmkerr/sharpgl/wiki) - Raster Renderer for scene rendering
 
 ## Screenshots
 
