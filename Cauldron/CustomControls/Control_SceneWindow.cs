@@ -167,6 +167,9 @@ namespace Cauldron.CustomControls
                 vertexShader.Compile();
                 fragmentShader.Compile();
 
+                if ((bool) !vertexShader.CompileStatus) MessageBox.Show(Application.Current.MainWindow, vertexShader.InfoLog);
+                if ((bool) !fragmentShader.CompileStatus) MessageBox.Show(Application.Current.MainWindow, fragmentShader.InfoLog);
+
                 program.CreateInContext(gl);
 
                 program.AttachShader(vertexShader);

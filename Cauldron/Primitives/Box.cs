@@ -153,12 +153,17 @@ namespace Cauldron.Primitives
             VertexBuffer vb = new VertexBuffer();
             vb.Create(gl);
             vb.Bind(gl);
-            vb.SetData(gl, 0, vertices.SelectMany(v => ((vec3) v).ToArray()).ToArray(), false, 3);
+            vb.SetData(gl, 0, vertexTriangles.Select(v => vertices[v]).SelectMany(v => ((vec3)v).ToArray()).ToArray(), false, 3);
+
+            VertexBuffer nb = new VertexBuffer();
+            nb.Create(gl);
+            nb.Bind(gl);
+            nb.SetData(gl, 1, vertexNormals.SelectMany(v => ((vec3)v).ToArray()).ToArray(), false, 3);
 
             IndexBuffer ib = new IndexBuffer();
             ib.Create(gl);
             ib.Bind(gl);
-            ib.SetData(gl, vertexTriangles);
+            ib.SetData(gl, Enumerable.Range(0, 36).Select(v => (ushort)v).ToArray());
         }
 
         public override void Draw(OpenGL gl)

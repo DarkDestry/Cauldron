@@ -133,6 +133,11 @@ namespace Cauldron.Primitives
             vb.Bind(gl);
             vb.SetData(gl, 0, Vertices.SelectMany(v => ((vec3)v).ToArray()).ToArray(), false, 3);
 
+            VertexBuffer nb = new VertexBuffer();
+            nb.Create(gl);
+            nb.Bind(gl);
+            nb.SetData(gl, 1, Vertices.SelectMany(v => ((vec3)v).ToArray()).ToArray(), false, 3);
+
             IndexBuffer ib = new IndexBuffer();
             ib.Create(gl);
             ib.Bind(gl);
