@@ -23,7 +23,15 @@
         <Setter Property="TextElement.Foreground" Value="#f1f1f1" />
         <Setter Property="BorderBrush" Value="Transparent" />
     </Style>
-<!-- End Styles -->
+    <Style TargetType="TextBlock" x:Key="ShaderCompileErrorLabel">
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="Background" Value="#252526" />
+        <Setter Property="Foreground" Value="#d0d0d0" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+    </Style>
+    <!-- End Styles -->
 
 
 <!-- ControlTemplates -->
@@ -141,6 +149,7 @@
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Scene</Label>
                             <sharpGL:OpenGLControl Panel.ZIndex="0" Grid.Row="1" Tag="3D" x:Name="Viewport_3D"/>
+                            <TextBlock Panel.ZIndex="0" Grid.Row="1" Tag="Error" x:Name="Shader_Compiler_Error" Style="{StaticResource ShaderCompileErrorLabel}" />
                             <!-- <cauldron:MonoGameViewport Panel.ZIndex="0" Grid.Row="1" Tag="3D" x:Name="Viewport_3D" /> -->
                         </Grid>
                     </Border>

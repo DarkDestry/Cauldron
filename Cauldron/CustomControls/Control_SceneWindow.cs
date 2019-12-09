@@ -16,10 +16,8 @@ using Shader = SharpGL.Shaders.Shader;
 
 namespace Cauldron.CustomControls
 {
-    [TemplatePart(Name = "Canvas_Front", Type = typeof(Canvas))]
-    [TemplatePart(Name = "Canvas_Right", Type = typeof(Canvas))]
-    [TemplatePart(Name = "Canvas_Top", Type = typeof(Canvas))]
     [TemplatePart(Name = "Viewport_3D", Type = typeof(OpenGLControl))]
+    [TemplatePart(Name = "Shader_Compiler_Error", Type = typeof(TextBlock))]
     public class Control_SceneWindow : Control
     {
         private delegate void SceneObjectFocusEventHandler(Hierarchy.SceneObject obj);
@@ -38,6 +36,7 @@ namespace Cauldron.CustomControls
 
         //private Canvas front, right, top;
         private OpenGLControl openGLControl;
+        private TextBlock shaderErrorLabel;
 
         //Camera stuff
         private float cameraPitch = -30;
@@ -70,6 +69,8 @@ namespace Cauldron.CustomControls
                 openGLControl.OpenGLInitialized += GL_Init;
                 openGLControl.Resized += OpenGlControlOnResized;
                 openGLControl.RenderContextType = RenderContextType.FBO;
+
+                shaderErrorLabel = Template.FindName("Shader_Compiler_Error", this) as TextBlock;
             }
         }
 
@@ -147,12 +148,15 @@ namespace Cauldron.CustomControls
             OpenGL gl = args.OpenGL;
 
 #if DEBUG
+            #region Hot Reload Shaders
             string vert, frag;
             bool vertChanged = ResourceLoader.LoadTextFileIfChanged(@"Shaders\color.vert", out vert);
             bool fragChanged = ResourceLoader.LoadTextFileIfChanged(@"Shaders\color.frag", out frag);
 
             if (vertChanged || fragChanged)
             {
+                shaderErrorLabel.Text = "\n";
+
                 program = new ShaderProgram();
                 
                 VertexShader vertexShader = new VertexShader();
@@ -167,8 +171,12 @@ namespace Cauldron.CustomControls
                 vertexShader.Compile();
                 fragmentShader.Compile();
 
-                if ((bool) !vertexShader.CompileStatus) MessageBox.Show(Application.Current.MainWindow, vertexShader.InfoLog);
-                if ((bool) !fragmentShader.CompileStatus) MessageBox.Show(Application.Current.MainWindow, fragmentShader.InfoLog);
+                if ((bool) !vertexShader.CompileStatus) shaderErrorLabel.Text += "color.vert: " + vertexShader.InfoLog + "\n\n";
+//                if ((bool) !vertexShader.CompileStatus) MessageBox.Show(Application.Current.MainWindow, vertexShader.InfoLog);
+                if ((bool) !fragmentShader.CompileStatus) shaderErrorLabel.Text += "color.frag: " + fragmentShader.InfoLog + "\n\n";
+                //                if ((bool) !fragmentShader.CompileStatus) MessageBox.Show(Application.Current.MainWindow, fragmentShader.InfoLog);
+
+                shaderErrorLabel.Visibility = (shaderErrorLabel.Text) == "\n" ? Visibility.Hidden : Visibility.Visible;
 
                 program.CreateInContext(gl);
 
@@ -177,8 +185,7 @@ namespace Cauldron.CustomControls
 
                 program.Link();
             }
-
-
+            #endregion
 #endif
 
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT | OpenGL.GL_STENCIL_BUFFER_BIT);
