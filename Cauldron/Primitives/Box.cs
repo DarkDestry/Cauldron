@@ -142,8 +142,6 @@ namespace Cauldron.Primitives
             };
         }
 
-        public VertexBufferArray vertexBufferArray;
-
         public override void GenerateGeometry(OpenGL gl)
         {
             vertexBufferArray = new VertexBufferArray();

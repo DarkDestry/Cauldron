@@ -132,10 +132,6 @@ namespace Cauldron.CustomControls
             program.AttachShader(fragmentShader);
             program.Link();
 
-            foreach (var sceneObject in Hierarchy.hierarchyObjectList)
-            {
-                sceneObject.MeshRenderer.Mesh.GenerateGeometry(gl);
-            }
         }
 
         float rotation = 0;
@@ -146,6 +142,13 @@ namespace Cauldron.CustomControls
         {
 
             OpenGL gl = args.OpenGL;
+
+
+            foreach (var sceneObject in Hierarchy.hierarchyObjectList)
+            {
+                if (!sceneObject.MeshRenderer.Mesh.GeometryGenerated)
+                    sceneObject.MeshRenderer.Mesh.GenerateGeometry(gl);
+            }
 
 #if DEBUG
             #region Hot Reload Shaders

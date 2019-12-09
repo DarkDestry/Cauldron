@@ -111,9 +111,7 @@
     <Compile Include="CustomControls\Control_SceneWindow.cs" />
     <Compile Include="Core\IProperty.cs" />
     <Compile Include="Core\IPropertyField.cs" />
-    <Compile Include="Core\MonoGameViewport.cs" />
     <Compile Include="Primitives\Box.cs" />
-    <Compile Include="Core\SolidColorTexture.cs" />
     <Compile Include="Core\Transform.cs" />
     <Compile Include="Core\CldVector3.cs" />
     <Page Include="WPF\Editor.xaml">

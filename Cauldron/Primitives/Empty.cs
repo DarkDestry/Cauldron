@@ -10,10 +10,7 @@ namespace Cauldron.Primitives
 {
     public class Empty : Mesh
     {
-        public override void GenerateGeometry(OpenGL gl)
-        {
-            throw new NotImplementedException();
-        }
+        public override void GenerateGeometry(OpenGL gl) { }
 
         public override void Draw(OpenGL gl) { }
     }
