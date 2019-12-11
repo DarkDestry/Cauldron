@@ -73,7 +73,9 @@ namespace Cauldron
         }
 
         public static implicit operator vec3(CldVector3 v) => new vec3(v.x, v.y, v.z);
+        public static implicit operator vec4(CldVector3 v) => new vec4(v.x, v.y, v.z, 0);
         public static implicit operator CldVector3(vec3 v) => new CldVector3(v.x, v.y, v.z);
+        public static implicit operator CldVector3(vec4 v) => new CldVector3(v.x, v.y, v.z);
 
         public static explicit operator GLColor (CldVector3 v)
         {
@@ -89,7 +91,6 @@ namespace Cauldron
         {
             return new CldVector2(v.x, v.y);
         }
-
 
 
         //        private static Quaternion toQuaternion(double yaw, double pitch, double roll) // yaw (Z), pitch (Y), roll (X)

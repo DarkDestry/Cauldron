@@ -12,6 +12,9 @@ using SharpGL.SceneGraph;
 using SharpGL.SceneGraph.Primitives;
 using SharpGL.SceneGraph.Shaders;
 using SharpGL.WPF;
+using Control = System.Windows.Controls.Control;
+using Cursors = System.Windows.Input.Cursors;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using Shader = SharpGL.Shaders.Shader;
 
 namespace Cauldron.CustomControls
@@ -44,19 +47,16 @@ namespace Cauldron.CustomControls
         private float distance = 20;
         private CldVector3 cameraFocusPoint = new CldVector3(0, 0, 0);
 
-        private mat4 cameraTransform => mat4.Translate(cameraFocusPoint) * 
+        private mat4 cameraTransform =>
             mat4.Translate(0,0,-distance) *
-            mat4.RotateX((float) CldMath.DegToRad(-cameraPitch)) *
-            mat4.RotateY((float) CldMath.DegToRad(-cameraYaw));
+            mat4.RotateX(CldMath.DegToRad(-cameraPitch)) *
+            mat4.RotateY(CldMath.DegToRad(-cameraYaw)) *
+            mat4.Translate(-(vec3)cameraFocusPoint);
 
-//        private double[,] cameraTransform => CldMatrix.MatrixFromPitchYawRoll(CldMath.DegToRad(cameraYaw), CldMath.DegToRad(cameraPitch), 0);
-
-
-//        private CldVector3 cameraForward => CldVector3.Transform(CldVector3.Forward, cameraTransform);
-//        private CldVector3 cameraRight => CldVector3.Transform(CldVector3.Right, cameraTransform);
-//        private CldVector3 cameraUp => CldVector3.Transform(CldVector3.Up, cameraTransform);
-
-//        private CldVector3 cameraPosition => cameraFocusPoint - cameraForward * distance;
+        private vec3 cameraUp => (vec3) (mat4.RotateY(CldMath.DegToRad(cameraYaw)) *
+                                         mat4.RotateX(CldMath.DegToRad(cameraPitch)) * vec4.UnitY);
+        private vec3 cameraRight => (vec3) (mat4.RotateY(CldMath.DegToRad(cameraYaw)) *
+                                            mat4.RotateX(CldMath.DegToRad(cameraPitch)) * vec4.UnitX);
 
         public override void OnApplyTemplate()
         {
@@ -69,9 +69,22 @@ namespace Cauldron.CustomControls
                 openGLControl.OpenGLInitialized += GL_Init;
                 openGLControl.Resized += OpenGlControlOnResized;
                 openGLControl.RenderContextType = RenderContextType.FBO;
+                openGLControl.MouseMove += Viewport_MouseMove;
+                openGLControl.GotMouseCapture += Viewport_MouseMove;
+                openGLControl.PreviewMouseDown += MouseMiddleButtonDown;
+                openGLControl.MouseWheel += OpenGlControlOnMouseWheel;
 
                 shaderErrorLabel = Template.FindName("Shader_Compiler_Error", this) as TextBlock;
+
+                Hierarchy.FocusChangedEvent += o => cameraFocusPoint = o.Transform.Position;
             }
+        }
+
+        private void OpenGlControlOnMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            double delta = -e.Delta;
+            distance += (float)(CldMath.Clamp(delta / 200, -1, 1) *
+                         CldMath.Clamp(Math.Pow(distance / 10, 2), 0, 30));
         }
 
         private void OpenGlControlOnResized(object sender, OpenGLEventArgs args)
@@ -221,10 +234,67 @@ namespace Cauldron.CustomControls
             program.Pop(gl, null);
         }
 
+        private bool mmDown;
+        private bool panning;
+        private bool orbiting;
+        private Point cursorPos;
 
+        private void Viewport_MouseMove(object sender, MouseEventArgs e)
+        {
+            OpenGLControl viewport = sender as OpenGLControl;
 
+            if (e.MiddleButton == MouseButtonState.Pressed)
+            {
+                if (!mmDown) cursorPos = Mouse.GetPosition(viewport);
 
+                mmDown = true;
+                if (Keyboard.IsKeyDown(Key.LeftShift)) panning = true;
+                else orbiting = true;
+            }
+            else if (e.MiddleButton == MouseButtonState.Released)
+            {
+                mmDown = false;
+                panning = false;
+                orbiting = false;
 
+                Mouse.OverrideCursor = null;
+                Mouse.Capture(null);
+            }
+
+            if (orbiting)
+            {
+                Vector delta = e.GetPosition(viewport) - cursorPos;
+
+                cursorPos = e.GetPosition(viewport);
+
+                cameraPitch += (float)-delta.Y / 2;
+                cameraYaw += (float)-delta.X / 2;
+            }
+
+            if (panning)
+            {
+                Vector delta = e.GetPosition(viewport) - cursorPos;
+
+                cursorPos = e.GetPosition(viewport);
+                if (delta.X != 0)
+                {
+                    bool b = true;
+                }
+                cameraFocusPoint += (CldVector3)(cameraRight * (float) -delta.X / 30);
+                cameraFocusPoint += (CldVector3)(cameraUp * (float) delta.Y / 30);
+            }
+
+        }
+
+        private void MouseMiddleButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.MiddleButton == MouseButtonState.Pressed)
+            {
+                e.Handled = true;
+                Mouse.Capture(sender as IInputElement);
+                Mouse.OverrideCursor = Cursors.SizeAll;
+            }
+        }
 
         public void CreateProjectionMatrix(OpenGL gl, float screenWidth, float screenHeight)
         {
@@ -241,18 +311,7 @@ namespace Cauldron.CustomControls
             gl.MatrixMode(OpenGL.GL_MODELVIEW);
         }
 
-        public void CreateModelviewAndNormalMatrix(float rotationAngle)
-        {
-            //  Create the modelview and normal matrix. We'll also rotate the scene
-            //  by the provided rotation angle, which means things that draw it 
-            //  can make the scene rotate easily.
-            mat4 rotation = mat4.Rotate(rotationAngle, new vec3(0, 1, 0));
-            mat4 translation = mat4.Translate(new vec3(0, 0, -4));
-            modelviewMatrix = translation * rotation;
-            normalMatrix = new mat3(modelviewMatrix);
-        }
 
-        private mat4 modelviewMatrix = mat4.Identity;
         private mat4 projectionMatrix = mat4.Identity;
         private mat3 normalMatrix = mat3.Identity;
     }
