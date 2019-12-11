@@ -100,6 +100,7 @@
     <Compile Include="Core\MeshRenderer.cs" />
     <Compile Include="Core\ObjImporter.cs" />
     <Compile Include="Core\ResourceLoader.cs" />
+    <Compile Include="Core\ShaderStore.cs" />
     <Compile Include="CustomControls\Control_HierarchyWindow.cs" />
     <Compile Include="CustomControls\Control_PropertiesWindow.cs" />
     <Compile Include="CustomControls\Control_Property_DropDown.cs" />
@@ -165,6 +166,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Shaders\color.frag" />
     <EmbeddedResource Include="Shaders\color.vert" />
+    <EmbeddedResource Include="Shaders\unlitColor.frag" />
+    <EmbeddedResource Include="Shaders\unlitColor.vert" />
     <None Include="WPF\App.config" />
   </ItemGroup>
   <ItemGroup>

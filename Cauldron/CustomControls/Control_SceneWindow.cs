@@ -96,8 +96,6 @@ namespace Cauldron.CustomControls
             CreateProjectionMatrix(gl, (float)ActualWidth, (float)ActualHeight);
         }
 
-        ShaderProgram program = new ShaderProgram();
-
         private void GL_Init(object sender, OpenGLEventArgs args)
         {
             OpenGL gl = args.OpenGL;
@@ -122,28 +120,8 @@ namespace Cauldron.CustomControls
             gl.Enable(OpenGL.GL_LIGHT0);
 
             gl.ShadeModel(OpenGL.GL_SMOOTH);
-            
-            //  Create a vertex shader.
-            VertexShader vertexShader = new VertexShader();
-            vertexShader.CreateInContext(gl);
-            vertexShader.SetSource(ResourceLoader.LoadEmbeddedTextFile(@"Shaders\color.vert"));
 
-            //  Create a fragment shader.
-            FragmentShader fragmentShader = new FragmentShader();
-            fragmentShader.CreateInContext(gl);
-            fragmentShader.SetSource(ResourceLoader.LoadEmbeddedTextFile(@"Shaders\color.frag"));
-
-            //  Compile them both.
-            vertexShader.Compile();
-            fragmentShader.Compile();
-
-            //  Build a program.
-            program.CreateInContext(gl);
-
-            //  Attach the shaders.
-            program.AttachShader(vertexShader);
-            program.AttachShader(fragmentShader);
-            program.Link();
+            ShaderStore.CompileShaders(gl);
 
         }
 
@@ -165,47 +143,16 @@ namespace Cauldron.CustomControls
 
 #if DEBUG
             #region Hot Reload Shaders
-            string vert, frag;
-            bool vertChanged = ResourceLoader.LoadTextFileIfChanged(@"Shaders\color.vert", out vert);
-            bool fragChanged = ResourceLoader.LoadTextFileIfChanged(@"Shaders\color.frag", out frag);
-
-            if (vertChanged || fragChanged)
-            {
-                shaderErrorLabel.Text = "\n";
-
-                program = new ShaderProgram();
-                
-                VertexShader vertexShader = new VertexShader();
-                vertexShader.CreateInContext(gl);
-                vertexShader.SetSource(vert);
-
-                //  Create a fragment shader.
-                FragmentShader fragmentShader = new FragmentShader();
-                fragmentShader.CreateInContext(gl);
-                fragmentShader.SetSource(frag);
-
-                vertexShader.Compile();
-                fragmentShader.Compile();
-
-                if ((bool) !vertexShader.CompileStatus) shaderErrorLabel.Text += "color.vert: " + vertexShader.InfoLog + "\n\n";
-//                if ((bool) !vertexShader.CompileStatus) MessageBox.Show(Application.Current.MainWindow, vertexShader.InfoLog);
-                if ((bool) !fragmentShader.CompileStatus) shaderErrorLabel.Text += "color.frag: " + fragmentShader.InfoLog + "\n\n";
-                //                if ((bool) !fragmentShader.CompileStatus) MessageBox.Show(Application.Current.MainWindow, fragmentShader.InfoLog);
-
-                shaderErrorLabel.Visibility = (shaderErrorLabel.Text) == "\n" ? Visibility.Hidden : Visibility.Visible;
-
-                program.CreateInContext(gl);
-
-                program.AttachShader(vertexShader);
-                program.AttachShader(fragmentShader);
-
-                program.Link();
-            }
+            ShaderStore.CompileShadersHotReload(gl);
+            shaderErrorLabel.Text = "\n" + ShaderStore.GetShaderErrors();
+            shaderErrorLabel.Visibility = (shaderErrorLabel.Text) == "\n" ? Visibility.Hidden : Visibility.Visible;
             #endregion
 #endif
 
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT | OpenGL.GL_STENCIL_BUFFER_BIT);
             gl.ClearColor((float)37/255, (float)37 /255, (float)38 /255, 1);
+
+            ShaderProgram program = ShaderStore.programs["unlitColor"];
 
             program.Push(gl, null);
 
