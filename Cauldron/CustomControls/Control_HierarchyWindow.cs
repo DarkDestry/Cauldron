@@ -75,7 +75,7 @@ namespace Cauldron.CustomControls
 			{
 				ListBoxItem item = new ListBoxItem();
 				item.Content = sceneObject.Name;
-				item.Tag = sceneObject;
+				item.Tag = sceneObject.Guid;
 				item.ContextMenu = new ContextMenu();
 				item.GotFocus += Item_Selected;
 				MenuItem deleteMenuItem = new MenuItem();
@@ -103,7 +103,7 @@ namespace Cauldron.CustomControls
         private void Item_Selected(object sender, RoutedEventArgs e)
 		{
 			ListBoxItem item = sender as ListBoxItem;
-			Hierarchy.SceneObject obj = item.Tag as Hierarchy.SceneObject;
+			Hierarchy.SceneObject obj = Hierarchy.GetObject(item.Tag as string);
             Hierarchy.ChangeObjectFocus(obj);
         }
 

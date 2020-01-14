@@ -58,7 +58,7 @@ namespace Cauldron.CustomControls
 
             if (!templateApplied) return;
 
-            color.UpdateProperty(obj.MeshRenderer.Color);
+            color.UpdateProperty((CldVector3)obj.MeshRenderer.Color);
         }
     }
 }

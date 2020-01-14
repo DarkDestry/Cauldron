@@ -53,13 +53,13 @@ namespace Cauldron
 
         public static CldVector3 operator *(CldVector3 left, float scale)
         {
-            return new CldVector3(left.x + scale, left.y + scale, left.z + scale);
+            return new CldVector3(left.x * scale, left.y * scale, left.z * scale);
         }
 
         public static CldVector3 operator *(CldVector3 left, double scale)
         {
             float s = (float) scale;
-            return new CldVector3(left.x + s, left.y + s, left.z + s);
+            return new CldVector3(left.x * s, left.y * s, left.z * s);
         }
 
         public static implicit operator double[](CldVector3 v)
@@ -77,20 +77,10 @@ namespace Cauldron
         public static implicit operator CldVector3(vec3 v) => new CldVector3(v.x, v.y, v.z);
         public static implicit operator CldVector3(vec4 v) => new CldVector3(v.x, v.y, v.z);
 
-        public static explicit operator GLColor (CldVector3 v)
-        {
-            return new GLColor(v.x, v.y, v.z, 1);
-        }
+        public static explicit operator GLColor (CldVector3 v) => new GLColor(v.x, v.y, v.z, 1);
+        public static explicit operator CldVector3(GLColor c) => new CldVector3(c.R, c.G, c.B);
 
-        public static explicit operator CldVector3(GLColor c)
-        {
-            return new CldVector3(c.R, c.G, c.B);
-        }
-
-        public static explicit operator CldVector2(CldVector3 v)
-        {
-            return new CldVector2(v.x, v.y);
-        }
+        public static explicit operator CldVector2(CldVector3 v) => new CldVector2(v.x, v.y);
 
 
         //        private static Quaternion toQuaternion(double yaw, double pitch, double roll) // yaw (Z), pitch (Y), roll (X)

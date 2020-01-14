@@ -120,6 +120,7 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="Primitives\Empty.cs" />
+    <Compile Include="Primitives\Grid.cs" />
     <Compile Include="Primitives\Icosphere.cs" />
     <Compile Include="Primitives\Mesh.cs" />
     <Compile Include="Primitives\Model.cs" />

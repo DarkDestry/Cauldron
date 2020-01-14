@@ -121,6 +121,8 @@ namespace Cauldron.CustomControls
 
             gl.ShadeModel(OpenGL.GL_SMOOTH);
 
+            grid.GenerateGeometry(gl);
+
             ShaderStore.CompileShaders(gl);
 
         }
@@ -128,6 +130,7 @@ namespace Cauldron.CustomControls
         float rotation = 0;
         private Box b;
         private float theta = 0;
+        Cauldron.Primitives.Grid grid = new Cauldron.Primitives.Grid();
 
         private void GL_Draw(object sender, OpenGLEventArgs args)
         {
@@ -168,6 +171,9 @@ namespace Cauldron.CustomControls
             gl.UniformMatrix4(program.GetUniformLocation("Projection"), 1, false, projectionMatrix.ToArray());
             gl.UniformMatrix4(program.GetUniformLocation("View"), 1, false, cameraTransform.ToArray());
             gl.UniformMatrix3(program.GetUniformLocation("NormalMatrix"), 1, false, normalMatrix.ToArray());
+
+            //  Draw Grid
+            grid.Draw(gl, program);
 
             foreach (var sceneObject in Hierarchy.hierarchyObjectList)
             {
