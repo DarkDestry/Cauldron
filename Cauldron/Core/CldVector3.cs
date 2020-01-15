@@ -113,5 +113,10 @@ namespace Cauldron
         {
             return new CldVector3(Matrix.Multiply(matrix, this));
         }
+
+        public override string ToString()
+        {
+            return $"{x},{y},{z}";
+        }
     }
 }
