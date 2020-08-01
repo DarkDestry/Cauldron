@@ -33,7 +33,7 @@ namespace Cauldron.Core
             {
                 string workingDirectory = Environment.CurrentDirectory;
                 string projectDirectory = Directory.GetParent(workingDirectory).Parent.FullName;
-                return File.ReadAllText(projectDirectory + @"\" + relativePath);
+                return File.ReadAllText(workingDirectory + @"\" + relativePath);
             }
             catch (IOException e)
             {

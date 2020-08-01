@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
+using Cauldron.Core;
 
 namespace Cauldron
 {
@@ -16,10 +17,22 @@ namespace Cauldron
 	{
         private void Application_Startup(object sender, StartupEventArgs e)
 		{
+            for (int i = 0; i < e.Args.Length; i++)
+            {
+                if (e.Args[i].StartsWith("-") || e.Args[i].StartsWith("/"))
+                {
+                    if (e.Args.Length - 1 > i && !(e.Args[i+1].StartsWith("-") || e.Args[i+1].StartsWith("/")))
+                    {
+                        CommandArguments.SetArgument(e.Args[i].Substring(1), e.Args[i + 1]);
+                    }
+                    else
+                    {   
+                        CommandArguments.SetArgument(e.Args[i].Substring(1));
+                    }
+                }
+            }
 			//Hook to Daemon here?
 			Editor editor = new	Editor();
-			if (e.Args.Length == 1)
-				MessageBox.Show("Now opening file: \n\n" + e.Args[0]);
 			editor.Show();
 		}
 

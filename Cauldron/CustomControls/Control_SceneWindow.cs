@@ -4,6 +4,10 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Threading;
+using SlimDX.Direct3D9;
 using Cauldron.Core;
 using Cauldron.Primitives;
 using GlmSharp;
@@ -12,15 +16,19 @@ using SharpGL.SceneGraph;
 using SharpGL.SceneGraph.Primitives;
 using SharpGL.SceneGraph.Shaders;
 using SharpGL.WPF;
+using Box = Cauldron.Primitives.Box;
 using Control = System.Windows.Controls.Control;
 using Cursors = System.Windows.Input.Cursors;
+using Grid = System.Windows.Controls.Grid;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using Shader = SharpGL.Shaders.Shader;
 
 namespace Cauldron.CustomControls
 {
     [TemplatePart(Name = "Viewport_3D", Type = typeof(OpenGLControl))]
+    [TemplatePart(Name = "Ether_Viewport", Type = typeof(Control_Ether_HwndHost))]
     [TemplatePart(Name = "Shader_Compiler_Error", Type = typeof(TextBlock))]
+    [TemplatePart(Name = "SceneWindow", Type = typeof(Grid))]
     public class Control_SceneWindow : Control
     {
         private delegate void SceneObjectFocusEventHandler(Hierarchy.SceneObject obj);
@@ -39,7 +47,9 @@ namespace Cauldron.CustomControls
 
         //private Canvas front, right, top;
         private OpenGLControl openGLControl;
+        private Control_Ether_HwndHost hwndHostElement;
         private TextBlock shaderErrorLabel;
+        private Grid sceneWindow;
 
         //Camera stuff
         private float cameraPitch = -30;
@@ -65,14 +75,31 @@ namespace Cauldron.CustomControls
             if (Template != null)
             {
                 openGLControl = Template.FindName("Viewport_3D", this) as OpenGLControl;
+                hwndHostElement = Template.FindName("Ether_Viewport", this) as Control_Ether_HwndHost;
+                sceneWindow = Template.FindName("SceneWindow", this) as Grid;
+
+                //TODO: Reference by name
+                if (CommandArguments.TryGetArgument("ether"))
+                {
+                    sceneWindow.Children.RemoveAt(1);
+                    return;
+                }
+                sceneWindow.Children.RemoveAt(2);
+
                 openGLControl.OpenGLDraw += GL_Draw;
                 openGLControl.OpenGLInitialized += GL_Init;
                 openGLControl.Resized += OpenGlControlOnResized;
-                openGLControl.RenderContextType = RenderContextType.FBO;
                 openGLControl.MouseMove += Viewport_MouseMove;
                 openGLControl.GotMouseCapture += Viewport_MouseMove;
                 openGLControl.PreviewMouseDown += MouseMiddleButtonDown;
+                openGLControl.RenderContextType = RenderContextType.FBO;
                 openGLControl.MouseWheel += OpenGlControlOnMouseWheel;
+                openGLControl.DrawFPS = true;
+
+                //HACK: To override the private timer field to allow for render to have higher priority than input.
+                var prop = openGLControl.GetType().GetField("timer",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                prop.SetValue(openGLControl, new DispatcherTimer(DispatcherPriority.Send));
 
                 shaderErrorLabel = Template.FindName("Shader_Compiler_Error", this) as TextBlock;
 
@@ -87,7 +114,7 @@ namespace Cauldron.CustomControls
                          CldMath.Clamp(Math.Pow(distance / 10, 2), 0, 30));
         }
 
-        private void OpenGlControlOnResized(object sender, OpenGLEventArgs args)
+        private void OpenGlControlOnResized(object sender, OpenGLRoutedEventArgs args)
         {
             //  Get the OpenGL instance.
             var gl = args.OpenGL;
@@ -96,7 +123,7 @@ namespace Cauldron.CustomControls
             CreateProjectionMatrix(gl, (float)ActualWidth, (float)ActualHeight);
         }
 
-        private void GL_Init(object sender, OpenGLEventArgs args)
+        private void GL_Init(object sender, OpenGLRoutedEventArgs args)
         {
             OpenGL gl = args.OpenGL;
 
@@ -124,15 +151,14 @@ namespace Cauldron.CustomControls
             grid.GenerateGeometry(gl);
 
             ShaderStore.CompileShaders(gl);
-
         }
 
         float rotation = 0;
         private Box b;
         private float theta = 0;
-        Cauldron.Primitives.Grid grid = new Cauldron.Primitives.Grid();
+        Primitives.Grid grid = new Primitives.Grid();
 
-        private void GL_Draw(object sender, OpenGLEventArgs args)
+        private void GL_Draw(object sender, OpenGLRoutedEventArgs args)
         {
 
             OpenGL gl = args.OpenGL;

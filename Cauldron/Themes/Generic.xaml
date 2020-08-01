@@ -139,7 +139,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type customControls:Control_SceneWindow}">
                     <Border Name="EditorWindow" Style="{StaticResource EditorWindows}" Grid.Column="1">
-                        <Grid>
+                        <Grid x:Name="SceneWindow">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto" />
                                 <RowDefinition Height="*" />
@@ -149,8 +149,8 @@
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Scene</Label>
                             <sharpGL:OpenGLControl Panel.ZIndex="0" Grid.Row="1" Tag="3D" x:Name="Viewport_3D"/>
+                            <customControls:Control_Ether_HwndHost Panel.ZIndex="2" Grid.Row="1" x:Name="Ether_Viewport"/>
                             <TextBlock Panel.ZIndex="0" Grid.Row="1" Tag="Error" x:Name="Shader_Compiler_Error" Style="{StaticResource ShaderCompileErrorLabel}" />
-                            <!-- <cauldron:MonoGameViewport Panel.ZIndex="0" Grid.Row="1" Tag="3D" x:Name="Viewport_3D" /> -->
                         </Grid>
                     </Border>
                 </ControlTemplate>
@@ -251,6 +251,16 @@
 
 <!-- End ControlTemplates -->
 
+
+    <Style TargetType="{x:Type customControls:Control_Ether_HwndHost}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type customControls:Control_Ether_HwndHost}">
+                    <Border Panel.ZIndex="0" Tag="HwndHost" x:Name="HwndHostElement" Background="DarkViolet"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 
 </ResourceDictionary>

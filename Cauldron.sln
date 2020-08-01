@@ -7,12 +7,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cauldron", "Cauldron\Cauldr
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug_Ether|Any CPU = Debug_Ether|Any CPU
+		Debug_Ether|x64 = Debug_Ether|x64
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2BCC70A8-BDEC-40D5-B674-7436314A5937}.Debug_Ether|Any CPU.ActiveCfg = Debug_Ether|Any CPU
+		{2BCC70A8-BDEC-40D5-B674-7436314A5937}.Debug_Ether|Any CPU.Build.0 = Debug_Ether|Any CPU
+		{2BCC70A8-BDEC-40D5-B674-7436314A5937}.Debug_Ether|x64.ActiveCfg = Debug_Ether|x64
+		{2BCC70A8-BDEC-40D5-B674-7436314A5937}.Debug_Ether|x64.Build.0 = Debug_Ether|x64
 		{2BCC70A8-BDEC-40D5-B674-7436314A5937}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2BCC70A8-BDEC-40D5-B674-7436314A5937}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BCC70A8-BDEC-40D5-B674-7436314A5937}.Debug|x64.ActiveCfg = Debug|x64
