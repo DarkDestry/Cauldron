@@ -8,7 +8,7 @@
 
 <!-- Styles -->
     <Style TargetType="Border" x:Key="EditorWindows">
-        <Setter Property="Margin" Value="5" />
+        <!-- <Setter Property="Margin" Value="5" /> -->
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Background" Value="#252526" />
         <Setter Property="BorderBrush" Value="#3f3f46" />
@@ -30,6 +30,12 @@
         <Setter Property="TextAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+    </Style>
+    <Style TargetType="Menu" x:Key="MainMenu">
+        <Setter Property="Background" Value="#252526" />
+    </Style>
+    <Style TargetType="Grid" x:Key="PropertyAttribute">
+        <Setter Property="Margin" Value="25 0 0 0" />
     </Style>
     <!-- End Styles -->
 
@@ -164,9 +170,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type customControls:Control_Property_Vector3}">
-                    <Grid>
+                    <Grid Style="{StaticResource PropertyAttribute}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" MaxWidth="200"/>
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
@@ -193,12 +199,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type customControls:Control_Property_String}">
-                    <Grid x:Name="Control_Property_String_Root">
+                    <Grid Style="{StaticResource PropertyAttribute}" x:Name="Control_Property_String_Root">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*" MaxWidth="200"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Label Name="LabelName" Content="{TemplateBinding NameLabel}"/>
@@ -213,12 +219,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type customControls:Control_Property_ReadOnly}">
-                    <Grid x:Name="Control_Property_ReadOnly_Root">
+                    <Grid Style="{StaticResource PropertyAttribute}" x:Name="Control_Property_ReadOnly_Root">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*" MaxWidth="200"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Label Name="LabelName" Content="{TemplateBinding NameLabel}"/>
@@ -233,12 +239,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type customControls:Control_Property_DropDown}">
-                    <Grid x:Name="Control_Property_DropDown_Root">
+                    <Grid Style="{StaticResource PropertyAttribute}" x:Name="Control_Property_DropDown_Root">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*" MaxWidth="200"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Label Name="LabelName" Content="{TemplateBinding NameLabel}"/>

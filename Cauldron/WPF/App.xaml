@@ -13,6 +13,14 @@
             <Setter Property="Foreground" Value="#f1f1f1"/>
             <Setter Property="FontFamily" Value="SegoeUI"/>
         </Style>
+        <Style TargetType="GridSplitter" x:Key="Horizontal">
+            <Setter Property="Background" Value="#2d2d30"/>
+            <Setter Property="Width" Value="5"/>
+        </Style>
+        <Style TargetType="GridSplitter" x:Key="Vertical">
+            <Setter Property="Background" Value="#2d2d30"/>
+            <Setter Property="Width" Value="5"/>
+        </Style>
         <Style TargetType="Expander">
             <Setter Property="Foreground" Value="#f1f1f1"/>
             <Setter Property="FontFamily" Value="SegoeUI"/>

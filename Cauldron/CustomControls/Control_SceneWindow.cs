@@ -95,11 +95,8 @@ namespace Cauldron.CustomControls
                 openGLControl.RenderContextType = RenderContextType.FBO;
                 openGLControl.MouseWheel += OpenGlControlOnMouseWheel;
                 openGLControl.DrawFPS = true;
-
-                //HACK: To override the private timer field to allow for render to have higher priority than input.
-                var prop = openGLControl.GetType().GetField("timer",
-                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                prop.SetValue(openGLControl, new DispatcherTimer(DispatcherPriority.Send));
+                openGLControl.RenderTrigger = RenderTrigger.Manual;
+                CompositionTarget.Rendering += (sender, args) => openGLControl.DoRender();
 
                 shaderErrorLabel = Template.FindName("Shader_Compiler_Error", this) as TextBlock;
 

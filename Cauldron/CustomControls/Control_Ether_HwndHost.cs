@@ -30,12 +30,18 @@ namespace Cauldron.CustomControls
             {
                 hwndHostElement = Template.FindName("HwndHostElement", this) as Border;
 
-                this.Loaded += (sender, args) => InitEther();
-                this.SizeChanged += OnSizeChanged;
+                Loaded += (sender, args) => InitEther();
+                SizeChanged += OnSizeChanged;
+
+                CompositionTarget.Rendering += (sender, args) =>
+                {
+                    Ether.Update();
+                    Ether.Render();
+                };
             }
         }
 
-        private bool etherInitialized = false;
+        private bool etherInitialized;
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -55,7 +61,7 @@ namespace Cauldron.CustomControls
                 Ether.Update();
                 Ether.Render();
             };
-            timer.Start();
+//            timer.Start();
             etherInitialized = true;
         }
 
@@ -110,7 +116,6 @@ namespace Cauldron.CustomControls
                 CHILD_ID = 0x00000001,
                 WS_VSCROLL = 0x00200000,
                 WS_BORDER = 0x00800000;
-
 
             IntPtr hwndRenderer;
             IntPtr hwndHost;
@@ -185,6 +190,8 @@ namespace Cauldron.CustomControls
                 int msg,
                 IntPtr wParam,
                 String lParam);
+
+
         }
     }
 }

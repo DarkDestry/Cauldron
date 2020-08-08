@@ -10,24 +10,34 @@
         Title="Cauldron Editor" Height="768" Width="1366">
     <Window.Resources>
     </Window.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="3*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <!--<Grid.ContextMenu>
-            <ContextMenu>
-                <MenuItem Name="Render" Header="Render" Click="Render_OnClick"></MenuItem>
-            </ContextMenu>
-        </Grid.ContextMenu>-->
-        <customControls:Control_HierarchyWindow/>
-        <customControls:Control_SceneWindow Grid.Column="1"/>
-        <customControls:Control_PropertiesWindow Grid.Column="2" />
 
+    <DockPanel>
+        <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="4*" />
+            </Grid.ColumnDefinitions>
 
-    </Grid>
+            <customControls:Control_HierarchyWindow/>
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Style="{StaticResource Vertical}"/>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <customControls:Control_SceneWindow Grid.Column="0"/>
+                <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Style="{StaticResource Vertical}"/>
+                <customControls:Control_PropertiesWindow Grid.Column="2" />
+            </Grid>
+
+        </Grid>
+    </DockPanel>
 </Window>

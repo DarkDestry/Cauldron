@@ -127,7 +127,7 @@ namespace Cauldron.CustomControls
                 {
                     cpv3.sensitivity = float.Parse(e.NewValue.ToString());
                 }
-                    break;
+                break;
             }
         }
 
@@ -195,16 +195,21 @@ namespace Cauldron.CustomControls
 
                 cursorPos = e.GetPosition(field);
 
+                bool isShiftHeld = Keyboard.GetKeyStates(Key.LeftShift) == KeyStates.Down;
+                bool isCtrlHeld = Keyboard.GetKeyStates(Key.LeftCtrl) == KeyStates.Down;
+
+                float multiplier = isShiftHeld ? 3 : isCtrlHeld ? 0.3f : 1;
+
                 switch (field.Name)
                 {
                     case "Field_X":
-                        XValue = (float)(float.Parse(field.Text) + delta.X * sensitivity);
+                        XValue = (float)(float.Parse(field.Text) + delta.X * sensitivity * multiplier);
                         break;
                     case "Field_Y":
-                        YValue = (float)(float.Parse(field.Text) + delta.X * sensitivity);
+                        YValue = (float)(float.Parse(field.Text) + delta.X * sensitivity * multiplier);
                         break;
                     case "Field_Z":
-                        ZValue = (float)(float.Parse(field.Text) + delta.X * sensitivity);
+                        ZValue = (float)(float.Parse(field.Text) + delta.X * sensitivity * multiplier);
                         break;
                 }
                 

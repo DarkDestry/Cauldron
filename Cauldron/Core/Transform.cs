@@ -16,7 +16,9 @@ namespace Cauldron.Core
 			Scale = new CldVector3(1,1,1);
 		}
 
-        private mat4 matRot => mat4.RotateX(Rotation.x) * mat4.RotateY(Rotation.y) * mat4.RotateZ(Rotation.z);
+        private mat4 matRot => mat4.RotateX(CldMath.DegToRad(Rotation.x)) * 
+                               mat4.RotateY(CldMath.DegToRad(Rotation.y)) * 
+                               mat4.RotateZ(CldMath.DegToRad(Rotation.z));
         private mat4 matTrans => mat4.Translate(Position);
         private mat4 matScale => mat4.Scale(Scale);
         public mat4 Matrix => matTrans * matRot * matScale;
