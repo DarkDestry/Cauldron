@@ -8,7 +8,7 @@
 
 ## Introduction
 
-Cauldron is an editor intended to be used with [Elixir](https://github.com/Eclmist/Elixir). 
+Cauldron is an editor intended to be used with [Elixir](https://github.com/Eclmist/Elixir). 
 
 The Cauldron project started with the need of a scene editor for a headless renderer. It is intended to be an experiment and learning experience for building a editor from the ground up. 
 
