@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:customControls="clr-namespace:Cauldron.CustomControls"
+        xmlns:windows="clr-namespace:Cauldron.UserControls.Windows"
         mc:Ignorable="d"
         Icon="..\Cauldron.png"
         Style="{StaticResource DarkTheme}"
@@ -22,7 +23,7 @@
                 <ColumnDefinition Width="4*" />
             </Grid.ColumnDefinitions>
 
-            <customControls:Control_HierarchyWindow/>
+            <windows:HierarchyWindow/>
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Style="{StaticResource Vertical}"/>
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
@@ -33,9 +34,9 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <customControls:Control_SceneWindow Grid.Column="0"/>
+                <windows:SceneWindow Grid.Column="0"/>
                 <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Style="{StaticResource Vertical}"/>
-                <customControls:Control_PropertiesWindow Grid.Column="2" />
+                <windows:PropertyWindow Grid.Column="2" />
             </Grid>
 
         </Grid>

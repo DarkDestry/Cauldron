@@ -14,14 +14,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Cauldron.Core;
 
 namespace Cauldron.CustomControls
 {
 	[TemplatePart(Name = "PropertyList", Type = typeof(StackPanel))]
 	public class Control_PropertiesWindow : Control
-	{
-
-		static Control_PropertiesWindow()
+    {
+        static Control_PropertiesWindow()
 		{
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(Control_PropertiesWindow), new FrameworkPropertyMetadata(typeof(Control_PropertiesWindow)));
 		}
@@ -35,34 +35,34 @@ namespace Cauldron.CustomControls
 			if (Template != null)
 			{
 				propertyList = Template.FindName("PropertyList", this) as StackPanel;
-                Hierarchy.FocusChangedEvent += Hierarchy_FocusChangedEvent;
+                // Hierarchy.FocusChangedEvent += Hierarchy_FocusChangedEvent;
 			}
 		}
 
-        private void Hierarchy_FocusChangedEvent(Hierarchy.SceneObject obj)
-        {
-            propertyList.Children.Clear();
-
-            if (obj.properties.ContainsKey("name"))
-            {
-                propertyList.Children.Add(new Control_Property_Object());
-            }
-
-            if (obj.properties.ContainsKey("transform"))
-            {
-                propertyList.Children.Add(new Control_Property_Transform());
-            }
-
-            if (obj.properties.ContainsKey("meshRenderer"))
-            {
-                propertyList.Children.Add(new Control_Property_MeshRenderer());
-            }
-
-            foreach (var propertyListChild in propertyList.Children)
-            {
-                IProperty iProperty = propertyListChild as IProperty;
-                iProperty.UpdateProperty(obj);
-            }
-        }
+        // private void Hierarchy_FocusChangedEvent(Hierarchy.SceneObject obj)
+        // {
+        //     propertyList.Children.Clear();
+        //
+        //     if (obj.properties.ContainsKey("name"))
+        //     {
+        //         propertyList.Children.Add(new Control_Property_Object());
+        //     }
+        //
+        //     if (obj.properties.ContainsKey("transform"))
+        //     {
+        //         propertyList.Children.Add(new Control_Property_Transform());
+        //     }
+        //
+        //     if (obj.properties.ContainsKey("meshRenderer"))
+        //     {
+        //         propertyList.Children.Add(new Control_Property_MeshRenderer());
+        //     }
+        //
+        //     foreach (var propertyListChild in propertyList.Children)
+        //     {
+        //         IProperty iProperty = propertyListChild as IProperty;
+        //         iProperty.UpdateProperty(obj);
+        //     }
+        // }
 	}
 }

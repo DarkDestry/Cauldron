@@ -265,9 +265,9 @@ namespace Cauldron.CustomControls
         {
             CldVector3 v3 = value is CldVector3 ? (CldVector3) value : default;
 
-            XValue = v3.x;
-            YValue = v3.y;
-            ZValue = v3.z;
+            XValue = v3.X;
+            YValue = v3.Y;
+            ZValue = v3.Z;
         }
 
         protected virtual void OnFieldChanged(CldVector3 value) => FieldChangedEvent?.Invoke(value);

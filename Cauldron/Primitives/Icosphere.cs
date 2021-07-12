@@ -26,8 +26,8 @@ namespace Cauldron.Primitives
 
         private int AddUnitVertex(CldVector3 v3)
         {
-            float length = (float)Math.Sqrt(v3.x * v3.x + v3.y * v3.y + v3.z * v3.z);
-            Vertices.Add(new CldVector3(v3.x / length, v3.y / length, v3.z / length));
+            float length = (float)Math.Sqrt(v3.X * v3.X + v3.Y * v3.Y + v3.Z * v3.Z);
+            Vertices.Add(new CldVector3(v3.X / length, v3.Y / length, v3.Z / length));
             return Vertices.Count - 1;
         }
 
@@ -110,9 +110,9 @@ namespace Cauldron.Primitives
             CldVector3 point1 = Vertices[p1];
             CldVector3 point2 = Vertices[p2];
             CldVector3 middle = new CldVector3(
-                (float) ((point1.x + point2.x) / 2.0),
-                (float) ((point1.y + point2.y) / 2.0),
-                (float) ((point1.z + point2.z) / 2.0));
+                (float) ((point1.X + point2.X) / 2.0),
+                (float) ((point1.Y + point2.Y) / 2.0),
+                (float) ((point1.Z + point2.Z) / 2.0));
 
             index = AddUnitVertex(middle);
 

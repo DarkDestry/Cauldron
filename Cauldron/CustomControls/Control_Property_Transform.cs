@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Cauldron.Core;
 using Control = System.Windows.Controls.Control;
 using MessageBox = System.Windows.MessageBox;
 
@@ -48,7 +49,7 @@ namespace Cauldron.CustomControls
 				rotation.FieldChangedEvent += Rotation_FieldChanged;
 				scale = Template.FindName("Vector3_Scale", this) as Control_Property_Vector3;
 				scale.FieldChangedEvent += Scale_FieldChanged;
-                if (currentObjectGuid != null) UpdateProperty(Hierarchy.GetObject(currentObjectGuid));
+                if (!string.IsNullOrEmpty(currentObjectGuid)) UpdateProperty(Hierarchy.GetObject(currentObjectGuid));
             }
         }
 

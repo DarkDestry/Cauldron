@@ -81,6 +81,9 @@
     <Reference Include="GlmSharp, Version=0.9.8.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\GlmSharp.0.9.8\lib\Net45\GlmSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.31\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
+    </Reference>
     <Reference Include="SharpGL, Version=3.1.1.0, Culture=neutral, PublicKeyToken=27fc851303210b27, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpGL.3.1.1\lib\net472\SharpGL.dll</HintPath>
     </Reference>
@@ -120,12 +123,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Behaviours\TextBoxEnterKeyUpdateBehaviour.cs" />
     <Compile Include="Core\CldMath.cs" />
     <Compile Include="Core\CldMatrix.cs" />
     <Compile Include="Core\CldVector2.cs" />
     <Compile Include="Core\CommandArguments.cs" />
     <Compile Include="Core\MeshRenderer.cs" />
     <Compile Include="Core\ObjImporter.cs" />
+    <Compile Include="Core\OpenGLRenderer.cs" />
     <Compile Include="Core\ResourceLoader.cs" />
     <Compile Include="Core\ShaderStore.cs" />
     <Compile Include="CustomControls\Control_Ether_HwndHost.cs" />
@@ -143,6 +148,42 @@
     <Compile Include="Primitives\Box.cs" />
     <Compile Include="Core\Transform.cs" />
     <Compile Include="Core\CldVector3.cs" />
+    <Page Include="UserControls\PropertyAttribute\ReadOnlyFieldControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PropertyAttribute\StringFieldControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PropertyAttribute\Vector3FieldControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PropertyComponent\MeshRendererControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PropertyComponent\ObjectInfoControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PropertyComponent\TransformControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Windows\HierarchyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Windows\PropertyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Windows\SceneWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WPF\Editor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -153,6 +194,35 @@
     <Compile Include="Primitives\Mesh.cs" />
     <Compile Include="Primitives\Model.cs" />
     <Compile Include="Primitives\Vertex.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="UserControls\PropertyAttribute\ReadOnlyFieldControl.xaml.cs">
+      <DependentUpon>ReadOnlyFieldControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PropertyAttribute\StringFieldControl.xaml.cs">
+      <DependentUpon>StringFieldControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PropertyAttribute\Vector3FieldControl.xaml.cs">
+      <DependentUpon>Vector3FieldControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PropertyComponent\MeshRendererControl.xaml.cs">
+      <DependentUpon>MeshRendererControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PropertyComponent\ObjectInfoControl.xaml.cs">
+      <DependentUpon>ObjectInfoControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PropertyComponent\TransformControl.xaml.cs">
+      <DependentUpon>TransformControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Windows\HierarchyWindow.xaml.cs">
+      <DependentUpon>HierarchyWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Windows\PropertyWindow.xaml.cs">
+      <DependentUpon>PropertyWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Windows\SceneWindow.xaml.cs">
+      <DependentUpon>SceneWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ValueConverters\GLColorToVector3Converter.cs" />
     <Compile Include="WPF\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>

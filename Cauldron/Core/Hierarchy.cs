@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Effects;
+using Cauldron.Annotations;
 using Cauldron.Core;
 using Transform = Cauldron.Core.Transform;
 
-namespace Cauldron
+namespace Cauldron.Core
 {
 	public static class Hierarchy
 	{
-		public static List<SceneObject> hierarchyObjectList = new List<SceneObject>();
+        public static ObservableCollection<SceneObject> HierarchyObjectList { get; } =
+            new ObservableCollection<SceneObject>();
 
         public delegate void FocusChangedEventHandler(SceneObject obj);
 
@@ -25,39 +31,101 @@ namespace Cauldron
 
         public static Dictionary<string, string> guidColorDictionary = new Dictionary<string, string>();
 
-		public class SceneObject
+		public class SceneObject : INotifyPropertyChanged
 		{
 			public SceneObject(string name)
-			{
-				properties.Add("name", name);
-				properties.Add("transform", new Transform());
-				properties.Add("guid", System.Guid.NewGuid().ToString());
+            {
+                var objectInfo = new ObjectInfo()
+                {
+                    Guid = System.Guid.NewGuid().ToString(),
+                    Name = name
+                };
+                objectInfo.PropertyChanged += (sender, args) => OnPropertyChanged(args.PropertyName);
+                properties.Add(objectInfo);
+				properties.Add(new Transform());
             }
 
-			public Dictionary<string,object> properties = new Dictionary<string, object>();
+            public ObservableCollection<object> properties = new ObservableCollection<object>();
 
 			public Transform Transform
-			{
-				get => properties["transform"] as Transform;
-				set => properties["transform"] = value;
-			}
+            {
+                get => properties.First(o => o is Transform) as Transform;
+                set
+                {
+                    var trans = properties.First(o => o is Transform);
+                    properties[properties.IndexOf(trans)] = value;
+                }
+            }
 
-			public string Name
-			{
-				get => properties["name"] as string;
-				set => properties["name"] = value;
-			}
+            public string Name
+            {
+                get => ((ObjectInfo)properties.First(o => o is ObjectInfo)).Name;
+                set
+                {
+                    var objectInfo = (ObjectInfo)properties.First(o => o is ObjectInfo);
+                    var index = properties.IndexOf(objectInfo);
+                    objectInfo.Name = value;
+                    properties[index] = objectInfo;
+                    OnPropertyChanged();
+                }
+            }
 
-			public string Guid
-			{
-				get => properties["guid"] as string;
-				set => properties["guid"] = value;
-			}
+            public string Guid => ((ObjectInfo)properties.First(o => o is ObjectInfo)).Guid;
 
             public MeshRenderer MeshRenderer
             {
-                get => properties["meshRenderer"] as MeshRenderer;
-                set => properties["meshRenderer"] = value;
+                get => properties.First(o => o is MeshRenderer) as MeshRenderer;
+                set
+                {
+                    var mr = properties.FirstOrDefault(o => o is MeshRenderer);
+                    int index = properties.IndexOf(mr);
+                    if (index > -1)
+                        properties[index] = value;
+                    else
+                        properties.Add(value);
+                }
+            }
+
+            public struct ObjectInfo : INotifyPropertyChanged
+            {
+                private string name;
+                private string guid;
+
+                public string Name
+                {
+                    get => name;
+                    set
+                    {
+                        name = value;
+                        OnPropertyChanged();
+                    }
+                }
+
+                public string Guid
+                {
+                    get => guid;
+                    set
+                    {
+                        guid = value;
+                        OnPropertyChanged();
+                    }
+                }
+
+                public event PropertyChangedEventHandler PropertyChanged;
+
+                [NotifyPropertyChangedInvocator]
+                private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+                {
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                }
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            [NotifyPropertyChangedInvocator]
+            protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 
@@ -65,18 +133,18 @@ namespace Cauldron
 		{
 			SceneObject objectToBeRemoved = null;
 
-			foreach (var sceneObject in hierarchyObjectList)
+			foreach (var sceneObject in HierarchyObjectList)
 			{
 				if (sceneObject.Guid == guid) objectToBeRemoved = sceneObject;
 			}
 
-			if (objectToBeRemoved != null) hierarchyObjectList.Remove(objectToBeRemoved);
+			if (objectToBeRemoved != null) HierarchyObjectList.Remove(objectToBeRemoved);
 			else MessageBox.Show($"Attempted to remove object of GUID {guid} but object is not in hierarchy");
 		}
 
 		public static SceneObject GetObject(string guid)
 		{
-			foreach (var sceneObject in hierarchyObjectList)
+			foreach (var sceneObject in HierarchyObjectList)
 			{
 				if (sceneObject.Guid == guid) return sceneObject;
 			}

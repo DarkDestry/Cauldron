@@ -53,11 +53,11 @@ namespace Cauldron
             mouth.MeshRenderer = new MeshRenderer { Color = Color.Pink, Mesh = new Icosphere(1) };
 
 
-            Hierarchy.hierarchyObjectList.Add(body);
-            Hierarchy.hierarchyObjectList.Add(head);
-            Hierarchy.hierarchyObjectList.Add(eye1);
-            Hierarchy.hierarchyObjectList.Add(eye2);
-            Hierarchy.hierarchyObjectList.Add(mouth);
+            Hierarchy.HierarchyObjectList.Add(body);
+            Hierarchy.HierarchyObjectList.Add(head);
+            Hierarchy.HierarchyObjectList.Add(eye1);
+            Hierarchy.HierarchyObjectList.Add(eye2);
+            Hierarchy.HierarchyObjectList.Add(mouth);
 #endif
         }
 

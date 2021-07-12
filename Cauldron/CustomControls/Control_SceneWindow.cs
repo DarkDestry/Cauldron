@@ -86,16 +86,7 @@ namespace Cauldron.CustomControls
                 }
                 sceneWindow.Children.RemoveAt(2);
 
-                openGLControl.OpenGLDraw += GL_Draw;
-                openGLControl.OpenGLInitialized += GL_Init;
-                openGLControl.Resized += OpenGlControlOnResized;
-                openGLControl.MouseMove += Viewport_MouseMove;
-                openGLControl.GotMouseCapture += Viewport_MouseMove;
-                openGLControl.PreviewMouseDown += MouseMiddleButtonDown;
-                openGLControl.RenderContextType = RenderContextType.FBO;
-                openGLControl.MouseWheel += OpenGlControlOnMouseWheel;
-                openGLControl.DrawFPS = true;
-                openGLControl.RenderTrigger = RenderTrigger.Manual;
+                
                 CompositionTarget.Rendering += (sender, args) => openGLControl.DoRender();
 
                 shaderErrorLabel = Template.FindName("Shader_Compiler_Error", this) as TextBlock;
@@ -161,7 +152,7 @@ namespace Cauldron.CustomControls
             OpenGL gl = args.OpenGL;
 
 
-            foreach (var sceneObject in Hierarchy.hierarchyObjectList)
+            foreach (var sceneObject in Hierarchy.HierarchyObjectList)
             {
                 if (!sceneObject.MeshRenderer.Mesh.GeometryGenerated)
                     sceneObject.MeshRenderer.Mesh.GenerateGeometry(gl);
@@ -198,7 +189,7 @@ namespace Cauldron.CustomControls
             //  Draw Grid
             grid.Draw(gl, program);
 
-            foreach (var sceneObject in Hierarchy.hierarchyObjectList)
+            foreach (var sceneObject in Hierarchy.HierarchyObjectList)
             {
                 GLColor col = sceneObject.MeshRenderer.Color;
                 gl.Uniform3(program.GetUniformLocation("DiffuseMaterial"), col.R, col.G, col.B);
@@ -252,10 +243,6 @@ namespace Cauldron.CustomControls
                 Vector delta = e.GetPosition(viewport) - cursorPos;
 
                 cursorPos = e.GetPosition(viewport);
-                if (delta.X != 0)
-                {
-                    bool b = true;
-                }
                 cameraFocusPoint += (CldVector3)(cameraRight * (float) -delta.X / 30);
                 cameraFocusPoint += (CldVector3)(cameraUp * (float) delta.Y / 30);
             }

@@ -41,7 +41,7 @@ namespace Cauldron.CustomControls
 			{
 				MenuItem NewSphereMenuItem = Template.FindName("ContextMenu_NewSphere", this) as MenuItem;
 				NewSphereMenuItem.Click += CreateSubMenuItem_OnClick;
-                Hierarchy.HierarchyUpdateEvent += _UpdateHierarchyList;
+				Hierarchy.HierarchyUpdateEvent += _UpdateHierarchyList;
 
 				hierarchyListBox = Template.FindName("HierarchyList", this) as ListBox;
 			}
@@ -56,11 +56,11 @@ namespace Cauldron.CustomControls
 				switch (item.Header)
 				{
 					case "Sphere":
-                        Hierarchy.SceneObject obj = new Hierarchy.SceneObject("Sphere");
-                        obj.MeshRenderer = new MeshRenderer();
-                        obj.MeshRenderer.Color = new GLColor(1,1,1,1);
-                        obj.MeshRenderer.Mesh = new Icosphere(1);
-                        Hierarchy.hierarchyObjectList.Add(obj);
+						Hierarchy.SceneObject obj = new Hierarchy.SceneObject("Sphere");
+						obj.MeshRenderer = new MeshRenderer();
+						obj.MeshRenderer.Color = new GLColor(1,1,1,1);
+						obj.MeshRenderer.Mesh = new Icosphere(1);
+						Hierarchy.HierarchyObjectList.Add(obj);
 
 						Hierarchy.TriggerHierarchyUpdate();
 						break;
@@ -68,10 +68,10 @@ namespace Cauldron.CustomControls
 			}
 		}
 
-        private void _UpdateHierarchyList()
+		private void _UpdateHierarchyList()
 		{
 			hierarchyListBox.Items.Clear();
-			foreach (var sceneObject in Hierarchy.hierarchyObjectList)
+			foreach (var sceneObject in Hierarchy.HierarchyObjectList)
 			{
 				ListBoxItem item = new ListBoxItem();
 				item.Content = sceneObject.Name;
@@ -82,36 +82,36 @@ namespace Cauldron.CustomControls
 				deleteMenuItem.Header = "Delete Object";
 				deleteMenuItem.Click += DeleteMenuItem_Click;
 				deleteMenuItem.Tag = sceneObject.Guid;
-                MenuItem focusMenuItem = new MenuItem();
-                focusMenuItem.Header = "Focus Object in Scene";
-                focusMenuItem.Click += FocusMenuItem_Click;
-                focusMenuItem.Tag = sceneObject.Guid;
+				MenuItem focusMenuItem = new MenuItem();
+				focusMenuItem.Header = "Focus Object in Scene";
+				focusMenuItem.Click += FocusMenuItem_Click;
+				focusMenuItem.Tag = sceneObject.Guid;
 				item.ContextMenu.Items.Add(deleteMenuItem);
-                item.ContextMenu.Items.Add(focusMenuItem);
+				item.ContextMenu.Items.Add(focusMenuItem);
 
 				hierarchyListBox.Items.Add(item);
 
 			}
 		}
 
-        private void FocusMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            MenuItem item = sender as MenuItem;
-            Control_SceneWindow.OnSceneObjectFocus(Hierarchy.GetObject(item.Tag as string));
-        }
+		private void FocusMenuItem_Click(object sender, RoutedEventArgs e)
+		{
+			MenuItem item = sender as MenuItem;
+			Control_SceneWindow.OnSceneObjectFocus(Hierarchy.GetObject(item.Tag as string));
+		}
 
-        private void Item_Selected(object sender, RoutedEventArgs e)
+		private void Item_Selected(object sender, RoutedEventArgs e)
 		{
 			ListBoxItem item = sender as ListBoxItem;
 			Hierarchy.SceneObject obj = Hierarchy.GetObject(item.Tag as string);
-            Hierarchy.ChangeObjectFocus(obj);
-        }
+			Hierarchy.ChangeObjectFocus(obj);
+		}
 
 		private void DeleteMenuItem_Click(object sender, RoutedEventArgs e)
 		{
 			MenuItem item = sender as MenuItem;
 			Hierarchy.RemoveObject(item.Tag as string);
-            Hierarchy.TriggerHierarchyUpdate();
-        }
+			Hierarchy.TriggerHierarchyUpdate();
+		}
 	}
 }

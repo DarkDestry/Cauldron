@@ -77,7 +77,7 @@ namespace Cauldron
         public static implicit operator CldVector3(vec3 v) => new CldVector3(v.x, v.y, v.z);
         public static implicit operator CldVector3(vec4 v) => new CldVector3(v.x, v.y, v.z);
 
-        public static explicit operator GLColor (CldVector3 v) => new GLColor(v.x, v.y, v.z, 1);
+        public static explicit operator GLColor(CldVector3 v) => new GLColor(v.x, v.y, v.z, 1);
         public static explicit operator CldVector3(GLColor c) => new CldVector3(c.R, c.G, c.B);
 
         public static explicit operator CldVector2(CldVector3 v) => new CldVector2(v.x, v.y);
@@ -103,6 +103,24 @@ namespace Cauldron
         public static readonly CldVector3 Forward = new CldVector3(0,0,1);
         public static readonly CldVector3 Right = new CldVector3(1,0,0);
         public static readonly CldVector3 Up = new CldVector3(0,1,0);
+
+        public float X
+        {
+            get => x;
+            set => x = value;
+        }
+
+        public float Y
+        {
+            get => y;
+            set => y = value;
+        }
+
+        public float Z
+        {
+            get => z;
+            set => z = value;
+        }
 
         public static CldVector3 Transform(CldVector3 vector ,double[,] matrix)
         {
