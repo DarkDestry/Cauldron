@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
@@ -7,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Cauldron.Core;
 
 namespace Cauldron.CustomControls
 {
@@ -32,12 +35,6 @@ namespace Cauldron.CustomControls
 
                 Loaded += (sender, args) => InitEther();
                 SizeChanged += OnSizeChanged;
-
-                CompositionTarget.Rendering += (sender, args) =>
-                {
-                    Ether.Update();
-                    Ether.Render();
-                };
             }
         }
 
@@ -47,7 +44,6 @@ namespace Cauldron.CustomControls
         {
             if (!etherInitialized) return;
             Size size = GetElementPixelSize(this);
-            Ether.ResizeViewport((uint)size.Width, (uint)size.Height);
         }
 
         private void InitEther()
@@ -55,13 +51,6 @@ namespace Cauldron.CustomControls
             Size size = GetElementPixelSize(this);
             rendererControl = new RendererHost(size.Height, size.Width);
             hwndHostElement.Child = rendererControl;
-            rendererControl.MessageHook += new HwndSourceHook(WndProcMsgFilter);
-            Ether.ResizeViewport((uint)size.Width, (uint)size.Height);
-            timer.Tick += (o, eventArgs) => {
-                Ether.Update();
-                Ether.Render();
-            };
-//            timer.Start();
             etherInitialized = true;
         }
 
@@ -81,31 +70,6 @@ namespace Cauldron.CustomControls
             return transformedSize;
         }
 
-        private IntPtr WndProcMsgFilter(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-        {
-            if (msg.Equals(0x0021)) RendererHost.SendMessage(rendererControl.HwndRenderer, 0x0006, new IntPtr(1), new IntPtr(0));
-            handled = false;
-            return IntPtr.Zero;
-        }
-
-        class Ether
-        {
-            [DllImport("Ether.dll")]
-            public static extern IntPtr Initialize(IntPtr hwndParent);
-
-            [DllImport("Ether.dll")]
-            public static extern void Update();
-
-            [DllImport("Ether.dll")]
-            public static extern void Render();
-
-            [DllImport("Ether.dll")]
-            public static extern void Release();
-
-            [DllImport("Ether.dll")]
-            public static extern void ResizeViewport(uint width, uint height);
-        }
-
         public class RendererHost : HwndHost
         {
             internal const int
@@ -120,6 +84,7 @@ namespace Cauldron.CustomControls
             IntPtr hwndRenderer;
             IntPtr hwndHost;
             int hostHeight, hostWidth;
+            private Process etherProcess;
 
             public RendererHost(double height, double width)
             {
@@ -146,14 +111,31 @@ namespace Cauldron.CustomControls
                     IntPtr.Zero,
                     0);
 
-                hwndRenderer = Ether.Initialize(hwndHost);
+                string workingDir;
+                if (CommandArguments.TryGetArgument("wd", out string path))
+                    workingDir = path;
+                else
+                    workingDir = AppContext.BaseDirectory;
+
+                string executableName;
+                if (CommandArguments.TryGetArgument("bin", out string exeName))
+                    executableName = exeName;
+                else
+                    executableName = "Ether.exe";
+
+                ProcessStartInfo etherProcessStartInfo = new ProcessStartInfo(
+                    Path.Combine(workingDir, executableName), $"-toolmode {hwndHost}");
+                etherProcessStartInfo.WorkingDirectory = workingDir;
+                
+                etherProcess = Process.Start(etherProcessStartInfo);
+                hwndRenderer = hwndHost;
 
                 return new HandleRef(this, hwndHost);
             }
 
             protected override void DestroyWindowCore(HandleRef hwnd)
             {
-                Ether.Release();
+                etherProcess.Kill();
                 DestroyWindow(hwnd.Handle);
             }
 
