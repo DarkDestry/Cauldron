@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Cauldron.Core;
+using Cauldron.IPC;
 
 namespace Cauldron.CustomControls
 {
@@ -84,7 +90,6 @@ namespace Cauldron.CustomControls
             IntPtr hwndRenderer;
             IntPtr hwndHost;
             int hostHeight, hostWidth;
-            private Process etherProcess;
 
             public RendererHost(double height, double width)
             {
@@ -110,24 +115,12 @@ namespace Cauldron.CustomControls
                     (IntPtr)HOST_ID,
                     IntPtr.Zero,
                     0);
-
-                string workingDir;
-                if (CommandArguments.TryGetArgument("wd", out string path))
-                    workingDir = path;
-                else
-                    workingDir = AppContext.BaseDirectory;
-
-                string executableName;
-                if (CommandArguments.TryGetArgument("bin", out string exeName))
-                    executableName = exeName;
-                else
-                    executableName = "Ether.exe";
-
-                ProcessStartInfo etherProcessStartInfo = new ProcessStartInfo(
-                    Path.Combine(workingDir, executableName), $"-toolmode {hwndHost}");
-                etherProcessStartInfo.WorkingDirectory = workingDir;
                 
-                etherProcess = Process.Start(etherProcessStartInfo);
+
+                InitializeCommand initializeCommand = new InitializeCommand(hwndHost);
+                ConnectionManager.SendCommand(initializeCommand);
+
+                //TODO: Parse Incoming Initialize Command
                 hwndRenderer = hwndHost;
 
                 return new HandleRef(this, hwndHost);
@@ -135,7 +128,6 @@ namespace Cauldron.CustomControls
 
             protected override void DestroyWindowCore(HandleRef hwnd)
             {
-                etherProcess.Kill();
                 DestroyWindow(hwnd.Handle);
             }
 

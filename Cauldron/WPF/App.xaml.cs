@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Cauldron.Core;
@@ -31,10 +32,23 @@ namespace Cauldron
                     }
                 }
             }
-			//Hook to Daemon here?
+
+            if (CommandArguments.TryGetArgument("ether"))
+            {
+                EtherManager.Initialize();
+            }
+
 			Editor editor = new	Editor();
 			editor.Show();
 		}
+
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+            if (CommandArguments.TryGetArgument("ether"))
+            {
+                EtherManager.Shutdown();
+            }
+        }
 
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {

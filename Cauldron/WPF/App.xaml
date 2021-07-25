@@ -4,7 +4,8 @@
              xmlns:local="clr-namespace:Cauldron"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              DispatcherUnhandledException="Application_DispatcherUnhandledException"
-             Startup="Application_Startup">
+             Startup="Application_Startup"
+             Exit="Application_Exit">
     <Application.Resources>
         <Style TargetType="Window" x:Key="DarkTheme">
             <Setter Property="Background" Value="#2d2d30"/>
