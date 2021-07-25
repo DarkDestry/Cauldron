@@ -45,6 +45,7 @@ namespace Cauldron.IPC
 
             byte[] data = command.toBytes();
             stream.Write(data, 0, data.Length);
+            stream.Write(new byte[]{0x0}, 0, 1);
         }
 
         /// <summary>

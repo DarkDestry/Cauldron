@@ -82,6 +82,7 @@ namespace Cauldron.Core
                     }
                 }
 
+                fsw.EnableRaisingEvents = false;
                 wh.Close();
             });
             logParserThreadKeepAlive = true;
