@@ -36,6 +36,7 @@ namespace Cauldron.Core
         public static void Shutdown()
         {
             ConnectionManager.Close();
+            StopLogParser();
             if (!etherProcess.HasExited) etherProcess.Kill();
         }
 
@@ -58,6 +59,8 @@ namespace Cauldron.Core
                         .FirstOrDefault();
                     if (!string.IsNullOrEmpty(latestLogFilePath) && File.Exists(latestLogFilePath)) break;
                 }
+
+                if (!logParserThreadKeepAlive) return;
 
                 var wh = new AutoResetEvent(false);
                 var fsw = new FileSystemWatcher(Path.Combine(workingDir, "logs"));
