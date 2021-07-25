@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Windows.Threading;
 using Cauldron.Core.Logging;
 using Cauldron.IPC;
+using Application = System.Windows.Application;
 
 namespace Cauldron.Core
 {
@@ -77,7 +78,7 @@ namespace Cauldron.Core
                     {
                         s = sr.ReadLine();
                         if (s != null)
-                            Logger.LogInfo("Ether", s);
+                            Application.Current.Dispatcher.Invoke(() => Logger.LogInfo("Ether", s));
                         else
                             wh.WaitOne(1000);
                     }
