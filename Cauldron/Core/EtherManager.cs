@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -78,7 +79,7 @@ namespace Cauldron.Core
                     {
                         s = sr.ReadLine();
                         if (s != null)
-                            Application.Current.Dispatcher.Invoke(() => Logger.LogInfo("Ether", s));
+                            Application.Current.Dispatcher.Invoke(() => ParseEtherLogLine(s));
                         else
                             wh.WaitOne(1000);
                     }
@@ -95,6 +96,31 @@ namespace Cauldron.Core
         {
             logParserThreadKeepAlive = false;
             if (logParserThread.IsAlive) logParserThread.Join();
+        }
+
+        private static void ParseEtherLogLine(string logLine)
+        {
+            Match m = Regex.Match(logLine, @"\[ (?<timestamp>[^\]]+?) \] \[ +(?<module>[^\]]+?) +\] +(?<level>[^-]+?) - (?<message>.+)");
+            if (!m.Success) Logger.LogError("Cauldron", $"Error parsing Ether LogLine: {logLine}");
+            else
+            {
+                string message = $"[{m.Groups["module"].Value}] {m.Groups["message"].Value}";
+                switch (m.Groups["level"].Value)
+                {
+                    case "INFO":
+                        Logger.LogInfo("Ether", message);
+                        break;
+                    case "FATAL":
+                        Logger.LogCritical("Ether", message);
+                        break;
+                    case "WARN":
+                        Logger.LogWarning("Ether", message);
+                        break;
+                    case "ERROR":
+                        Logger.LogError("Ether", message);
+                        break;
+                }
+            }
         }
     }
 }
