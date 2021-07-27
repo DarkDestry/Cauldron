@@ -76,6 +76,11 @@ namespace Cauldron.Core.Logging
             Source = source;
             Level = level;
         }
+
+        public override string ToString()
+        {
+            return $"[{Source}][{Level}] {Message}";
+        }
     }
 
     [Flags]

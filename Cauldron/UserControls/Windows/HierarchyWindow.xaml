@@ -20,7 +20,7 @@
                       ItemsSource="{Binding Source={x:Static core:Hierarchy.HierarchyObjectList}}" 
                       Grid.Row="1" 
                       Grid.Column="0" 
-                      Style="{StaticResource HierarchyListBox}">
+                      Style="{StaticResource ListBox}">
                 <!-- To be filled programatically -->   
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">

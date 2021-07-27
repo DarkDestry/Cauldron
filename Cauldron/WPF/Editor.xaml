@@ -15,30 +15,43 @@
     <DockPanel>
         <Grid Margin="5">
             <Grid.RowDefinitions>
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="4*" />
             </Grid.ColumnDefinitions>
 
-            <windows:HierarchyWindow/>
-            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Style="{StaticResource Vertical}"/>
-            <Grid Grid.Column="2">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*" />
-                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="4*" />
                 </Grid.ColumnDefinitions>
-                <windows:SceneWindow Grid.Column="0"/>
-                <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Style="{StaticResource Vertical}"/>
-                <windows:PropertyWindow Grid.Column="2" />
-            </Grid>
 
+                <windows:HierarchyWindow/>
+                <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Style="{StaticResource Vertical}"/>
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <windows:SceneWindow Grid.Column="0"/>
+                    <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Style="{StaticResource Vertical}"/>
+                    <windows:PropertyWindow Grid.Column="2" />
+                </Grid>
+
+            </Grid>
+            <GridSplitter Grid.Row="1" VerticalAlignment="Stretch" Style="{StaticResource Horizontal}"/>
+            <windows:LogWindow Grid.Row="2"></windows:LogWindow>
         </Grid>
     </DockPanel>
 </Window>
