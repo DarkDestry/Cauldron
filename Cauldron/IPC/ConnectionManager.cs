@@ -92,7 +92,7 @@ namespace Cauldron.IPC
             {
                 int bytesRead = stream.Read(data, 0, data.Length);
                 Logger.LogDebug("Cauldron", $"Received TCP packet of size {bytesRead}, with data {Encoding.ASCII.GetString(data, 0, bytesRead)}");
-                if (bytesRead == 1 && data[0] == 48)
+                if (bytesRead == 1 && data[0] == 0)
                     break;
                 sb.Append(Encoding.ASCII.GetString(data,0,bytesRead));
             }

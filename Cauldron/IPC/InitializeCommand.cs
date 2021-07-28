@@ -42,7 +42,7 @@ namespace Cauldron.IPC
         public override void ExecuteCommand()
         {
             Control_Ether_HwndHost.rendererControl.HwndRenderer = args.childHwnd;
-            Control_Ether_HwndHost.
+            Control_Ether_HwndHost.Resize();
         }
 
         public class Args

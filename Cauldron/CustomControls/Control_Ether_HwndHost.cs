@@ -23,6 +23,8 @@ namespace Cauldron.CustomControls
     [TemplatePart(Name = "HwndHostElement", Type = typeof(Border))]
     public class Control_Ether_HwndHost : Control
     {
+        private static Control_Ether_HwndHost instance;
+
         static Control_Ether_HwndHost()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Control_Ether_HwndHost), new FrameworkPropertyMetadata(typeof(Control_Ether_HwndHost)));
@@ -42,6 +44,8 @@ namespace Cauldron.CustomControls
 
                 Loaded += (sender, args) => InitEther();
                 SizeChanged += OnSizeChanged;
+
+                instance = this;
             }
         }
 
@@ -53,9 +57,9 @@ namespace Cauldron.CustomControls
             Resize();
         }
 
-        public void Resize()
+        public static void Resize()
         {
-            Size size = GetElementPixelSize(this);
+            Size size = GetElementPixelSize(instance);
 
             RendererHost.MoveWindow(rendererControl.HwndRenderer, 0, 0, (int) size.Width, (int) size.Height, true);
         }
@@ -69,7 +73,7 @@ namespace Cauldron.CustomControls
             etherInitialized = true;
         }
 
-        public Size GetElementPixelSize(UIElement element)
+        public static Size GetElementPixelSize(UIElement element)
         {
             Matrix transformToDevice;
             var source = PresentationSource.FromVisual(element);
