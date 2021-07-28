@@ -15,6 +15,7 @@ using System.Windows.Threading;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Cauldron.Core;
+using Cauldron.Core.Logging;
 using Cauldron.IPC;
 
 namespace Cauldron.CustomControls
@@ -27,7 +28,7 @@ namespace Cauldron.CustomControls
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Control_Ether_HwndHost), new FrameworkPropertyMetadata(typeof(Control_Ether_HwndHost)));
         }
 
-        private RendererHost rendererControl;
+        public static RendererHost rendererControl;
         private Border hwndHostElement;
         private DispatcherTimer timer = new DispatcherTimer();
 
@@ -49,13 +50,21 @@ namespace Cauldron.CustomControls
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (!etherInitialized) return;
+            Resize();
+        }
+
+        public void Resize()
+        {
             Size size = GetElementPixelSize(this);
+
+            RendererHost.MoveWindow(rendererControl.HwndRenderer, 0, 0, (int) size.Width, (int) size.Height, true);
         }
 
         private void InitEther()
         {
             Size size = GetElementPixelSize(this);
             rendererControl = new RendererHost(size.Height, size.Width);
+            rendererControl.MessageHook += new HwndSourceHook(WndProcMsgFilter);
             hwndHostElement.Child = rendererControl;
             etherInitialized = true;
         }
@@ -74,6 +83,19 @@ namespace Cauldron.CustomControls
             transformedSize.Height = Math.Ceiling(transformedSize.Height);
             transformedSize.Width = Math.Ceiling(transformedSize.Width);
             return transformedSize;
+        }
+
+        private IntPtr WndProcMsgFilter(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            if (rendererControl.HwndRenderer == default) return IntPtr.Zero;
+
+            if (msg.Equals(0x0021))
+            {
+                Logger.LogDebug("Cauldron", $"Sending message 0x0006 (WM_ACTIVATE), 1, 0");
+                RendererHost.SendMessage(rendererControl.HwndRenderer, 0x0006, new IntPtr(1), new IntPtr(0));
+            }
+            handled = false;
+            return IntPtr.Zero;
         }
 
         public class RendererHost : HwndHost
@@ -100,7 +122,13 @@ namespace Cauldron.CustomControls
             public IntPtr HwndRenderer
             {
                 get { return hwndRenderer; }
+                set
+                {
+                    if (hwndRenderer == default) hwndRenderer = value;
+                }
             }
+
+            private bool test = false;
 
             protected override HandleRef BuildWindowCore(HandleRef hwndParent)
             {
@@ -121,7 +149,7 @@ namespace Cauldron.CustomControls
                 ConnectionManager.SendCommand(initializeCommand);
 
                 //TODO: Parse Incoming Initialize Command
-                hwndRenderer = hwndHost;
+                // hwndRenderer = hwndHost;
 
                 return new HandleRef(this, hwndHost);
             }
@@ -164,8 +192,27 @@ namespace Cauldron.CustomControls
                 int msg,
                 IntPtr wParam,
                 String lParam);
+            
+            [DllImport("user32.dll", EntryPoint = "SetActiveWindow", CharSet = CharSet.Unicode)]
+            internal static extern IntPtr SetActiveWindow(IntPtr hwnd);
 
+            [DllImport("user32.dll", EntryPoint = "SetFocus", CharSet = CharSet.Unicode)]
+            internal static extern IntPtr SetFocus(IntPtr hwnd);
+            
+            [DllImport("user32.dll", EntryPoint = "MoveWindow", CharSet = CharSet.Unicode)]
+            internal static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
+        }
 
+        [StructLayout(LayoutKind.Explicit)]
+        public struct WordUnion
+        {
+            [FieldOffset(0)] public uint Number;
+
+            [FieldOffset(0)] public IntPtr ptr;
+
+            [FieldOffset(0)] public ushort Low;
+
+            [FieldOffset(2)] public ushort High;
         }
     }
 }

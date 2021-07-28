@@ -2,18 +2,34 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
+using System.Windows.Threading;
 
 namespace Cauldron.Core.Logging
 {
     public static class Logger
     {
-        private static ObservableCollection<LogEntry> logEntries = new ObservableCollection<LogEntry>();
+        private static ObservableCollection<LogEntry> _logEntries;
 
-        private static LogLevel _logLevelMask = LogLevel.Critical | LogLevel.Error | LogLevel.Warning | LogLevel.Info;
+        private static ObservableCollection<LogEntry> LogEntries
+        {
+            get {
+                if (_logEntries == null)
+                {
+                    Application.Current.Dispatcher.Invoke(() => _logEntries = new ObservableCollection<LogEntry>());
+                }
+
+                return _logEntries;
+            }
+            set => _logEntries = value;
+        }
+
+        private static LogLevel _logLevelMask = LogLevel.Critical | LogLevel.Error | LogLevel.Warning | LogLevel.Info | LogLevel.Debug;
         public static LogLevel LogLevelMask
         {
             get => _logLevelMask;
@@ -38,23 +54,40 @@ namespace Cauldron.Core.Logging
         public static ICollectionView filteredLogEntries {
             get
             {
-                var source = CollectionViewSource.GetDefaultView(logEntries);
+                ICollectionView source = null;
+                Application.Current.Dispatcher.Invoke(() => source = CollectionViewSource.GetDefaultView(LogEntries));
                 source.Filter = o => FilterLogEntries((LogEntry)o, _logLevelMask, _sourcesMask);
                 return source;
             }
         }
-        
-        public static void LogCritical(string source, string message) => Log(message, source, LogLevel.Critical);
-        public static void LogError(string source, string message) => Log(message, source, LogLevel.Error);
-        public static void LogWarning(string source, string message) => Log(message, source, LogLevel.Warning);
-        public static void LogInfo(string source, string message) => Log(message, source, LogLevel.Info);
-        public static void LogDebug(string source, string message) => Log(message, source, LogLevel.Debug);
 
-        private static void Log(string message, string source, LogLevel logLevel)
+        public static void LogCritical(string message) => Log(message, "Cauldron", LogLevel.Critical, DateTime.Now);
+        public static void LogError(string message) => Log(message, "Cauldron", LogLevel.Error, DateTime.Now);
+        public static void LogWarning(string message) => Log(message, "Cauldron", LogLevel.Warning, DateTime.Now);
+        public static void LogInfo(string message) => Log(message, "Cauldron", LogLevel.Info, DateTime.Now);
+        public static void LogDebug(string message) => Log(message, "Cauldron", LogLevel.Debug, DateTime.Now);
+
+        public static void LogCritical(string source, string message) => Log(message, source, LogLevel.Critical, DateTime.Now);
+        public static void LogError(string source, string message) => Log(message, source, LogLevel.Error, DateTime.Now);
+        public static void LogWarning(string source, string message) => Log(message, source, LogLevel.Warning, DateTime.Now);
+        public static void LogInfo(string source, string message) => Log(message, source, LogLevel.Info, DateTime.Now);
+        public static void LogDebug(string source, string message) => Log(message, source, LogLevel.Debug, DateTime.Now);
+        
+        public static void LogCritical(string source, string message, DateTime dateTime) => Log(message, source, LogLevel.Critical, dateTime);
+        public static void LogError(string source, string message, DateTime dateTime) => Log(message, source, LogLevel.Error, dateTime);
+        public static void LogWarning(string source, string message, DateTime dateTime) => Log(message, source, LogLevel.Warning, dateTime);
+        public static void LogInfo(string source, string message, DateTime dateTime) => Log(message, source, LogLevel.Info, dateTime);
+        public static void LogDebug(string source, string message, DateTime dateTime) => Log(message, source, LogLevel.Debug, dateTime);
+
+        private static void Log(string message, string source, LogLevel logLevel, DateTime dateTime)
         {
-            logEntries.Add(new LogEntry(message, source, logLevel));
-            Console.WriteLine($"[{Enum.GetName(typeof(LogLevel), logLevel)}][{source}] {message}");
-            filteredLogEntries.Refresh();
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                _logEntries.Add(new LogEntry(message, source, logLevel, dateTime));
+
+                Console.WriteLine($"[{Enum.GetName(typeof(LogLevel), logLevel)}][{source}] {message}");
+                filteredLogEntries.Refresh();
+            }));
         }
 
 
@@ -69,17 +102,19 @@ namespace Cauldron.Core.Logging
         public string Message { get; }
         public string Source { get; }
         public LogLevel Level { get; }
+        public DateTime Time { get; }
 
-        public LogEntry(string message, string source, LogLevel level)
+        public LogEntry(string message, string source, LogLevel level, DateTime time)
         {
             Message = message;
             Source = source;
             Level = level;
+            Time = time;
         }
 
         public override string ToString()
         {
-            return $"[{Source}][{Level}] {Message}";
+            return $"[{Time.ToString("G", CultureInfo.CurrentCulture)}][{Source}][{Level}] {Message}";
         }
     }
 

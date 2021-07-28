@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Cauldron.CustomControls;
 
 namespace Cauldron.IPC
 {
@@ -40,7 +41,8 @@ namespace Cauldron.IPC
 
         public override void ExecuteCommand()
         {
-            throw new NotImplementedException();
+            Control_Ether_HwndHost.rendererControl.HwndRenderer = args.childHwnd;
+            Control_Ether_HwndHost.
         }
 
         public class Args

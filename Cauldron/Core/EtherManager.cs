@@ -34,19 +34,21 @@ namespace Cauldron.Core
 
             StartLogParser();
             ConnectionManager.Connect();
+            StartNetworkListener();
         }
 
         public static void Shutdown()
         {
-            ConnectionManager.Close();
             StopLogParser();
+            StopNetworkListener();
+            ConnectionManager.Close();
             if (!etherProcess.HasExited) etherProcess.Kill();
         }
 
 
 
         private static Thread logParserThread;
-        private static bool logParserThreadKeepAlive;
+        private static volatile bool logParserThreadKeepAlive;
 
         private static void StartLogParser()
         {
@@ -79,7 +81,7 @@ namespace Cauldron.Core
                     {
                         s = sr.ReadLine();
                         if (s != null)
-                            Application.Current.Dispatcher.Invoke(() => ParseEtherLogLine(s));
+                            ParseEtherLogLine(s);
                         else
                             wh.WaitOne(1000);
                     }
@@ -88,6 +90,7 @@ namespace Cauldron.Core
                 fsw.EnableRaisingEvents = false;
                 wh.Close();
             });
+            logParserThread.Name = "Log Parser Thread";
             logParserThreadKeepAlive = true;
             logParserThread.Start();
         }
@@ -105,22 +108,57 @@ namespace Cauldron.Core
             else
             {
                 string message = $"[{m.Groups["module"].Value}] {m.Groups["message"].Value}";
+                // DateTime timestamp = DateTime.Parse(m.Groups["timestamp"].Value);
+                DateTime timestamp = DateTime.Now;
+
                 switch (m.Groups["level"].Value)
                 {
                     case "INFO":
-                        Logger.LogInfo("Ether", message);
+                        Logger.LogInfo("Ether", message, timestamp);
                         break;
                     case "FATAL":
-                        Logger.LogCritical("Ether", message);
+                        Logger.LogCritical("Ether", message, timestamp);
                         break;
                     case "WARN":
-                        Logger.LogWarning("Ether", message);
+                        Logger.LogWarning("Ether", message, timestamp);
                         break;
                     case "ERROR":
-                        Logger.LogError("Ether", message);
+                        Logger.LogError("Ether", message, timestamp);
                         break;
                 }
             }
+        }
+
+
+        private static Thread networkListenerThread;
+        private static volatile bool networkListenerThreadKeepAlive;
+
+        private static void StartNetworkListener()
+        {
+            networkListenerThread = new Thread(() =>
+            {
+                while (networkListenerThreadKeepAlive)
+                {
+                    try
+                    {
+                        IncomingCommand command = ConnectionManager.GetCommand();
+                        command.ExecuteCommand();
+                    }
+                    catch (Exception e)
+                    {
+                        if (networkListenerThreadKeepAlive) Logger.LogError("Cauldron", e.Message);
+                    }
+                }
+            });
+            networkListenerThread.Name = "Network Listener Thread";
+            networkListenerThreadKeepAlive = true;
+            networkListenerThread.Start();
+        }
+
+        private static void StopNetworkListener()
+        {
+            networkListenerThreadKeepAlive = false;
+            //no need to join as the thread will be killed when the connection is closed.
         }
     }
 }
