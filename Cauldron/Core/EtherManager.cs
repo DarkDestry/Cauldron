@@ -110,7 +110,6 @@ namespace Cauldron.Core
             {
                 string message = $"[{m.Groups["module"].Value}] {m.Groups["message"].Value}";
                 DateTime timestamp = DateTime.Parse(m.Groups["timestamp"].Value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
-                // DateTime timestamp = DateTime.Now;
 
                 switch (m.Groups["level"].Value)
                 {

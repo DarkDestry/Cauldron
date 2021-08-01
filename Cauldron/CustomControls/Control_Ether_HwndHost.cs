@@ -20,6 +20,7 @@ using Cauldron.IPC;
 using Cauldron.Windows;
 
 using static Cauldron.Windows.WS;
+using static Cauldron.Windows.WM;
 
 namespace Cauldron.CustomControls
 {
@@ -97,7 +98,7 @@ namespace Cauldron.CustomControls
         {
             if (rendererControl.HwndRenderer == default) return IntPtr.Zero;
 
-            if (msg.Equals(0x0021))
+            if (msg.Equals(WM_MOUSEACTIVATE))
             {
                 Logger.LogDebug("Cauldron", $"Sending message 0x0006 (WM_ACTIVATE), 1, 0 to HWND {rendererControl.HwndRenderer}");
                 RendererHost.SendMessage(rendererControl.HwndRenderer, 0x0006, new IntPtr(1), new IntPtr(0));
