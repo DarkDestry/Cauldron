@@ -36,7 +36,7 @@ namespace Cauldron.Core.Logging
             set
             {
                 _logLevelMask = value;
-                filteredLogEntries.Refresh();
+                DispatchRefresh();
             }
         }
 
@@ -47,7 +47,7 @@ namespace Cauldron.Core.Logging
             set
             {
                 _sourcesMask = value;
-                filteredLogEntries.Refresh();
+                DispatchRefresh();
             }
         }
 
@@ -57,6 +57,7 @@ namespace Cauldron.Core.Logging
                 ICollectionView source = null;
                 Application.Current.Dispatcher.Invoke(() => source = CollectionViewSource.GetDefaultView(LogEntries));
                 source.Filter = o => FilterLogEntries((LogEntry)o, _logLevelMask, _sourcesMask);
+                source.SortDescriptions.Add(new SortDescription("Time", ListSortDirection.Descending));
                 return source;
             }
         }
@@ -86,7 +87,7 @@ namespace Cauldron.Core.Logging
                 _logEntries.Add(new LogEntry(message, source, logLevel, dateTime));
 
                 Console.WriteLine($"[{Enum.GetName(typeof(LogLevel), logLevel)}][{source}] {message}");
-                filteredLogEntries.Refresh();
+                DispatchRefresh();
             }));
         }
 
@@ -94,6 +95,11 @@ namespace Cauldron.Core.Logging
         private static bool FilterLogEntries(LogEntry logEntry, LogLevel logLevelMask, params string[] sources)
         {
             return sources.Contains(logEntry.Source) && (logLevelMask & logEntry.Level) != LogLevel.None;
+        }
+
+        private static void DispatchRefresh()
+        {
+            Application.Current.Dispatcher.BeginInvoke(new Action(() => filteredLogEntries.Refresh()));
         }
     }
 

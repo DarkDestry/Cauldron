@@ -17,6 +17,9 @@ using System.Text.Json.Serialization;
 using Cauldron.Core;
 using Cauldron.Core.Logging;
 using Cauldron.IPC;
+using Cauldron.Windows;
+
+using static Cauldron.Windows.WS;
 
 namespace Cauldron.CustomControls
 {
@@ -61,7 +64,8 @@ namespace Cauldron.CustomControls
         {
             Size size = GetElementPixelSize(instance);
 
-            RendererHost.MoveWindow(rendererControl.HwndRenderer, 0, 0, (int) size.Width, (int) size.Height, true);
+            // RendererHost.MoveWindow(rendererControl.HwndRenderer, 0, 0, (int) size.Width, (int) size.Height, true);
+            ConnectionManager.SendCommand(new ResizeCommand((uint) size.Width, (uint) size.Height));
         }
 
         private void InitEther()
@@ -95,7 +99,7 @@ namespace Cauldron.CustomControls
 
             if (msg.Equals(0x0021))
             {
-                Logger.LogDebug("Cauldron", $"Sending message 0x0006 (WM_ACTIVATE), 1, 0");
+                Logger.LogDebug("Cauldron", $"Sending message 0x0006 (WM_ACTIVATE), 1, 0 to HWND {rendererControl.HwndRenderer}");
                 RendererHost.SendMessage(rendererControl.HwndRenderer, 0x0006, new IntPtr(1), new IntPtr(0));
             }
             handled = false;
@@ -105,13 +109,9 @@ namespace Cauldron.CustomControls
         public class RendererHost : HwndHost
         {
             internal const int
-                WS_CHILD = 0x40000000,
-                WS_VISIBLE = 0x10000000,
                 LBS_NOTIFY = 0x00000001,
                 HOST_ID = 0x00000002,
-                CHILD_ID = 0x00000001,
-                WS_VSCROLL = 0x00200000,
-                WS_BORDER = 0x00800000;
+                CHILD_ID = 0x00000001;
 
             IntPtr hwndRenderer;
             IntPtr hwndHost;
@@ -140,7 +140,7 @@ namespace Cauldron.CustomControls
                 hwndHost = IntPtr.Zero;
 
                 hwndHost = CreateWindowEx(0, "static", "",
-                    WS_CHILD | WS_VISIBLE,
+                    (int)(WS_CHILD | WS_VISIBLE),
                     0, 0,
                     hostWidth, hostHeight,
                     hwndParent.Handle,
@@ -202,7 +202,7 @@ namespace Cauldron.CustomControls
 
             [DllImport("user32.dll", EntryPoint = "SetFocus", CharSet = CharSet.Unicode)]
             internal static extern IntPtr SetFocus(IntPtr hwnd);
-            
+
             [DllImport("user32.dll", EntryPoint = "MoveWindow", CharSet = CharSet.Unicode)]
             internal static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
         }
@@ -218,5 +218,8 @@ namespace Cauldron.CustomControls
 
             [FieldOffset(2)] public ushort High;
         }
+
+
+        
     }
 }

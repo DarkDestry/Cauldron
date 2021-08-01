@@ -57,7 +57,7 @@ namespace Cauldron.IPC
             {
                 case "initialize" : return CommandType.Initialize;
                 case "shutdown" : return CommandType.Shutdown;
-                case "resize" : return CommandType.Shutdown;
+                case "resize" : return CommandType.Resize;
                 case "loadworld" : return CommandType.LoadWorld;
                 case "saveworld" : return CommandType.SaveWorld;
                 default: return CommandType.Unknown;

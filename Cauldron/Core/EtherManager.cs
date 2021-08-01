@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -108,8 +109,8 @@ namespace Cauldron.Core
             else
             {
                 string message = $"[{m.Groups["module"].Value}] {m.Groups["message"].Value}";
-                // DateTime timestamp = DateTime.Parse(m.Groups["timestamp"].Value);
-                DateTime timestamp = DateTime.Now;
+                DateTime timestamp = DateTime.Parse(m.Groups["timestamp"].Value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
+                // DateTime timestamp = DateTime.Now;
 
                 switch (m.Groups["level"].Value)
                 {
@@ -146,7 +147,7 @@ namespace Cauldron.Core
                     }
                     catch (Exception e)
                     {
-                        if (networkListenerThreadKeepAlive) Logger.LogError("Cauldron", e.Message);
+                        if (networkListenerThreadKeepAlive) Logger.LogError("Cauldron", "[Network Listener Thread]" + e.Message);
                     }
                 }
             });

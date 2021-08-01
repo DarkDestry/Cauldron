@@ -179,6 +179,7 @@
     <Compile Include="IPC\Command.cs" />
     <Compile Include="IPC\ConnectionManager.cs" />
     <Compile Include="IPC\InitializeCommand.cs" />
+    <Compile Include="IPC\ResizeCommand.cs" />
     <Compile Include="Primitives\Box.cs" />
     <Compile Include="Core\Transform.cs" />
     <Compile Include="Core\CldVector3.cs" />
@@ -264,6 +265,8 @@
       <DependentUpon>SceneWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ValueConverters\GLColorToVector3Converter.cs" />
+    <Compile Include="Windows\WM.cs" />
+    <Compile Include="Windows\WS.cs" />
     <Compile Include="WPF\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
