@@ -40,15 +40,29 @@
                     </Label>
 
                     <CheckBox Grid.Column="1" Style="{DynamicResource LogFilterButton}" IsThreeState="False" 
-                              IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LogWindow}}, Path=FilterDebug}"> D </CheckBox>
-                    <CheckBox Grid.Column="2" Style="{DynamicResource LogFilterButton}" IsThreeState="False"
-                              IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LogWindow}}, Path=FilterInfo}"> I </CheckBox>
+                              IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LogWindow}}, Path=FilterDebug}">
+                         Debug
+                    </CheckBox>
+                    <Border Grid.Column="2" BorderThickness="1, 0" BorderBrush="#3f3f46" Margin="2 2" Padding="2 0">
+                    <CheckBox Grid.Column="2" Style="{DynamicResource LogFilterButton}" IsThreeState="False" 
+                              IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LogWindow}}, Path=FilterInfo}">
+                         Info
+                    </CheckBox>
+                    </Border>
                     <CheckBox Grid.Column="3" Style="{DynamicResource LogFilterButton}" IsThreeState="False"
-                              IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LogWindow}}, Path=FilterWarning}"> W </CheckBox>
+                              IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LogWindow}}, Path=FilterWarning}">
+                         Warning
+                    </CheckBox>
+                    <Border Grid.Column="4" BorderThickness="1, 0" BorderBrush="#3f3f46" Margin="2 2" Padding="2 0">
                     <CheckBox Grid.Column="4" Style="{DynamicResource LogFilterButton}" IsThreeState="False"
-                              IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LogWindow}}, Path=FilterError}"> E </CheckBox>
+                              IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LogWindow}}, Path=FilterError}">
+                         Error
+                    </CheckBox>
+                    </Border>
                     <CheckBox Grid.Column="5" Style="{DynamicResource LogFilterButton}" IsThreeState="False"
-                              IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LogWindow}}, Path=FilterCritical}"> C </CheckBox>
+                              IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LogWindow}}, Path=FilterCritical}">
+                         Critical
+                    </CheckBox>
                 </Grid>
             </Border>
             <Grid Grid.Row="2">
@@ -80,9 +94,10 @@
     </Border>
     <UserControl.Resources>
         <Style TargetType="CheckBox" x:Key="LogFilterButton">
-            <Setter Property="Width" Value="20" />
+            <Setter Property="MinWidth" Value="20" />
             <Setter Property="Height" Value="20" />
-            <Setter Property="Margin" Value="1" />
+            <Setter Property="Margin" Value="0 " />
+            <Setter Property="Padding" Value="4 0"></Setter>
             <Setter Property="Background" Value="#252526" />
             <Setter Property="Foreground" Value="#d0d0d0" />
             <Setter Property="BorderBrush" Value="#3399ff"></Setter>
@@ -91,7 +106,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="CheckBox">
                         <Grid>
-                            <Border x:Name="ToggleBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <Border x:Name="ToggleBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" Margin="{TemplateBinding Margin}">
                                 <ContentPresenter Margin="0"
                                                   VerticalAlignment="Center"
                                                   HorizontalAlignment="Center"
