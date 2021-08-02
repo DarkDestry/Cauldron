@@ -19,14 +19,38 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label Grid.Row="0" Style="{StaticResource EditorWindowLabel}">Logs</Label>
-            <Label Grid.Row="1" 
-                   Background="#252526"
-                   Foreground="#d0d0d0"
-                   BorderThickness="0 1 0 1"
-                   BorderBrush="#3f3f46"
-                   FontFamily="SegoeUI">
-                Current Filter:
-            </Label>
+            <Border Grid.Row="1" 
+                    BorderThickness="0 1 0 1"
+                    BorderBrush="#3f3f46">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <Label Grid.Column="0"
+                           Background="#252526"
+                           Foreground="#d0d0d0"
+                           FontFamily="SegoeUI">
+                        Filter:
+                    </Label>
+
+                    <CheckBox Grid.Column="1" Style="{DynamicResource LogFilterButton}" IsThreeState="False" 
+                              IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LogWindow}}, Path=FilterDebug}"> D </CheckBox>
+                    <CheckBox Grid.Column="2" Style="{DynamicResource LogFilterButton}" IsThreeState="False"
+                              IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LogWindow}}, Path=FilterInfo}"> I </CheckBox>
+                    <CheckBox Grid.Column="3" Style="{DynamicResource LogFilterButton}" IsThreeState="False"
+                              IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LogWindow}}, Path=FilterWarning}"> W </CheckBox>
+                    <CheckBox Grid.Column="4" Style="{DynamicResource LogFilterButton}" IsThreeState="False"
+                              IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LogWindow}}, Path=FilterError}"> E </CheckBox>
+                    <CheckBox Grid.Column="5" Style="{DynamicResource LogFilterButton}" IsThreeState="False"
+                              IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:LogWindow}}, Path=FilterCritical}"> C </CheckBox>
+                </Grid>
+            </Border>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -54,4 +78,45 @@
             </Grid>
         </Grid>
     </Border>
+    <UserControl.Resources>
+        <Style TargetType="CheckBox" x:Key="LogFilterButton">
+            <Setter Property="Width" Value="20" />
+            <Setter Property="Height" Value="20" />
+            <Setter Property="Margin" Value="1" />
+            <Setter Property="Background" Value="#252526" />
+            <Setter Property="Foreground" Value="#d0d0d0" />
+            <Setter Property="BorderBrush" Value="#3399ff"></Setter>
+            <Setter Property="BorderThickness" Value="1"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid>
+                            <Border x:Name="ToggleBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter Margin="0"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Center"
+                                                  RecognizesAccessKey="True" />
+                            </Border>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CheckStates">
+                                    <VisualState x:Name="Checked">
+                                    </VisualState>
+                                    <VisualState x:Name="Unchecked" >
+                                        <Storyboard TargetName="ToggleBorderThickness">
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush"
+                                                                           Storyboard.TargetName="ToggleBorder">
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="{x:Null}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Indeterminate" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
 </UserControl>
